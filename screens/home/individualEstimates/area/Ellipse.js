@@ -1,11 +1,13 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import { containerStyles } from '../styles/utility';
+import { containerStyles } from '../../../../styles/utility';
 
-export default function Settings() {
+const Ellipse = () => {
   return (
     <View style={containerStyles.container}>
-      <Text>Settings</Text>
+      <Text>Ellipse</Text>
     </View>
   );
-}
+};
+
+export default Ellipse;

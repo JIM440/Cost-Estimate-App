@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { containerStyles } from '../styles/utility';
 
 const RateApp = () => {
   return (
-    <View>
+    <View style={containerStyles.container}>
       <Text>RateApp</Text>
     </View>
   );

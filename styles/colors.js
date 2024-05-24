@@ -1,5 +1,6 @@
-const primary_color = '#2997FF';
-const light_bg_blue = '#EFF6FF';
+const primary_color = '#3A3A3A';
+const light_bg_blue = '#E7E7E7';
 const white = '#ffffff';
+const borderColor = 'gray';
 
-export { primary_color, light_bg_blue, white };
+export { primary_color, light_bg_blue, white, borderColor };

@@ -1,15 +1,26 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { containerStyles, titleStyles } from '../../../../styles/utility';
-import React, { useState } from 'react';
-import { View, TextInput, Text, Picker } from 'react-native';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 
 const Length = () => {
   const [length, setLength] = useState('');
-  const [unit, setUnit] = useState('m');
+  const [targetLength, setTargetLength] = useState('');
+  const [unit, setUnit] = useState('mm');
+  const [targetUnit, setTargetUnit] = useState('mm');
 
-  const convertLength = (toUnit) => {
-    if (!length) return '';
+  useEffect(() => {
+    convertLength();
+  }, [length, unit, targetUnit]);
+
+  const convertLength = () => {
+    if (length === '') {
+      setTargetLength('');
+      return;
+    }
+
     const units = {
       mm: 1000,
       cm: 100,
@@ -22,27 +33,21 @@ const Length = () => {
     };
 
     let result = parseFloat(length);
-
-    // Start from the smaller unit and convert upwards by multiplying
-    const unitsOrdered = ['mm', 'cm', 'inch', 'ft', 'yard', 'm', 'km', 'mile'];
-    const fromIndex = unitsOrdered.indexOf(unit);
-    const toIndex = unitsOrdered.indexOf(toUnit);
-    const startIndex = Math.min(fromIndex, toIndex);
-    const endIndex = Math.max(fromIndex, toIndex);
-
-    for (let i = startIndex; i < endIndex; i++) {
-      const currentUnit = unitsOrdered[i];
-      const nextUnit = unitsOrdered[i + 1];
-      if (fromUnit === currentUnit) {
-        result /= units[currentUnit];
-        result *= units[nextUnit];
-      } else if (toUnit === currentUnit) {
-        result *= units[currentUnit];
-        result /= units[nextUnit];
-      }
+    if (isNaN(result)) {
+      setTargetLength('');
+      return;
     }
 
-    return result.toFixed(2);
+    if (unit === targetUnit) {
+      setTargetLength(result.toString());
+      return;
+    }
+
+    // Convert the length to meters first
+    const lengthInMeters = result / units[unit];
+    // Then convert meters to target unit
+    const convertedLength = lengthInMeters * units[targetUnit];
+    setTargetLength(Number(convertedLength.toFixed(5)).toString());
   };
 
   return (
@@ -60,7 +65,9 @@ const Length = () => {
       <Picker
         selectedValue={unit}
         style={inputStyles.picker}
-        onValueChange={(itemValue) => setUnit(itemValue)}
+        onValueChange={(itemValue) => {
+          setUnit(itemValue);
+        }}
       >
         <Picker.Item label="Millimeter (mm)" value="mm" />
         <Picker.Item label="Centimeter (cm)" value="cm" />
@@ -72,15 +79,23 @@ const Length = () => {
         <Picker.Item label="Mile" value="mile" />
       </Picker>
       <View style={containerStyles.resultContainer}>
-        <Text style={titleStyles.title}>Converted Lengths:</Text>
-        <Text>Millimeter (mm): {convertLength('mm')}</Text>
-        <Text>Centimeter (cm): {convertLength('cm')}</Text>
-        <Text>Inch: {convertLength('inch')}</Text>
-        <Text>Foot (ft): {convertLength('ft')}</Text>
-        <Text>Yard: {convertLength('yard')}</Text>
-        <Text>Meter (m): {convertLength('m')}</Text>
-        <Text>Kilometer (km): {convertLength('km')}</Text>
-        <Text>Mile: {convertLength('mile')}</Text>
+        <Text style={titleStyles.title}>Converted Length: {targetLength}</Text>
+        <Picker
+          selectedValue={targetUnit}
+          style={inputStyles.picker}
+          onValueChange={(itemValue) => {
+            setTargetUnit(itemValue);
+          }}
+        >
+          <Picker.Item label="Millimeter (mm)" value="mm" />
+          <Picker.Item label="Centimeter (cm)" value="cm" />
+          <Picker.Item label="Inch" value="inch" />
+          <Picker.Item label="Foot (ft)" value="ft" />
+          <Picker.Item label="Yard" value="yard" />
+          <Picker.Item label="Meter (m)" value="m" />
+          <Picker.Item label="Kilometer (km)" value="km" />
+          <Picker.Item label="Mile" value="mile" />
+        </Picker>
       </View>
     </View>
   );

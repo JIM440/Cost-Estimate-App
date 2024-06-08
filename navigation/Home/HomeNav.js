@@ -20,14 +20,14 @@ const Home = () => {
       }}
     >
       <TopTabs.Screen
-        name="HouseStack"
-        component={HouseStackCategory}
-        options={{ tabBarLabel: 'House Category' }}
-      />
-      <TopTabs.Screen
         name="Individual"
         component={Individual}
         options={{ tabBarLabel: 'Individual Estimates' }}
+      />
+      <TopTabs.Screen
+        name="HouseStack"
+        component={HouseStackCategory}
+        options={{ tabBarLabel: 'House Category' }}
       />
     </TopTabs.Navigator>
   );

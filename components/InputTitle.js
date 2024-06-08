@@ -10,7 +10,7 @@ const TextInputTitle = ({ title, placeholder, onChange, value }) => {
       <TextInput
         style={inputStyles.input}
         placeholder={placeholder}
-        keyboardType="numeric"
+        inputMode="numeric"
         onChangeText={onChange}
         value={value}
       />

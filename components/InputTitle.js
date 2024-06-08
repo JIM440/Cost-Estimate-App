@@ -3,9 +3,9 @@ import React from 'react';
 // styles
 import { inputStyles } from '../styles/components/inputStyles';
 
-const TextInputTitle = ({ title, placeholder, onChange, value }) => {
+const TextInputTitle = ({ title, placeholder, onChange, value, style }) => {
   return (
-    <View style={inputStyles.container}>
+    <View style={style ? style : inputStyles.container}>
       <Text style={inputStyles.title}>{title}:</Text>
       <TextInput
         style={inputStyles.input}

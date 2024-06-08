@@ -22,4 +22,13 @@ export const inputStyles = StyleSheet.create({
     marginBottom: 20,
     borderColor: 'gray',
   },
+  threeColumn: {
+    flexDirection: 'row',
+    marginVertical: 10,
+  },
+  threeColumnInput: {
+    marginRight: 10,
+    width: '32%',
+    borderColor: 'gray',
+  },
 });

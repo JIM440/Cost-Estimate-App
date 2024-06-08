@@ -51,4 +51,16 @@ const wideCardStyles = StyleSheet.create({
   },
 });
 
-export { longCardStyles, wideCardStyles };
+const ColumnLayouts = StyleSheet.create({
+  TwoColumn: {
+    flexDirection: 'row',
+    paddingBottom: 10,
+  },
+  TwoColumnItem: {
+    width: '50%',
+    marginRight: 10,
+    borderColor: 'gray',
+  },
+});
+
+export { longCardStyles, wideCardStyles, ColumnLayouts };

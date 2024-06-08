@@ -5,7 +5,7 @@ import Plaster from '../../../screens/home/individualEstimates/costEstimate/Plas
 import Tiles from '../../../screens/home/individualEstimates/costEstimate/Tiles';
 import Paint from '../../../screens/home/individualEstimates/costEstimate/Paint';
 import Foundation from '../../../screens/home/individualEstimates/costEstimate/Foundation';
-import Excavation from '../../../screens/home/individualEstimates/costEstimate/Concrete';
+import Excavation from '../../../screens/home/individualEstimates/costEstimate/Excavation';
 import Filling from '../../../screens/home/individualEstimates/costEstimate/Filling';
 
 const { createStackNavigator } = require('@react-navigation/stack');

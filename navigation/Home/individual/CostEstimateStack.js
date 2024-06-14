@@ -7,6 +7,8 @@ import Paint from '../../../screens/home/individualEstimates/costEstimate/Paint'
 import Foundation from '../../../screens/home/individualEstimates/costEstimate/Foundation';
 import Excavation from '../../../screens/home/individualEstimates/costEstimate/Excavation';
 import Filling from '../../../screens/home/individualEstimates/costEstimate/Filling';
+import Formwork from '../../../screens/home/individualEstimates/costEstimate/Formwork';
+import Rod from '../../../screens/home/individualEstimates/costEstimate/Rod';
 
 const { createStackNavigator } = require('@react-navigation/stack');
 
@@ -28,6 +30,8 @@ export default function CostEstimateStack() {
       <Stack.Screen name="Foundation" component={Foundation} />
       <Stack.Screen name="Excavation" component={Excavation} />
       <Stack.Screen name="Filling" component={Filling} />
+      <Stack.Screen name="Rods" component={Rod} />
+      <Stack.Screen name="Formwork" component={Formwork} />
     </Stack.Navigator>
   );
 }

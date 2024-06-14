@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 // styles
 import { buttonStyles } from '../styles/components/buttonStyles';
@@ -10,5 +10,11 @@ const ButtonPrimary = ({ onPress, title }) => {
     </TouchableOpacity>
   );
 };
+
+const disabled = StyleSheet.create({
+  disabled: {
+    backgroundColor: '#777',
+  },
+});
 
 export default ButtonPrimary;

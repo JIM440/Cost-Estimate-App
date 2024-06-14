@@ -15,11 +15,11 @@ const estimates = [
   },
   {
     name: 'Rods',
-    image: require('../../../../assets/images/individual_estiamte/concrete.svg'),
+    image: require('../../../../assets/images/individual_estiamte/rod.svg'),
   },
   {
     name: 'Formwork',
-    image: require('../../../../assets/images/individual_estiamte/concrete.svg'),
+    image: require('../../../../assets/images/individual_estiamte/formwork.png'),
   },
   {
     name: 'Plaster',

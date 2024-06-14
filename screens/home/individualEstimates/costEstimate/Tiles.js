@@ -6,33 +6,50 @@ import TextInputTitle from '../../../../components/InputTitle';
 import ButtonPrimary from '../../../../components/Button';
 
 const Tiles = () => {
-  const [tileLength, setTileLength] = useState(0);
-  const [tileWidth, setTileWidth] = useState(0);
-  const [floorLength, setFloorLength] = useState(0);
-  const [floorWidth, setFloorWidth] = useState(0);
-  const [wastage, setWastage] = useState(0);
-  const [tilePrice, setTilePrice] = useState(0);
-  const [totalNumberOfTiles, setTotalNumberOfTiles] = useState(0);
+  const [tileLength, setTileLength] = useState('');
+  const [tileWidth, setTileWidth] = useState('');
+  const [floorLength, setFloorLength] = useState('');
+  const [floorWidth, setFloorWidth] = useState('');
+  const [wastage, setWastage] = useState('');
+  const [tilePrice, setTilePrice] = useState('');
+  const [floorArea, setFloorArea] = useState('');
+  const [totalNumberOfTiles, setTotalNumberOfTiles] = useState('');
+  const [tileCost, setTileCost] = useState('');
+
+  const RoundUp = (number) => {
+    if (number === '') {
+      return null;
+    }
+    return Math.ceil(parseFloat(number)).toFixed(0);
+  };
 
   const CalculateCost = () => {
-    // const floorLength = 5;
-    // const floorWidth = 12;
-    // const floorArea = floorLength * floorWidth;
+    if (
+      tileLength === '' ||
+      tileWidth === '' ||
+      floorLength === '' ||
+      floorWidth === '' ||
+      wastage === '' ||
+      tilePrice === ''
+    ) {
+      return;
+    }
 
-    // const tileLength = 0.3;
-    // const tileWidth = 0.3;
-    // const tileArea = tileLength * tileWidth;
+    const floorArea = floorLength * floorWidth;
+    setFloorArea(floorArea);
 
-    // const NumberOfTiles = floorArea / tileArea;
+    const tileArea = tileLength * tileWidth;
 
-    // const waste = 10 / 100;
-    // const wastePercentTiles = waste * NumberOfTiles;
+    const NumberOfTiles = floorArea / tileArea;
 
-    // const TotalNumberOfTiles = NumberOfTiles + wastePercentTiles;
+    const waste = wastage / 100;
+    const wastePercentTiles = waste * NumberOfTiles;
 
-    console.log(floorLength, floorWidth);
+    const TotalNumberOfTiles = NumberOfTiles + wastePercentTiles;
+    setTotalNumberOfTiles(TotalNumberOfTiles);
 
-    // return TotalNumberOfTiles;
+    const totalCost = TotalNumberOfTiles * tilePrice;
+    setTileCost(totalCost);
   };
 
   return (
@@ -47,8 +64,9 @@ const Tiles = () => {
           title="Length(m)"
           placeholder="Length"
           style={ColumnLayouts.TwoColumnItem}
-          onChange={(event) => {
-            setFloorLength(event.target.value);
+          value={floorLength}
+          onChange={(value) => {
+            setFloorLength(value);
           }}
         />
 
@@ -56,8 +74,9 @@ const Tiles = () => {
           title="Width(m)"
           placeholder="Width"
           style={ColumnLayouts.TwoColumnItem}
-          onChange={(event) => {
-            setFloorWidth(event.target.value);
+          value={floorWidth}
+          onChange={(value) => {
+            setFloorWidth(value);
           }}
         />
       </View>
@@ -69,33 +88,49 @@ const Tiles = () => {
           title="Length(m)"
           placeholder="Length"
           style={ColumnLayouts.TwoColumnItem}
+          value={tileLength}
+          onChange={(value) => {
+            setTileLength(value);
+          }}
         />
         <TextInputTitle
           title="Width(m)"
           placeholder="Width"
           style={ColumnLayouts.TwoColumnItem}
+          value={tileWidth}
+          onChange={(value) => {
+            setTileWidth(value);
+          }}
         />
       </View>
 
       <View style={ColumnLayouts.TwoColumn}>
         <TextInputTitle
           title="Wastage %"
-          placeholder="Enter Value"
+          placeholder="Enter waste %"
           style={ColumnLayouts.TwoColumnItem}
+          value={wastage}
+          onChange={(value) => {
+            setWastage(value);
+          }}
         />
         <TextInputTitle
           title="Tile Price per m2"
           placeholder="Tile Price"
           style={ColumnLayouts.TwoColumnItem}
+          value={tilePrice}
+          onChange={(value) => {
+            setTilePrice(value);
+          }}
         />
       </View>
 
       <ButtonPrimary title="Calculate Estimate" onPress={CalculateCost} />
       <Line />
       <Text style={titleStyles.title}>Output:</Text>
-      <Text>Floor Area: m2</Text>
-      <Text>Number of Tiles: Tiles</Text>
-      <Text>Tile Cost: fcfa</Text>
+      <Text>Floor Area: {RoundUp(floorArea) || ''} m2</Text>
+      <Text>Number of Tiles: {RoundUp(totalNumberOfTiles) || ''} Tiles</Text>
+      <Text>Tile Cost: {RoundUp(tileCost) || ''} fcfa</Text>
     </ScrollView>
   );
 };

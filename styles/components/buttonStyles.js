@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { primary_color, borderColor } from '../colors';
+import { border_radius_8 } from '../global';
 
 export const buttonStyles = StyleSheet.create({
   btn_primary: {

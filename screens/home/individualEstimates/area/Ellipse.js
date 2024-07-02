@@ -91,7 +91,7 @@ const Ellipse = () => {
         <Picker.Item label="Kilometer (km)" value="km" />
       </Picker>
       <Line />
-      <Text style={titleStyles.title}>Results:</Text>
+      <Text style={titleStyles.boldTitle}>Results</Text>
       <View>
         <Text style={Area.resultsText}>
           Area: {area} {unit}²

@@ -9,7 +9,7 @@ const longCardStyles = StyleSheet.create({
   title: {
     marginLeft: 16,
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
     textTransform: 'capitalize',
   },
   longCardBox: {
@@ -46,7 +46,7 @@ const wideCardStyles = StyleSheet.create({
   title: {
     marginTop: 10,
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
     textTransform: 'capitalize',
   },
 });
@@ -57,7 +57,7 @@ const ColumnLayouts = StyleSheet.create({
     paddingBottom: 10,
   },
   TwoColumnItem: {
-    width: '50%',
+    width: '48%',
     marginRight: 10,
     borderColor: 'gray',
   },

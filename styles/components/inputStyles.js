@@ -5,7 +5,7 @@ export const inputStyles = StyleSheet.create({
   container: {},
   title: {
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
     marginBottom: 10,
   },
   input: {
@@ -28,7 +28,12 @@ export const inputStyles = StyleSheet.create({
   },
   threeColumnInput: {
     marginRight: 10,
-    width: '32%',
+    width: '30%',
+    borderColor: 'gray',
+  },
+  twoColumnInput: {
+    marginRight: 10,
+    width: '47%',
     borderColor: 'gray',
   },
 });

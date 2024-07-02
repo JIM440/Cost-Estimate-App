@@ -11,10 +11,10 @@ const ButtonPrimary = ({ onPress, title }) => {
   );
 };
 
-const disabled = StyleSheet.create({
-  disabled: {
-    backgroundColor: '#777',
-  },
-});
+// const disabled = StyleSheet.create({
+//   disabled: {
+//     backgroundColor: '#777',
+//   },
+// });
 
 export default ButtonPrimary;

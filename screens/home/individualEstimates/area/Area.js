@@ -14,7 +14,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/circle.svg')}
+            source={require('../../../../assets/images/area/circle.png')}
           />
           <Text style={wideCardStyles.title}>Circle</Text>
         </Pressable>
@@ -23,7 +23,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/square.svg')}
+            source={require('../../../../assets/images/area/square.png')}
           />
           <Text style={wideCardStyles.title}>Square</Text>
         </Pressable>
@@ -32,7 +32,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/triangle.svg')}
+            source={require('../../../../assets/images/area/triangle.png')}
           />
           <Text style={wideCardStyles.title}>Triangle</Text>
         </Pressable>
@@ -41,7 +41,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/rectangle.svg')}
+            source={require('../../../../assets/images/area/rectangle.png')}
           />
           <Text style={wideCardStyles.title}>Rectangle</Text>
         </Pressable>
@@ -50,7 +50,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/trapezium.svg')}
+            source={require('../../../../assets/images/area/trapezium.png')}
           />
           <Text style={wideCardStyles.title}>Trapezium</Text>
         </Pressable>
@@ -59,7 +59,7 @@ const Area = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/area/ellipse.svg')}
+            source={require('../../../../assets/images/area/ellipse.png')}
           />
           <Text style={wideCardStyles.title}>Ellipse</Text>
         </Pressable>

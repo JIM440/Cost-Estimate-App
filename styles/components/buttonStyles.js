@@ -10,11 +10,13 @@ export const buttonStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 'auto',
+    maxHeight: 45,
+    minHeight: 45,
   },
   btn_primary_text: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 500,
   },
   btn_outline: {
     borderRadius: border_radius_8,
@@ -27,6 +29,6 @@ export const buttonStyles = StyleSheet.create({
   },
   btn_outline_text: {
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
   },
 });

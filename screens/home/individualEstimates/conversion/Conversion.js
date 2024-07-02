@@ -14,7 +14,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/length.svg')}
+            source={require('../../../../assets/images/conversion/length.png')}
           />
           <Text style={wideCardStyles.title}>Length</Text>
         </Pressable>
@@ -23,7 +23,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/area.svg')}
+            source={require('../../../../assets/images/conversion/area.png')}
           />
           <Text style={wideCardStyles.title}>Area</Text>
         </Pressable>
@@ -32,7 +32,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/volume.svg')}
+            source={require('../../../../assets/images/conversion/volume.png')}
           />
           <Text style={wideCardStyles.title}>Volume</Text>
         </Pressable>
@@ -41,7 +41,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/weight.svg')}
+            source={require('../../../../assets/images/conversion/weight.png')}
           />
           <Text style={wideCardStyles.title}>Weight</Text>
         </Pressable>
@@ -50,7 +50,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/temperature.svg')}
+            source={require('../../../../assets/images/conversion/temperature.png')}
           />
           <Text style={wideCardStyles.title}>Temperature</Text>
         </Pressable>
@@ -59,7 +59,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/pressure.svg')}
+            source={require('../../../../assets/images/conversion/pressure.png')}
           />
           <Text style={wideCardStyles.title}>Pressure</Text>
         </Pressable>
@@ -68,7 +68,7 @@ const Index = () => {
           style={wideCardStyles.wideCardBox}
         >
           <Image
-            source={require('../../../../assets/images/conversion/angle.svg')}
+            source={require('../../../../assets/images/conversion/angle.png')}
           />
           <Text style={wideCardStyles.title}>Angle</Text>
         </Pressable>

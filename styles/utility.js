@@ -11,14 +11,23 @@ const titleStyles = StyleSheet.create({
     fontWeight: 'semibold',
     marginBottom: 10,
   },
+  boldTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
 });
 
 const containerStyles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#fff',
+  },
   container: {
     width: '100%',
     flex: 1,
     backgroundColor: white,
     paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   resultContainer: {
     width: '80%',

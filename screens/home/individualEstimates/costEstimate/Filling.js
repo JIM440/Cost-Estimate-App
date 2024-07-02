@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
@@ -26,7 +26,7 @@ const Filling = () => {
 
     const trips = Math.ceil(totalVolume / 56); // 56m³ per trip
 
-    const totalCost = trips * price;
+    const totalCost = totalVolume * price;
 
     setTrips(trips);
     setTotalVolume(totalVolume);
@@ -34,10 +34,7 @@ const Filling = () => {
   };
 
   return (
-    <View style={containerStyles.container}>
-      <Text>Filling</Text>
-      <Text>Image Here</Text>
-
+    <ScrollView style={containerStyles.container}>
       <View style={inputStyles.threeColumn}>
         <TextInputTitle
           style={inputStyles.threeColumnInput}
@@ -48,6 +45,7 @@ const Filling = () => {
             setLength(value);
           }}
         />
+
         <TextInputTitle
           style={inputStyles.threeColumnInput}
           placeholder="Width"
@@ -57,6 +55,7 @@ const Filling = () => {
             setWidth(value);
           }}
         />
+
         <TextInputTitle
           style={inputStyles.threeColumnInput}
           placeholder="Depth"
@@ -82,11 +81,12 @@ const Filling = () => {
         onPress={calculateCostEstimate}
       />
       <Line />
+
       <Text style={titleStyles.title}>Output:</Text>
       <Text>Total volume (plus compaction volume): {totalVolume} m³</Text>
       <Text>Number of trips: {trips}</Text>
       <Text>Total cost: {totalCost} fcfa</Text>
-    </View>
+    </ScrollView>
   );
 };
 

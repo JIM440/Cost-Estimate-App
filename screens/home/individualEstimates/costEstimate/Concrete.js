@@ -13,14 +13,18 @@ const Concrete = () => {
   const [sideB, setSideB] = useState('');
   const [height, setHeight] = useState('');
   const [pricePerM3, setPricePerM3] = useState('');
-  const [dryConcreteVolume, setDryConcreteVolume] = useState(0);
-  const [cementWeight, setCementWeight] = useState(0);
-  const [cementBags, setCementBags] = useState(0);
-  const [sandVolume, setSandVolume] = useState(0);
-  const [aggregateVolume, setAggregateVolume] = useState(0);
-  const [concreteCost, setConcreteCost] = useState(0);
+  const [dryConcreteVolume, setDryConcreteVolume] = useState('');
+  const [cementWeight, setCementWeight] = useState('');
+  const [cementBags, setCementBags] = useState('');
+  const [sandVolume, setSandVolume] = useState('');
+  const [aggregateVolume, setAggregateVolume] = useState('');
+  const [concreteCost, setConcreteCost] = useState('');
 
   const calculateEstimate = () => {
+    if (sideA == '' || sideB == '' || height == '' || pricePerM3 == '') {
+      return;
+    }
+
     const volume = parseFloat(sideA) * parseFloat(sideB) * parseFloat(height);
     setDryConcreteVolume(volume.toFixed(2));
 

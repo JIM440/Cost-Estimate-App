@@ -4,6 +4,7 @@ import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import ButtonPrimary from '../../../../components/Button';
+import tableStyles from '../../../../styles/components/table';
 import { primary_color } from '../../../../styles/colors';
 import { ColumnLayouts } from '../../../../styles/components/cards';
 
@@ -15,11 +16,22 @@ const Paint = () => {
   const [coveragePerLiter, setCoveragePerLiter] = useState('');
   const [paintPricePerLiter, setPaintPricePerLiter] = useState('');
 
-  const [areaToPaint, setAreaToPaint] = useState(0);
-  const [totalLiters, setTotalLiters] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
+  const [areaToPaint, setAreaToPaint] = useState('');
+  const [totalLiters, setTotalLiters] = useState('');
+  const [totalCost, setTotalCost] = useState('');
 
   const calculate = () => {
+    if (
+      length == '' ||
+      width == '' ||
+      subtractArea == '' ||
+      numCoats == '' ||
+      coveragePerLiter == '' ||
+      paintPricePerLiter == ''
+    ) {
+      return;
+    }
+
     //convert inouts to numbers
     const wallLength = parseFloat(length);
     const wallWidth = parseFloat(width);
@@ -42,12 +54,13 @@ const Paint = () => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: '#fff' }}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={style.image}
         source={require('../../../../assets/images/individual_estiamte/painting-estimate-1.jpg')}
       />
       <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Paint</Text>
         <View style={ColumnLayouts.TwoColumn}>
           <TextInputTitle
             style={inputStyles.twoColumnInput}
@@ -108,10 +121,58 @@ const Paint = () => {
         <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
         <Line />
 
-        <Text>Output:</Text>
-        <Text>Area: {areaToPaint} m2</Text>
-        <Text>Total Liter: {totalLiters} liter</Text>
-        <Text>Cost: {totalCost} fcfa</Text>
+        <Text style={titleStyles.boldTitle}>Output:</Text>
+
+        <View style={tableStyles.container}>
+          {/* Row 1 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
+          </View>
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Area</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{areaToPaint}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m²</Text>
+            </View>
+          </View>
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Number of Liters</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalLiters}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>liter</Text>
+            </View>
+          </View>
+          {/* Row 4 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Total Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
+            </View>
+          </View>
+        </View>
       </View>
     </ScrollView>
   );

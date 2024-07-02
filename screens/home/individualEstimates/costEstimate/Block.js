@@ -16,15 +16,29 @@ const Block = () => {
   const [subtractArea, setSubtractArea] = useState('');
   const [blockPrice, setBlockPrice] = useState('');
 
-  const [wallVolume, setWallVolume] = useState(0);
-  const [numOfBlocks, setNumOfBlocks] = useState(0);
-  const [dryMortarVolume, setDryMortarVolume] = useState(0);
-  const [sandVolume, setSandVolume] = useState(0);
-  const [cementVolume, setCementVolume] = useState(0);
-  const [cementWeight, setCementWeight] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
+  const [wallVolume, setWallVolume] = useState('');
+  const [numOfBlocks, setNumOfBlocks] = useState('');
+  const [dryMortarVolume, setDryMortarVolume] = useState('');
+  const [sandVolume, setSandVolume] = useState('');
+  const [cementVolume, setCementVolume] = useState('');
+  const [cementWeight, setCementWeight] = useState('');
+  const [totalCost, setTotalCost] = useState('');
+  const [cementBags, setCementBags] = useState('');
 
   const calculate = () => {
+    if (
+      length == '' ||
+      width == '' ||
+      height == '' ||
+      blockLength == '' ||
+      blockWidth == '' ||
+      blockHeight == '' ||
+      subtractArea == '' ||
+      blockPrice == ''
+    ) {
+      return;
+    }
+
     // Convert inputs to numbers
     const wallLength = parseFloat(length);
     const wallWidth = parseFloat(width);
@@ -65,6 +79,7 @@ const Block = () => {
     setCementVolume(cementVol.toFixed(2));
     setCementWeight(cementWeightValue.toFixed(2));
     setTotalCost(totalBlockCost.toFixed(2));
+    setCementBags((cementWeight / 50).toFixed(2));
   };
 
   return (
@@ -238,9 +253,7 @@ const Block = () => {
               <Text style={tableStyles.cell}>Cement Bags Cost</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>
-                {(cementWeight / 50).toFixed(2)}
-              </Text>
+              <Text style={tableStyles.cell}>{cementBags}</Text>
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}></Text>

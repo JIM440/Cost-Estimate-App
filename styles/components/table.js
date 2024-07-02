@@ -8,6 +8,7 @@ const tableStyles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 0,
     borderBottomColor: '#000',
+    marginBottom: 16,
   },
   row: {
     flexDirection: 'row',
@@ -22,6 +23,14 @@ const tableStyles = StyleSheet.create({
   columnHeader: {
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  columnHeaderSingle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+    width: '100%',
+    padding: 10,
+    fontSize: 18,
   },
   cell: {
     textAlign: 'center',

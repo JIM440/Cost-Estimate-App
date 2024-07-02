@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
+import tableStyles from '../../../../styles/components/table';
 import { ColumnLayouts } from '../../../../styles/components/cards';
 import ButtonPrimary from '../../../../components/Button';
 
@@ -17,6 +18,9 @@ const Rod = () => {
   const [volume, setVolume] = useState('');
 
   const calculate = () => {
+    if (length == '' || diameter == '' || pricePerKg == '' || pieces == '') {
+      return;
+    }
     // Convert inputs to numbers
     const rodLength = parseFloat(length);
     const rodDiameter = parseFloat(diameter);
@@ -42,8 +46,9 @@ const Rod = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
-      <View>
+    <ScrollView style={containerStyles.scrollContainer}>
+      <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Rods</Text>
         <TextInputTitle
           title="Diameter (mm)"
           placeholder="Enter diameter"
@@ -75,9 +80,60 @@ const Rod = () => {
         <Line />
 
         <Text style={titleStyles.boldTitle}>Output</Text>
-        <Text>Weight: {weight} Kg</Text>
-        <Text>Total Cost: {totalCost} fcfa</Text>
-        <Text>Volume of 1 piece: {volume} m³</Text>
+
+        <View style={tableStyles.container}>
+          {/* Row 1 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
+          </View>
+
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Weight</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{weight}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>kg</Text>
+            </View>
+          </View>
+
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Total Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
+            </View>
+          </View>
+
+          {/* Row 4 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Volume of 1 piece</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{volume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+        </View>
       </View>
     </ScrollView>
   );

@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
+import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
 
 const Excavation = () => {
@@ -10,11 +11,14 @@ const Excavation = () => {
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [pricePerM3, setPricePerM3] = useState('');
-  const [trips, setTrips] = useState(0);
-  const [totalVolume, setTotalVolume] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
+  const [trips, setTrips] = useState('');
+  const [totalVolume, setTotalVolume] = useState('');
+  const [totalCost, setTotalCost] = useState('');
 
   const calculateCostEstimate = () => {
+    if (length == '' || width == '' || height == '' || pricePerM3 == '') {
+      return;
+    }
     const l = parseFloat(length);
     const w = parseFloat(width);
     const h = parseFloat(height);
@@ -34,59 +38,110 @@ const Excavation = () => {
   };
 
   return (
-    <View style={containerStyles.container}>
-      <Text>Excavation</Text>
-      <Text>Image Here</Text>
+    <ScrollView style={containerStyles.scrollContainer}>
+      <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Excavation</Text>
 
-      <View style={inputStyles.threeColumn}>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Length"
+            title="Length (m)"
+            value={length}
+            onChange={(value) => {
+              setLength(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Width"
+            title="Width (m)"
+            value={width}
+            onChange={(value) => {
+              setWidth(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Depth"
+            title="Depth (m)"
+            value={height}
+            onChange={(value) => {
+              setHeight(value);
+            }}
+          />
+        </View>
+
         <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Length"
-          title="Length (m)"
-          value={length}
+          title="Excavation Price Per m³"
+          placeholder="price"
+          value={pricePerM3}
           onChange={(value) => {
-            setLength(value);
+            setPricePerM3(value);
           }}
         />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Width"
-          title="Width (m)"
-          value={width}
-          onChange={(value) => {
-            setWidth(value);
-          }}
+
+        <ButtonPrimary
+          title="Calculate Estimate"
+          onPress={calculateCostEstimate}
         />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Depth"
-          title="Depth (m)"
-          value={height}
-          onChange={(value) => {
-            setHeight(value);
-          }}
-        />
+        <Line />
+        <Text style={titleStyles.boldTitle}>Output:</Text>
+
+        <View style={tableStyles.container}>
+          {/* Row 1 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
+          </View>
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>
+                Total Volume (plus compaction volume)
+              </Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Number of Trips</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{trips}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}></Text>
+            </View>
+          </View>
+          {/* Row 4 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Total Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
+            </View>
+          </View>
+        </View>
       </View>
-
-      <TextInputTitle
-        title="Excavation Price Per m3"
-        placeholder="price"
-        value={pricePerM3}
-        onChange={(value) => {
-          setPricePerM3(value);
-        }}
-      />
-
-      <ButtonPrimary
-        title="Calculate Estimate"
-        onPress={calculateCostEstimate}
-      />
-      <Line />
-      <Text style={titleStyles.title}>Output:</Text>
-      <Text>Total volume (plus compaction volume): {totalVolume} m³</Text>
-      <Text>Number of trips: {trips}</Text>
-      <Text>Total cost: {totalCost} fcfa</Text>
-    </View>
+    </ScrollView>
   );
 };
 

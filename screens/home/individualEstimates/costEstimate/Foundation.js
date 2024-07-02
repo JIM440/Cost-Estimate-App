@@ -1,7 +1,8 @@
 import { ScrollView, View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
-import { ColumnLayouts } from '../../../../styles/components/cards';
+import tableStyles from '../../../../styles/components/table';
+
 import TextInputTitle from '../../../../components/InputTitle';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import ButtonPrimary from '../../../../components/Button';
@@ -24,6 +25,18 @@ const Foundation = () => {
 
   const calculate = () => {
     // Calculate depth of foundation
+    if (
+      length == '' ||
+      width == '' ||
+      height == '' ||
+      pricePerM3 == '' ||
+      densityOfSoil == '' ||
+      bearingCapacity == '' ||
+      angleOfResponse == ''
+    ) {
+      return;
+    }
+
     const depthResult =
       (parseFloat(bearingCapacity) / parseFloat(densityOfSoil)) *
       Math.pow(
@@ -55,86 +68,178 @@ const Foundation = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
-      <Text>Depth of Foundation</Text>
-      <Text>Image Here</Text>
+    <ScrollView style={containerStyles.scrollContainer}>
+      <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Depth of Foundation</Text>
 
-      <TextInputTitle
-        title="Bearing Capacity of Soil (kg/m2)"
-        placeholder="Enter Value"
-        value={bearingCapacity}
-        onChange={(value) => {
-          setBearingCapacity(value);
-        }}
-      />
-      <TextInputTitle
-        title="Density of Soil (kg/m3)"
-        placeholder="Density"
-        value={densityOfSoil}
-        onChange={(value) => {
-          setDensityOfSoil(value);
-        }}
-      />
-      <TextInputTitle
-        title="Angle of Response"
-        placeholder="Enter Angle"
-        value={angleOfResponse}
-        onChange={(value) => {
-          setAngleOfResponse(value);
-        }}
-      />
+        <TextInputTitle
+          title="Bearing Capacity of Soil (kg/m2)"
+          placeholder="Enter Value"
+          value={bearingCapacity}
+          onChange={(value) => {
+            setBearingCapacity(value);
+          }}
+        />
+        <TextInputTitle
+          title="Density of Soil (kg/m3)"
+          placeholder="Density"
+          value={densityOfSoil}
+          onChange={(value) => {
+            setDensityOfSoil(value);
+          }}
+        />
+        <TextInputTitle
+          title="Angle of Response"
+          placeholder="Enter Angle"
+          value={angleOfResponse}
+          onChange={(value) => {
+            setAngleOfResponse(value);
+          }}
+        />
 
-      <Text style={titleStyles.title}>Slab Concrete</Text>
-      <View style={inputStyles.threeColumn}>
+        <Text style={titleStyles.title}>Slab Concrete</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Length"
+            title="Length (m)"
+            value={length}
+            onChange={(value) => {
+              setLength(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Width"
+            title="Width (m)"
+            value={width}
+            onChange={(value) => {
+              setWidth(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Thickness"
+            title="Thickness (m)"
+            value={height}
+            onChange={(value) => {
+              setHeight(value);
+            }}
+          />
+        </View>
         <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Length"
-          title="Length (m)"
-          value={length}
+          title="Concrete Price per m3"
+          placeholder="price"
+          value={pricePerM3}
           onChange={(value) => {
-            setLength(value);
+            setPricePerM3(value);
           }}
         />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Width"
-          title="Width (m)"
-          value={width}
-          onChange={(value) => {
-            setWidth(value);
-          }}
-        />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Thickness"
-          title="Thickness (m)"
-          value={height}
-          onChange={(value) => {
-            setHeight(value);
-          }}
-        />
+
+        <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
+
+        <Line />
+        <Text style={titleStyles.boldTitle}>Output:</Text>
+
+        <View style={tableStyles.container}>
+          {/* Row 1 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
+          </View>
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Depth of Foundation</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{depth}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m</Text>
+            </View>
+          </View>
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Dry Concrete Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{dryConcreteVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 4 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Cement Weight</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{cementWeight}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Kg</Text>
+            </View>
+          </View>
+          {/* Row 5 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Sand Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{sandVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 6 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Aggregate Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{aggregateVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 7 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Cement Bags Required</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{cementBags}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}></Text>
+            </View>
+          </View>
+          {/* Row 8 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Concrete Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{concreteCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
+            </View>
+          </View>
+        </View>
       </View>
-      <TextInputTitle
-        title="Concrete Price per m3"
-        placeholder="price"
-        value={pricePerM3}
-        onChange={(value) => {
-          setPricePerM3(value);
-        }}
-      />
-
-      <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
-
-      <Line />
-      <Text style={titleStyles.title}>Output:</Text>
-
-      <Text>Depth of Foundation: {depth} m</Text>
-      <Text>Dry Concrete Volume: {dryConcreteVolume} m³</Text>
-      <Text>Cement Weight: {cementWeight} kg</Text>
-      <Text>Sand Volume: {sandVolume} m³</Text>
-      <Text>Aggregate Volume: {aggregateVolume} m³</Text>
-      <Text>Cement Bags Required: {cementBags}</Text>
-      <Text>Concrete Cost: {concreteCost} fcfa</Text>
     </ScrollView>
   );
 };

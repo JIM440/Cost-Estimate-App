@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
+import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
 
 const Plaster = () => {
@@ -12,14 +13,23 @@ const Plaster = () => {
   const [thickness, setThickness] = useState('');
   const [openingArea, setOpeningArea] = useState('');
 
-  const [dryMortarVolume, setDryMortarVolume] = useState(0);
-  const [cementWeight, setCementWeight] = useState(0);
-  const [cementVolume, setCementVolume] = useState(0);
-  const [sandVolume, setSandVolume] = useState(0);
-  const [bagsOfCement, setBagsOfCement] = useState(0);
-  const [plasterCost, setPlasterCost] = useState(0);
+  const [dryMortarVolume, setDryMortarVolume] = useState('');
+  const [cementWeight, setCementWeight] = useState('');
+  const [cementVolume, setCementVolume] = useState('');
+  const [sandVolume, setSandVolume] = useState('');
+  const [bagsOfCement, setBagsOfCement] = useState('');
+  const [plasterCost, setPlasterCost] = useState('');
 
   const calculate = () => {
+    if (
+      length == '' ||
+      width == '' ||
+      thickness == '' ||
+      openingArea == '' ||
+      plasterPricePerM2 == ''
+    ) {
+      return;
+    }
     const pricePerM2 = parseFloat(plasterPricePerM2);
     const wallLength = parseFloat(length);
     const wallWidth = parseFloat(width);
@@ -59,66 +69,147 @@ const Plaster = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
-      <Text>Plaster</Text>
-      <Text>Image Here</Text>
+    <ScrollView style={containerStyles.scrollContainer}>
+      <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Plaster</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Length"
+            title="Length (m)"
+            value={length}
+            onChange={(value) => {
+              setLength(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Width"
+            title="Width (m)"
+            value={width}
+            onChange={(value) => {
+              setWidth(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Thickness"
+            title="Thickness (m)"
+            value={thickness}
+            onChange={(value) => {
+              setThickness(value);
+            }}
+          />
+        </View>
+        <TextInputTitle
+          title="Area of Opening"
+          placeholder="area"
+          value={openingArea}
+          onChange={(value) => {
+            setOpeningArea(value);
+          }}
+        />
+        <TextInputTitle
+          title="Plaster Price Per m2"
+          placeholder="price"
+          value={plasterPricePerM2}
+          onChange={(value) => {
+            setPlasterPricePerM2(value);
+          }}
+        />
+        <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
+        <Line />
 
-      <View style={inputStyles.threeColumn}>
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Length"
-          title="Length (m)"
-          value={length}
-          onChange={(value) => {
-            setLength(value);
-          }}
-        />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Width"
-          title="Width (m)"
-          value={width}
-          onChange={(value) => {
-            setWidth(value);
-          }}
-        />
-        <TextInputTitle
-          style={inputStyles.threeColumnInput}
-          placeholder="Thickness"
-          title="Thickness (m)"
-          value={thickness}
-          onChange={(value) => {
-            setThickness(value);
-          }}
-        />
+        <Text style={titleStyles.boldTitle}>Output:</Text>
+
+        <View style={tableStyles.container}>
+          {/* Row 1 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
+          </View>
+
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Dry Mortar Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{dryMortarVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Cement Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{cementVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 4 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Cement Weight</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{cementWeight}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>kg</Text>
+            </View>
+          </View>
+          {/* Row 5 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Sand Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{sandVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+          {/* Row 6 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Number of Bags of Cement</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{bagsOfCement}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}></Text>
+            </View>
+          </View>
+          {/* Row 7 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Plaster Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{plasterCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
+            </View>
+          </View>
+        </View>
       </View>
-      <TextInputTitle
-        title="Area of Opening"
-        placeholder="area"
-        value={openingArea}
-        onChange={(value) => {
-          setOpeningArea(value);
-        }}
-      />
-      <TextInputTitle
-        title="Plaster Price Per m2"
-        placeholder="price"
-        value={plasterPricePerM2}
-        onChange={(value) => {
-          setPlasterPricePerM2(value);
-        }}
-      />
-      <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
-      <Line />
-
-      <Text style={titleStyles.title}>Output:</Text>
-
-      <Text>Dry Mortar Volume: {dryMortarVolume} cubic meters</Text>
-      <Text>Cement Volume: {cementVolume} cubic meters</Text>
-      <Text>Cement Weight: {cementWeight} kg</Text>
-      <Text>Sand Volume: {sandVolume} cubic meters</Text>
-      <Text>Number of Bags of Cement: {bagsOfCement}</Text>
-      <Text>Plaster Cost: {plasterCost}</Text>
     </ScrollView>
   );
 };

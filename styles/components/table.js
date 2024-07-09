@@ -24,6 +24,21 @@ const tableStyles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  columnHeaderLeft: {
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginLeft: 16,
+  },
+  columnHeaderRight: {
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+  columnSubHeader: {
+    fontWeight: '700',
+    marginLeft: 22,
+    textAlign: 'left',
+    paddingVertical: 10,
+  },
   columnHeaderSingle: {
     fontWeight: 'bold',
     textAlign: 'center',
@@ -34,6 +49,10 @@ const tableStyles = StyleSheet.create({
   },
   cell: {
     textAlign: 'center',
+  },
+  cellLeft: {
+    textAlign: 'left',
+    marginLeft: 16,
   },
 });
 

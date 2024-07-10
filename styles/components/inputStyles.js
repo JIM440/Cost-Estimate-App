@@ -24,6 +24,7 @@ export const inputStyles = StyleSheet.create({
   },
   threeColumn: {
     flexDirection: 'row',
+    alignItems: 'flex-end',
     marginVertical: 10,
   },
   threeColumnInput: {

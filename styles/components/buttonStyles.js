@@ -26,8 +26,9 @@ export const buttonStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 10,
   },
-  btn_outline_text: {
+  btn_outlined_text: {
     fontSize: 16,
     fontWeight: '500',
   },

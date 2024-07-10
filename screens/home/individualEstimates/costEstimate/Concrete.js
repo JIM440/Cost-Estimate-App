@@ -26,22 +26,23 @@ const Concrete = () => {
     }
 
     const volume = parseFloat(sideA) * parseFloat(sideB) * parseFloat(height);
-    setDryConcreteVolume(volume.toFixed(2));
+    const dryVolume = volume * 1.54;
+    setDryConcreteVolume(dryVolume.toFixed(2));
 
     // Assuming density of concrete is 2400 kg/m³
-    const weight = volume * 2400;
+    const weight = dryVolume * 2400;
     setCementWeight(weight.toFixed(2));
 
     // Assuming sand is 55% and aggregate is 45% of concrete volume
-    setSandVolume((volume * 0.55).toFixed(2));
-    setAggregateVolume((volume * 0.45).toFixed(2));
+    setSandVolume((dryVolume * 0.55).toFixed(2));
+    setAggregateVolume((dryVolume * 0.45).toFixed(2));
 
     // Assuming each bag of cement is 50 kg
     const bags = Math.ceil(weight / 50);
     setCementBags(bags);
 
     // Calculate concrete cost
-    setConcreteCost((volume * pricePerM3).toFixed(2));
+    setConcreteCost((dryVolume * pricePerM3).toFixed(2));
   };
 
   return (

@@ -18,6 +18,10 @@ const estimates = [
     image: require('../../../../assets/images/individual_estiamte/rod.png'),
   },
   {
+    name: 'Roofing',
+    image: require('../../../../assets/images/individual_estiamte/roof.png'),
+  },
+  {
     name: 'Formwork',
     image: require('../../../../assets/images/individual_estiamte/formwork.png'),
   },
@@ -43,7 +47,7 @@ const estimates = [
   },
   {
     name: 'Filling',
-    image: require('../../../../assets/images/individual_estiamte/block.png'),
+    image: require('../../../../assets/images/individual_estiamte/filling.png'),
   },
 ];
 

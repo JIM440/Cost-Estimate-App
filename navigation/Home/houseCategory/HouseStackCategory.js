@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HouseCategory from '../../../screens/home/houseCategory/HouseCategory';
-import SingleStack from './SingleStack';
-import MultiStack from './MultiStack';
+import SingleStack from '../../../screens/home/houseCategory/Single/SingleHouse';
+import MultiStack from '../../../screens/home/houseCategory/Multi/MultiHouse';
 
 const Stack = createStackNavigator();
 
@@ -13,12 +13,12 @@ const HouseStackCategory = () => {
       <Stack.Screen
         name="SingleStack"
         component={SingleStack}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name="MultiStack"
         component={MultiStack}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );

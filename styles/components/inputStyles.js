@@ -4,7 +4,7 @@ import { border_radius_8 } from '../global';
 export const inputStyles = StyleSheet.create({
   container: {},
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
     marginBottom: 10,
   },

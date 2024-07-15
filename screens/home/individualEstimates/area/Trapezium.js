@@ -54,11 +54,12 @@ const Trapezium = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        source={require('../../../../assets/images/area/area-trapezium.jpg')}
+        source={require('../../../../assets/images/area/area-trapezium.png')}
         style={Area.img}
       />
+    <View style={containerStyles.container}>
       <TextInputTitle
         title="Base 1"
         placeholder="Enter Base 1 Length"
@@ -111,6 +112,7 @@ const Trapezium = () => {
           Area: {area} {unit}²
         </Text>
       </View>
+    </View>
     </ScrollView>
   );
 };

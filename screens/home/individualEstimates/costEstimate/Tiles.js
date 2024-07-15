@@ -166,7 +166,7 @@ const Tiles = () => {
               <Text style={tableStyles.cell}>{totalNumberOfTiles}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>FCFA</Text>
+              <Text style={tableStyles.cell}>Tiles</Text>
             </View>
           </View>
 

@@ -47,11 +47,13 @@ const Square = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        source={require('../../../../assets/images/area/area-square.jpg')}
+        source={require('../../../../assets/images/area/area-square.png')}
         style={Area.img}
       />
+    <View style={containerStyles.scrollContainer}>
+      <View style={containerStyles.container}>
       <TextInputTitle
         title="Side Length"
         placeholder="Enter Side Length"
@@ -84,6 +86,8 @@ const Square = () => {
           Area: {area} {unit}²
         </Text>
       </View>
+    </View>
+    </View>
     </ScrollView>
   );
 };

@@ -108,19 +108,6 @@ const Rod = () => {
             </View>
           </View>
 
-          {/* Row 3 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Total Cost</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{totalCost}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>FCFA</Text>
-            </View>
-          </View>
-
           {/* Row 4 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
@@ -131,6 +118,19 @@ const Rod = () => {
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Total Cost</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{totalCost}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>FCFA</Text>
             </View>
           </View>
         </View>

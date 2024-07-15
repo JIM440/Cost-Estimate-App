@@ -54,11 +54,12 @@ const Circle = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        source={require('../../../../assets/images/area/area-circle.jpg')}
+        source={require('../../../../assets/images/area/area-circle.png')}
         style={Area.img}
       />
+      <View style={containerStyles.container}>
       <TextInputTitle
         title="Radius (r)"
         placeholder="Enter Radius"
@@ -94,6 +95,7 @@ const Circle = () => {
           Circumference: {circumference} {unit}
         </Text>
       </View>
+    </View>
     </ScrollView>
   );
 };

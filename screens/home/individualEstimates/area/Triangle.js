@@ -50,11 +50,12 @@ const Triangle = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        source={require('../../../../assets/images/area/area-triangle.jpg')}
+        source={require('../../../../assets/images/area/area-triangle.png')}
         style={Area.img}
       />
+    <View style={containerStyles.container}>
       <TextInputTitle
         title="Base"
         placeholder="Enter Base Length"
@@ -97,6 +98,7 @@ const Triangle = () => {
           Area: {area} {unit}²
         </Text>
       </View>
+    </View>
     </ScrollView>
   );
 };

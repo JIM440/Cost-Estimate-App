@@ -51,14 +51,14 @@ const Block = () => {
 
     // Calculate wall volume
     const wallVolumeValue =
-      (wallLength * wallWidth - subtractAreaValue) * wallHeight;
+      ((wallLength * wallHeight) - subtractAreaValue) * wallWidth;
 
     // Calculate number of blocks
     const blockVolume = blockLengthValue * blockWidthValue * blockHeightValue;
     const totalBlockVolume = wallVolumeValue;
-    const blockNumber = Math.ceil(totalBlockVolume / blockVolume);
+    const blockNumber = Math.ceil((1.1 * totalBlockVolume) / blockVolume); //wastage volume
 
-    // Calculate dry mortar volume, assuming standard 1:6 mortar mix
+    // Calculate dry mortar volume, assuming standard 1:3 mortar mix
     const dryMortarVol = totalBlockVolume * 1.54;
 
     // Calculate sand volume
@@ -67,9 +67,12 @@ const Block = () => {
     // Calculate cement volume and weight, assuming density of cement as 1440 kg/m³
     const cementVol = (dryMortarVol * 1) / 4;
     const cementWeightValue = cementVol * 1440;
+    // assuming 1 bag = 
+    const cementBags = Math.ceil(blockNumber / 35);
 
     // Calculate total cost
     const totalBlockCost = blockNumber * blockPriceValue;
+
 
     // Update state with results
     setWallVolume(totalBlockVolume.toFixed(2));
@@ -79,7 +82,7 @@ const Block = () => {
     setCementVolume(cementVol.toFixed(2));
     setCementWeight(cementWeightValue.toFixed(2));
     setTotalCost(totalBlockCost.toFixed(2));
-    setCementBags((cementWeight / 50).toFixed(2));
+    setCementBags(cementBags);
   };
 
   return (
@@ -182,19 +185,6 @@ const Block = () => {
             </View>
           </View>
 
-          {/* Row 3 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Number of Blocks</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{numOfBlocks}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}></Text>
-            </View>
-          </View>
-
           {/* Row 4 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
@@ -237,7 +227,7 @@ const Block = () => {
           {/* Row 7 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Cement Weight Cost</Text>
+              <Text style={tableStyles.cell}>Cement Weight</Text>
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>{cementWeight}</Text>
@@ -250,15 +240,29 @@ const Block = () => {
           {/* Row 8 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Cement Bags Cost</Text>
+              <Text style={tableStyles.cell}>Cement Bags</Text>
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>{cementBags}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}></Text>
+              <Text style={tableStyles.cell}>Bags</Text>
             </View>
           </View>
+          
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Number of Blocks</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{numOfBlocks}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Blocks</Text>
+            </View>
+          </View>
+
 
           {/* Row 9 */}
           <View style={tableStyles.row}>

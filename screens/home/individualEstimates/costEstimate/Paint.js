@@ -46,7 +46,7 @@ const Paint = () => {
 
     // calculate total liters of paint required
     const litersRequired = (totalArea / coverage) * coats;
-    setTotalLiters(litersRequired);
+    setTotalLiters(litersRequired.toFixed(1));
 
     // calculate total costs of paint
     const cost = litersRequired * pricePerLiter;

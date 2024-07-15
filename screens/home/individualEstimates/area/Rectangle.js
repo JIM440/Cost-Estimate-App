@@ -50,11 +50,12 @@ const Rectangle = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
-      <Image
-        source={require('../../../../assets/images/area/area-rectangle.jpg')}
+<ScrollView style={containerStyles.scrollContainer}>
+<Image
+        source={require('../../../../assets/images/area/area-rectangle.png')}
         style={Area.img}
       />
+    <View style={containerStyles.container}>
       <TextInputTitle
         title="Length"
         placeholder="Enter Length"
@@ -97,7 +98,8 @@ const Rectangle = () => {
           Area: {area} {unit}²
         </Text>
       </View>
-    </ScrollView>
+    </View>
+</ScrollView>
   );
 };
 

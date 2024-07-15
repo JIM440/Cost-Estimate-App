@@ -17,33 +17,6 @@ const HouseCategory = () => {
   const navigation = useNavigation();
   return (
     <ScrollView style={containerStyles.container}>
-      {/* <View style={longCardStyles.longCardContainer}>
-        <Pressable onPress={() => navigation.navigate('SingleHouse')}>
-          <View style={longCardStyles.longCardBox}>
-            <Image
-              source={require('../../../assets/images/full_house/single-story.png')}
-            />
-            <Text style={longCardStyles.title}>Single-Story</Text>
-            <Image
-              style={longCardStyles.chevron_right}
-              source={require('../../../assets/icons/chevron_right.svg')}
-            />
-          </View>
-        </Pressable>
-
-        <Pressable onPress={() => navigation.navigate('MultiHouse')}>
-          <View style={longCardStyles.longCardBox}>
-            <Image
-              source={require('../../../assets/images/full_house/multi-story.png')}
-            />
-            <Text style={longCardStyles.title}>Multi-Story</Text>
-            <Image
-              style={longCardStyles.chevron_right}
-              source={require('../../../assets/icons/chevron_right.svg')}
-            />
-          </View>
-        </Pressable>
-      </View> */}
       {/* two column flex layout */}
       <View style={{ marginTop: 30 }}>
         <View style={styles.flexContainer}>
@@ -60,7 +33,7 @@ const HouseCategory = () => {
 
             <TouchableOpacity
               style={styles.link}
-              onPress={() => navigation.navigate('SingleStack')}
+              onPress={() => navigation.navigate('SingleStorey')}
             >
               <Text style={styles.linkText}>Proceed</Text>
               <Image
@@ -85,7 +58,7 @@ const HouseCategory = () => {
 
             <TouchableOpacity
               style={styles.link}
-              onPress={() => navigation.navigate('MultiStack')}
+              onPress={() => navigation.navigate('MultiStorey')}
             >
               <Text style={styles.linkText}>Proceed</Text>
               <Image

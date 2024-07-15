@@ -47,6 +47,7 @@ const wideCardStyles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontWeight: '500',
+    textAlign: 'center',
     textTransform: 'capitalize',
   },
 });

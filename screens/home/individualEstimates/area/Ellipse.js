@@ -50,11 +50,12 @@ const Ellipse = () => {
   };
 
   return (
-    <ScrollView style={containerStyles.container}>
+    <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        source={require('../../../../assets/images/area/area-ellipse.jpg')}
+        source={require('../../../../assets/images/area/area-ellipse.png')}
         style={Area.img}
       />
+      <View style={containerStyles.container}>
       <TextInputTitle
         title="Major Axis"
         placeholder="Enter Major Axis Length"
@@ -97,6 +98,7 @@ const Ellipse = () => {
           Area: {area} {unit}²
         </Text>
       </View>
+    </View>
     </ScrollView>
   );
 };

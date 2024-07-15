@@ -17,6 +17,7 @@ const Concrete = () => {
   const [cementWeight, setCementWeight] = useState('');
   const [cementBags, setCementBags] = useState('');
   const [sandVolume, setSandVolume] = useState('');
+  const [cementVol, setCementVol] = useState('');
   const [aggregateVolume, setAggregateVolume] = useState('');
   const [concreteCost, setConcreteCost] = useState('');
 
@@ -27,21 +28,24 @@ const Concrete = () => {
 
     const volume = parseFloat(sideA) * parseFloat(sideB) * parseFloat(height);
     const dryVolume = volume * 1.54;
-    setDryConcreteVolume(dryVolume.toFixed(2));
-
-    // Assuming density of concrete is 2400 kg/m³
+    const cementVol = dryVolume * 1 / 4;
+    const sandVol = dryVolume * 1 / 4;
+    const gravelVol = dryVolume * 2 / 4;
+    
     const weight = dryVolume * 2400;
     setCementWeight(weight.toFixed(2));
-
+    setCementVol(cementVol);
+    
     // Assuming sand is 55% and aggregate is 45% of concrete volume
-    setSandVolume((dryVolume * 0.55).toFixed(2));
-    setAggregateVolume((dryVolume * 0.45).toFixed(2));
-
+    setSandVolume((sandVol).toFixed(2));
+    setAggregateVolume((gravelVol).toFixed(2));
+    
     // Assuming each bag of cement is 50 kg
     const bags = Math.ceil(weight / 50);
     setCementBags(bags);
-
+    
     // Calculate concrete cost
+    setDryConcreteVolume(dryVolume.toFixed(2));
     setConcreteCost((dryVolume * pricePerM3).toFixed(2));
   };
 
@@ -118,6 +122,19 @@ const Concrete = () => {
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+
+          {/* Row 3 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Cement Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{cementVol}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>kg</Text>
             </View>
           </View>
 

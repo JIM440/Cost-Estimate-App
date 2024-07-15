@@ -1,58 +1,80 @@
 const guides = [
   {
     id: 1,
-    title: 'block',
-    content:
-      'Cost estimates for block construction: This guide provides an estimate of the costs associated with building using concrete blocks. It includes the cost of materials such as blocks, mortar, and reinforcement, as well as labor costs.',
+    title: 'Blocks',
+    route: 'blockGuide',
     image: require('../../assets/images/individual_estiamte/block.png'),
   },
   {
     id: 2,
-    title: 'concrete',
-    content:
-      'Cost estimates for concrete work: This guide provides an estimate of the costs involved in various concrete construction projects, including foundations, slabs, columns, and beams. It covers materials, labor, and equipment costs.',
+    title: 'Concrete',
+    route: 'concreteGuide',
     image: require('../../assets/images/individual_estiamte/concrete.png'),
   },
   {
     id: 3,
-    title: 'plastering',
-    content:
-      'Cost estimates for plastering: This guide outlines the costs associated with plastering interior and exterior surfaces. It includes materials such as plaster, sand, and additives, as well as labor costs for preparation and application.',
+    title: 'Plastering',
+    route: 'plasterGuide',
     image: require('../../assets/images/individual_estiamte/plaster.png'),
   },
   {
+    id: 3.1,
+    title: 'Roofing',
+    route: 'roofingGuide',
+    image: require('../../assets/images/individual_estiamte/roof.png'),
+  },
+  {
+    id: 3.2,
+    title: 'Formwork',
+    route: 'formworkGuide',
+    image: require('../../assets/images/individual_estiamte/formwork.png'),
+  },
+  {
+    id: 3.3,
+    title: 'Rods',
+    route: 'rodsGuide',
+    image: require('../../assets/images/individual_estiamte/rod.png'),
+  },
+  {
+    id: 3.4,
+    title: 'RC Slab',
+    route: 'rcslabGuide',
+    image: require('../../assets/images/individual_estiamte/rc_slab.png'),
+  },
+  {
+    id: 3.5,
+    title: 'Hollow Block Slab',
+    route: 'hollowblockslabGuide',
+    image: require('../../assets/images/individual_estiamte/hollow_icon.png'),
+  },
+  {
     id: 4,
-    title: 'tiling',
-    content:
-      'Cost estimates for tiling: This guide provides an estimate of the costs involved in tiling floors, walls, and other surfaces. It covers materials such as tiles, adhesive, grout, and sealant, as well as labor costs for installation.',
+    title: 'Tiles',
+    route: 'tilesGuide',
     image: require('../../assets/images/individual_estiamte/tiles.png'),
   },
   {
     id: 5,
-    title: 'painting',
-    content:
-      'Cost estimates for painting: This guide outlines the costs associated with painting interior and exterior surfaces. It includes materials such as paint, primer, brushes, and rollers, as well as labor costs for preparation and application.',
+    title: 'Painting',
+    route: 'paintGuide',
     image: require('../../assets/images/individual_estiamte/paint.png'),
   },
   {
     id: 6,
-    title: 'foundation',
-    content:
-      'Cost estimates for foundation work: This guide provides an estimate of the costs involved in foundation construction, including excavation, footings, and foundation walls. It covers materials, labor, and equipment costs.',
+    title: 'Foundation',
+    route: 'foundationGuide',
     image: require('../../assets/images/individual_estiamte/foundation.png'),
   },
   {
     id: 7,
-    title: 'excavation',
-    content:
-      'Cost estimates for excavation: This guide outlines the costs associated with excavation for construction projects, including digging, hauling, and disposal of soil. It covers labor, equipment, and disposal fees.',
+    title: 'Excavation',
+    route: 'excavationGuide',
     image: require('../../assets/images/individual_estiamte/excavation.png'),
   },
   {
     id: 8,
-    title: 'filling',
-    content:
-      'Cost estimates for filling: This guide provides an estimate of the costs involved in filling excavated areas, such as trenches, basements, and utility trenches. It includes materials such as gravel, sand, and soil, as well as labor costs for placement and compaction.',
+    title: 'Filling',
+    route: 'fillingGuide',
     image: require('../../assets/images/individual_estiamte/filling.png'),
   },
 ];

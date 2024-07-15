@@ -23,9 +23,9 @@ const GuideList = ({ navigation }) => {
       </Text>
       {guides.map((item) => {
         return (
-          <Pressable onPress={() => navigation.navigate('GuideContent', item)}>
+          <Pressable onPress={() => navigation.navigate(item.route)}>
             <View style={longCardStyles.longCardBox}>
-              <Image source={item.image} />
+              <Image source={item.image} style={{width: 50, objectFit: 'contain'}} />
               <Text style={longCardStyles.title}>{item.title}</Text>
               <Image
                 style={longCardStyles.chevron_right}

@@ -2,9 +2,12 @@ import { StyleSheet } from 'react-native';
 
 const Area = StyleSheet.create({
   img: {
-    borderRadius: 22,
     width: '100%',
+    objectFit: 'contain',
+    minHeight: 150,
     marginBottom: 10,
+    borderColor: '#eee',
+    borderWidth: 1,
   },
   picker: {
     height: 50,

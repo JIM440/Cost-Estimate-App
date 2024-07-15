@@ -1,23 +1,24 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-  createDrawerNavigator,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList, createDrawerNavigator } from "@react-navigation/drawer";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
-// colors
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+const BottomTab = createBottomTabNavigator();
+const TopTab = createMaterialTopTabNavigator();
+
 import { light_bg_blue, primary_color, white } from "../styles/colors";
 
 // icons
 import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+    FontAwesome,
+    Ionicons,
+    MaterialCommunityIcons,
+  } from '@expo/vector-icons';
 
 // // screens
 // guides
@@ -79,231 +80,226 @@ import RateApp from "../screens/RateApp";
 import Settings from "../screens/Settings";
 // share app
 import ShareApp from "../screens/ShareApp";
-import { View, Image } from "react-native";
-
-const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-const BottomTab = createBottomTabNavigator();
-const TopTab = createMaterialTopTabNavigator();
+import { View } from "react-native";
 
 const IndividualTopTabs = () => {
-  return (
-    <View style={{ flex: 1, backgroundColor: white }}>
-      <TopTab.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            backgroundColor: white,
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: primary_color,
-            position: "absolute",
-            borderRadius: 8,
-            zIndex: -1,
-            bottom: "15%",
-            height: "70%",
-          },
-          tabBarActiveTintColor: white,
-          tabBarInactiveTintColor: "gray",
-        }}
-      >
-        <TopTab.Screen
-          name="CostEstimateStack"
-          component={CostEstimate}
-          options={{ tabBarLabel: "Cost Estimate" }}
-        />
-        <TopTab.Screen
-          name="AreaStack"
-          component={AreaHome}
-          options={{ tabBarLabel: "Area" }}
-        />
-        <TopTab.Screen
-          name="ConversionStack"
-          component={Conversion}
-          options={{ tabBarLabel: "Conversion" }}
-        />
-      </TopTab.Navigator>
-    </View>
-  );
-};
+    return (
+        <View style={{ flex: 1, backgroundColor: white }}>
+          <TopTab.Navigator
+            screenOptions={{
+              tabBarStyle: {
+                backgroundColor: white,
+              },
+              tabBarIndicatorStyle: {
+                backgroundColor: primary_color,
+                position: 'absolute',
+                borderRadius: 8,
+                zIndex: -1,
+                bottom: '15%',
+                height: '70%',
+              },
+              tabBarActiveTintColor: white,
+              tabBarInactiveTintColor: 'gray',
+            }}
+          >
+            <TopTab.Screen
+              name="CostEstimateStack"
+              component={CostEstimate}
+              options={{ tabBarLabel: 'Cost Estimate' }}
+            />
+            <TopTab.Screen
+              name="AreaStack"
+              component={AreaHome}
+              options={{ tabBarLabel: 'Area' }}
+            />
+            <TopTab.Screen
+              name="ConversionStack"
+              component={Conversion}
+              options={{ tabBarLabel: 'Conversion' }}
+            />
+          </TopTab.Navigator>
+        </View>
+      );
+}
+
 
 const HomeTopTab = () => {
-  return (
-    <TopTab.Navigator
-      screenOptions={{
-        tabBarStyle: { backgroundColor: primary_color, fontWeight: "700" },
-        tabBarActiveTintColor: white,
-        tabBarInactiveTintColor: "#ECECEC",
-        tabBarIndicatorStyle: {
-          backgroundColor: white,
-          height: 4,
-        },
-      }}
-    >
-      <TopTab.Screen
-        name="Individual"
-        component={IndividualTopTabs}
-        options={{ tabBarLabel: "Individual Estimates" }}
-      />
-      <TopTab.Screen
-        name="HouseStack"
-        component={HouseCategory}
-        options={{ tabBarLabel: "House Category" }}
-      />
-    </TopTab.Navigator>
-  );
-};
+    return (
+        <TopTab.Navigator
+          screenOptions={{
+            tabBarStyle: { backgroundColor: primary_color, fontWeight: '700' },
+            tabBarActiveTintColor: white,
+            tabBarInactiveTintColor: '#ECECEC',
+            tabBarIndicatorStyle: {
+              backgroundColor: white,
+              height: 4,
+            },
+          }}
+        >
+          <TopTab.Screen
+            name="Individual"
+            component={IndividualTopTabs}
+            options={{ tabBarLabel: 'Individual Estimates' }}
+          />
+          <TopTab.Screen
+            name="HouseStack"
+            component={HouseCategory}
+            options={{ tabBarLabel: 'House Category' }}
+          />
+        </TopTab.Navigator>
+      );
+}
+
 
 const HomeBottomTab = () => {
-  return (
-    <BottomTab.Navigator
-      screenOptions={{
-        tabBarActiveTintColor: primary_color,
-        tabBarInactiveTintColor: "gray",
-      }}
-    >
-      <BottomTab.Screen
-        name="Home"
-        component={HomeTopTab}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? "home-sharp" : "home-outline"}
-              color={color}
-              size={size}
-            />
-          ),
-          headerShown: false,
-        }}
-      />
-      <BottomTab.Screen
-        name="Guides"
-        component={GuideHome}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            return focused ? (
-              <Image
-                source={require("../assets/icons/IconParkSolidBook.png")}
-              />
-            ) : (
-              <Image
-                source={require("../assets/icons/IconParkOutlineBook.png")}
-              />
-            );
-          },
-        }}
-      />
-      <BottomTab.Screen
-        name="Time"
-        component={TimeManagement}
-        options={{
-          tabBarLabel: "Time Management",
-          headerShown: false,
-          tabBarIcon: ({ color, size, focused }) => {
-            return (
-              <Ionicons
-                name={focused ? "time" : "time-outline"}
-                color={color}
-                size={size}
-              />
-            );
-          },
-        }}
-      />
-    </BottomTab.Navigator>
-  );
-};
+    return (
+        <BottomTab.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: primary_color,
+            tabBarInactiveTintColor: 'gray',
+          }}
+        >
+          <BottomTab.Screen
+            name="Home"
+            component={HomeTopTab}
+            options={{
+              tabBarIcon: ({ color, size, focused }) => (
+                <Ionicons
+                  name={focused ? 'home-sharp' : 'home-outline'}
+                  color={color}
+                  size={size}
+                />
+              ),
+              headerShown: false,
+            }}
+          />
+          <BottomTab.Screen
+            name="Guides"
+            component={GuideHome}
+            options={{
+              headerShown: false,
+              tabBarIcon: ({ focused }) => {
+                return focused ? (
+                  <Image source={require('../assets/icons/IconParkSolidBook.png')} />
+                ) : (
+                  <Image source={require('../assets/icons/IconParkOutlineBook.png')} />
+                );
+              },
+            }}
+          />
+          <BottomTab.Screen
+            name="Time"
+            component={TimeManagement}
+            options={{
+              tabBarLabel: 'Time Management',
+              headerShown: false,
+              tabBarIcon: ({ color, size, focused }) => {
+                return (
+                  <Ionicons
+                    name={focused ? 'time' : 'time-outline'}
+                    color={color}
+                    size={size}
+                  />
+                );
+              },
+            }}
+          />
+        </BottomTab.Navigator>
+      );
+}
+
 
 const DrawerNav = () => {
-  return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerTitle: "Cost Estimate",
-        headerStyle: {
-          backgroundColor: primary_color,
-        },
-        headerTintColor: white,
-        drawerActiveBackgroundColor: light_bg_blue,
-        drawerActiveTintColor: primary_color,
-      }}
-      drawerContent={(props) => {
-        return (
-          <DrawerContentScrollView {...props}>
-            <DrawerItem
-              label="Cost Estimate"
-              labelStyle={{ fontSize: 24, fontWeight: "bold" }}
-            />
-            <DrawerItemList {...props} />
-          </DrawerContentScrollView>
-        );
-      }}
-    >
-      <Drawer.Screen
-        name="BottomTab"
-        component={HomeBottomTab}
-        options={{
-          drawerLabel: "Home",
-          drawerIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name={focused ? "home-sharp" : "home-outline"}
-                size={size}
-                color={color}
-              />
-            );
+    return (
+      <Drawer.Navigator
+        screenOptions={{
+          headerTitle: 'Cost Estimate',
+          headerStyle: {
+            backgroundColor: primary_color,
           },
+          headerTintColor: white,
+          drawerActiveBackgroundColor: light_bg_blue,
+          drawerActiveTintColor: primary_color,
         }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          drawerIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name={focused ? "settings" : "settings-outline"}
-                color={color}
-                size={size}
+        drawerContent={(props) => {
+          return (
+            <DrawerContentScrollView {...props}>
+              <DrawerItem
+                label="Cost Estimate"
+                labelStyle={{ fontSize: 24, fontWeight: 'bold' }}
               />
-            );
-          },
+              <DrawerItemList {...props} />
+            </DrawerContentScrollView>
+          );
         }}
-      />
-      <Drawer.Screen
-        name="Share"
-        component={ShareApp}
-        options={{
-          drawerLabel: "Share App",
-          drawerIcon: ({ focused, color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name={focused ? "share-variant" : "share-variant-outline"}
-                color={color}
-                size={size}
-              />
-            );
-          },
-        }}
-      />
-      <Drawer.Screen
-        name="Rate"
-        component={RateApp}
-        options={{
-          drawerLabel: "Rate App",
-          drawerIcon: ({ color, size, focused }) => {
-            return (
-              <FontAwesome
-                name={focused ? "star" : "star-o"}
-                color={color}
-                size={size}
-              />
-            );
-          },
-        }}
-      />
-    </Drawer.Navigator>
-  );
-};
+      >
+        <Drawer.Screen
+          name="BottomTab"
+          component={HomeBottomTab}
+          options={{
+            drawerLabel: 'Home',
+            drawerIcon: ({ focused, color, size }) => {
+              return (
+                <Ionicons
+                  name={focused ? 'home-sharp' : 'home-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            drawerIcon: ({ focused, color, size }) => {
+              return (
+                <Ionicons
+                  name={focused ? 'settings' : 'settings-outline'}
+                  color={color}
+                  size={size}
+                />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="Share"
+          component={ShareApp}
+          options={{
+            drawerLabel: 'Share App',
+            drawerIcon: ({ focused, color, size }) => {
+              return (
+                <MaterialCommunityIcons
+                  name={focused ? 'share-variant' : 'share-variant-outline'}
+                  color={color}
+                  size={size}
+                />
+              );
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="Rate"
+          component={RateApp}
+          options={{
+            drawerLabel: 'Rate App',
+            drawerIcon: ({ color, size, focused }) => {
+              return (
+                <FontAwesome
+                  name={focused ? 'star' : 'star-o'}
+                  color={color}
+                  size={size}
+                />
+              );
+            },
+          }}
+        />
+      </Drawer.Navigator>
+    );
+  };
+
 
 const RootStack = () => {
   return (
@@ -311,20 +307,20 @@ const RootStack = () => {
       <Stack.Screen
         name="DrawerNav"
         component={DrawerNav}
-        options={{ headerShown: false }}
-      />
-      {/* house category */}
-      <Stack.Screen
+        options={{ headerShown: false, }}
+        />
+        {/* house category */}
+        <Stack.Screen
         name="SingleStorey"
         component={SingleStorey}
         options={{ title: "Single Storey" }}
       />
-      <Stack.Screen
+            <Stack.Screen
         name="MultiStorey"
         component={MultiStorey}
         options={{ title: "Multi Storey" }}
       />
-      {/* guides */}
+        {/* guides */}
       <Stack.Screen
         name="roofingGuide"
         component={RoofingGuide}
@@ -391,28 +387,22 @@ const RootStack = () => {
         options={{ title: "Block Guide" }}
       />
 
+
       {/* cost estimate */}
       <Stack.Screen name="Concrete" component={Concrete} />
       <Stack.Screen name="Block" component={Block} />
       <Stack.Screen name="Plaster" component={Plaster} />
       <Stack.Screen name="Tiles" component={Tiles} />
       <Stack.Screen name="Paint" component={Paint} />
-      <Stack.Screen
-        name="HollowSlab"
-        component={Hollowaslab}
-        options={{ title: "Hollow Block Slab" }}
-      />
-      <Stack.Screen
-        name="RCSlab"
-        component={RCSlab}
-        options={{ title: "RC Slab" }}
-      />
+      <Stack.Screen name="HollowSlab" component={Hollowaslab} options={{title: 'Hollow Block Slab'}} />
+      <Stack.Screen name="RCSlab" component={RCSlab} options={{title: 'RC Slab'}} />
       <Stack.Screen name="Foundation" component={Foundation} />
       <Stack.Screen name="Excavation" component={Excavation} />
       <Stack.Screen name="Filling" component={Filling} />
       <Stack.Screen name="Rods" component={Rod} />
       <Stack.Screen name="Roofing" component={Roofing} />
       <Stack.Screen name="Formwork" component={Formwork} />
+    
 
       {/* area */}
       <Stack.Screen name="Circle" component={Circle} />
@@ -430,6 +420,7 @@ const RootStack = () => {
       <Stack.Screen name="Temperature" component={Temperature} />
       <Stack.Screen name="Pressure" component={Pressure} />
       <Stack.Screen name="Angle" component={Angle} />
+
     </Stack.Navigator>
   );
 };

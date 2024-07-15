@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
@@ -39,6 +39,8 @@ const Filling = () => {
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image style={image.image} source={require('../../../../assets/images/individual_estiamte/filling_c.jpg')} />
+
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Filling</Text>
 
@@ -124,7 +126,7 @@ const Filling = () => {
               <Text style={tableStyles.cell}>{trips}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}></Text>
+              <Text style={tableStyles.cell}>Trips</Text>
             </View>
           </View>
           {/* Row 4 */}
@@ -146,3 +148,10 @@ const Filling = () => {
 };
 
 export default Filling;
+
+const image = StyleSheet.create({
+  image: {
+    width: '100vw',
+    marginBottom: 10
+  }
+})

@@ -20,14 +20,16 @@ const titleStyles = StyleSheet.create({
 
 const containerStyles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: white,
+    flex: 1,
+    maxHeight: '92vh',
   },
   container: {
     width: '100%',
     flex: 1,
     backgroundColor: white,
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    padding: 16,
+    paddingVertical: 10,
   },
   resultContainer: {
     width: '80%',

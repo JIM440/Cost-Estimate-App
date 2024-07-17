@@ -5,8 +5,8 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import ButtonPrimary from '../../../../components/Button';
 import tableStyles from '../../../../styles/components/table';
-import { primary_color } from '../../../../styles/colors';
 import { ColumnLayouts } from '../../../../styles/components/cards';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Paint = () => {
   const [length, setLength] = useState('');
@@ -50,14 +50,14 @@ const Paint = () => {
 
     // calculate total costs of paint
     const cost = litersRequired * pricePerLiter;
-    setTotalCost(cost);
+    setTotalCost(cost.toFixed(2));
   };
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        style={style.image}
-        source={require('../../../../assets/images/individual_estiamte/painting-estimate-1.jpg')}
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/paint_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Paint</Text>
@@ -103,7 +103,7 @@ const Paint = () => {
           <TextInputTitle
             style={inputStyles.twoColumnInput}
             placeholder="Area covered per liter"
-            title="Area covered (per l)"
+            title="Area covered (per liter)"
             value={coveragePerLiter}
             onChange={(value) => {
               setCoveragePerLiter(value);
@@ -177,14 +177,5 @@ const Paint = () => {
     </ScrollView>
   );
 };
-
-const style = StyleSheet.create({
-  image: {
-    width: '100%',
-    objectFit: 'contain',
-    borderWidth: 1,
-    borderColor: primary_color,
-  },
-});
 
 export default Paint;

@@ -5,6 +5,7 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Excavation = () => {
   const [length, setLength] = useState('');
@@ -26,20 +27,23 @@ const Excavation = () => {
 
     const volume = l * w * h;
 
-    const totalVolume = volume + 0.3 * volume;
+    const totalVolume = volume;
 
     const trips = Math.ceil(totalVolume / 56); // 56m³ per trip
 
-    const totalCost = trips * price;
+    const totalCost = totalVolume * price;
 
     setTrips(trips);
-    setTotalVolume(totalVolume);
-    setTotalCost(totalCost);
+    setTotalVolume(totalVolume.toFixed(2));
+    setTotalCost(totalCost.toFixed(2));
   };
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
-      <Image style={image.image} source={require('../../../../assets/images/individual_estiamte/excavation2_c.webp')} />
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/excavation2_c.webp')}
+      />
 
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Excavation</Text>
@@ -106,9 +110,7 @@ const Excavation = () => {
           {/* Row 2 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>
-                Total Volume (plus compaction volume)
-              </Text>
+              <Text style={tableStyles.cell}>Total Volume</Text>
             </View>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>{totalVolume}</Text>
@@ -147,11 +149,4 @@ const Excavation = () => {
   );
 };
 
-
-const image = StyleSheet.create({
-  image: {
-    width: '100vw',
-    marginBottom: 10
-  }
-})
 export default Excavation;

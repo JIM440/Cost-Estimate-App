@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
@@ -6,6 +6,8 @@ import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import { ColumnLayouts } from '../../../../styles/components/cards';
 import ButtonPrimary from '../../../../components/Button';
+import { primary_color } from '../../../../styles/colors';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Rod = () => {
   const [length, setLength] = useState('');
@@ -37,16 +39,20 @@ const Rod = () => {
     const totalRodCost = totalWeight * rodPricePerKg;
 
     // Calculate volume of one piece assuming rod as a cylinder
-    const rodVolume = Math.PI * Math.pow(rodDiameter / 2, 2) * rodLength;
+    const rodVolume = Math.PI * Math.pow(rodDiameter / 2000, 2) * rodLength;
 
     // Update state with results
-    setWeight(rodWeight.toFixed(2)); // Round to 2 decimal places
+    setWeight(totalWeight.toFixed(2)); // Round to 2 decimal places
     setTotalCost(totalRodCost.toFixed(2));
-    setVolume(rodVolume.toFixed(2));
+    setVolume(rodVolume.toFixed(3));
   };
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/rods_c.jpg')}
+      />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Rods</Text>
         <TextInputTitle

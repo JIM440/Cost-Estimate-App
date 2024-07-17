@@ -4,7 +4,6 @@ import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import tableStyles from '../../../../styles/components/table';
 
 import TextInputTitle from '../../../../components/InputTitle';
-import { inputStyles } from '../../../../styles/components/inputStyles';
 import ButtonPrimary from '../../../../components/Button';
 
 const Foundation = () => {
@@ -15,11 +14,7 @@ const Foundation = () => {
 
   const calculate = () => {
     // Calculate depth of foundation
-    if (
-      densityOfSoil == '' ||
-      bearingCapacity == '' ||
-      angleOfResponse == ''
-    ) {
+    if (densityOfSoil == '' || bearingCapacity == '' || angleOfResponse == '') {
       return;
     }
 
@@ -39,7 +34,7 @@ const Foundation = () => {
         <Text style={titleStyles.boldTitle}>Depth of Foundation</Text>
 
         <TextInputTitle
-          title="Bearing Capacity of Soil (kg/m2)"
+          title="Bearing Capacity of Soil (kg/m²)"
           placeholder="Enter Value"
           value={bearingCapacity}
           onChange={(value) => {
@@ -47,7 +42,7 @@ const Foundation = () => {
           }}
         />
         <TextInputTitle
-          title="Density of Soil (kg/m3)"
+          title="Density of Soil (kg/m³)"
           placeholder="Density"
           value={densityOfSoil}
           onChange={(value) => {

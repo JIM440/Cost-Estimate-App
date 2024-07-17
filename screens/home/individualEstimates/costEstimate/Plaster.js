@@ -1,10 +1,11 @@
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Plaster = () => {
   const [plasterPricePerM2, setPlasterPricePerM2] = useState('');
@@ -15,6 +16,7 @@ const Plaster = () => {
 
   const [dryMortarVolume, setDryMortarVolume] = useState('');
   const [cementWeight, setCementWeight] = useState('');
+  const [area, setArea] = useState('');
   const [cementVolume, setCementVolume] = useState('');
   const [sandVolume, setSandVolume] = useState('');
   const [bagsOfCement, setBagsOfCement] = useState('');
@@ -33,7 +35,7 @@ const Plaster = () => {
     const pricePerM2 = parseFloat(plasterPricePerM2);
     const wallLength = parseFloat(length);
     const wallWidth = parseFloat(width);
-    const wallThickness = parseFloat(thickness);
+    const wallThickness = parseFloat(thickness) / 1000;
     const openingAreaValue = parseFloat(openingArea);
 
     // Calculate total area of the wall to be plastered
@@ -57,9 +59,10 @@ const Plaster = () => {
     const sandVol = (dryVolume * 2) / 3;
 
     // Calculate plaster cost
-    const totalPlasterCost = dryVolume * pricePerM2;
+    const totalPlasterCost = totalArea * pricePerM2;
 
     // Update state with results
+    setArea(totalArea);
     setDryMortarVolume(dryVolume.toFixed(2));
     setCementWeight(cementWeightValue.toFixed(2));
     setCementVolume(cementVol.toFixed(2));
@@ -70,6 +73,10 @@ const Plaster = () => {
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/plaster_c.jpg')}
+      />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Plaster</Text>
         <View style={inputStyles.threeColumn}>
@@ -94,7 +101,7 @@ const Plaster = () => {
           <TextInputTitle
             style={inputStyles.threeColumnInput}
             placeholder="Thickness"
-            title="Thickness (m)"
+            title="Thickness (mm)"
             value={thickness}
             onChange={(value) => {
               setThickness(value);
@@ -110,7 +117,7 @@ const Plaster = () => {
           }}
         />
         <TextInputTitle
-          title="Plaster Price Per m2"
+          title="Plaster Price Per m²"
           placeholder="price"
           value={plasterPricePerM2}
           onChange={(value) => {
@@ -136,6 +143,18 @@ const Plaster = () => {
             </View>
           </View>
 
+          {/* Row 2 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Total Area</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{area}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m²</Text>
+            </View>
+          </View>
           {/* Row 2 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
@@ -193,7 +212,7 @@ const Plaster = () => {
               <Text style={tableStyles.cell}>{bagsOfCement}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}></Text>
+              <Text style={tableStyles.cell}>Bags</Text>
             </View>
           </View>
           {/* Row 7 */}

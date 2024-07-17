@@ -1,10 +1,11 @@
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Block = () => {
   const [length, setLength] = useState('');
@@ -51,7 +52,7 @@ const Block = () => {
 
     // Calculate wall volume
     const wallVolumeValue =
-      ((wallLength * wallHeight) - subtractAreaValue) * wallWidth;
+      (wallLength * wallHeight - subtractAreaValue) * wallWidth;
 
     // Calculate number of blocks
     const blockVolume = blockLengthValue * blockWidthValue * blockHeightValue;
@@ -67,12 +68,11 @@ const Block = () => {
     // Calculate cement volume and weight, assuming density of cement as 1440 kg/m³
     const cementVol = (dryMortarVol * 1) / 4;
     const cementWeightValue = cementVol * 1440;
-    // assuming 1 bag = 
+    // assuming 1 bag =
     const cementBags = Math.ceil(blockNumber / 35);
 
     // Calculate total cost
     const totalBlockCost = blockNumber * blockPriceValue;
-
 
     // Update state with results
     setWallVolume(totalBlockVolume.toFixed(2));
@@ -87,6 +87,10 @@ const Block = () => {
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/block_c.jpg')}
+      />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Blocks</Text>
         <Text>Dimension of Wall</Text>
@@ -100,8 +104,8 @@ const Block = () => {
           />
           <TextInputTitle
             style={inputStyles.threeColumnInput}
-            title="Width (m)"
-            placeholder="Enter width"
+            title="Thickness (m)"
+            placeholder="Enter Thickness"
             value={width}
             onChange={(text) => setWidth(text)}
           />
@@ -125,8 +129,8 @@ const Block = () => {
           />
           <TextInputTitle
             style={inputStyles.threeColumnInput}
-            title="Width (m)"
-            placeholder="Enter width"
+            title="Thickness (m)"
+            placeholder="Enter thickness"
             value={blockWidth}
             onChange={(text) => setBlockWidth(text)}
           />
@@ -249,7 +253,7 @@ const Block = () => {
               <Text style={tableStyles.cell}>Bags</Text>
             </View>
           </View>
-          
+
           {/* Row 3 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
@@ -262,7 +266,6 @@ const Block = () => {
               <Text style={tableStyles.cell}>Blocks</Text>
             </View>
           </View>
-
 
           {/* Row 9 */}
           <View style={tableStyles.row}>

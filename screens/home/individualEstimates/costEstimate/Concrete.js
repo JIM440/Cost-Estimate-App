@@ -6,7 +6,7 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
 import { ScrollView } from 'react-native-gesture-handler';
-import { primary_color } from '../../../../styles/colors';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Concrete = () => {
   const [sideA, setSideA] = useState('');
@@ -28,22 +28,22 @@ const Concrete = () => {
 
     const volume = parseFloat(sideA) * parseFloat(sideB) * parseFloat(height);
     const dryVolume = volume * 1.54;
-    const cementVol = dryVolume * 1 / 4;
-    const sandVol = dryVolume * 1 / 4;
-    const gravelVol = dryVolume * 2 / 4;
-    
-    const weight = dryVolume * 2400;
+    const cementVol = (dryVolume * 1) / 4;
+    const sandVol = (dryVolume * 1) / 4;
+    const gravelVol = (dryVolume * 2) / 4;
+
+    const weight = cementVol * 1440;
     setCementWeight(weight.toFixed(2));
-    setCementVol(cementVol);
-    
+    setCementVol(cementVol.toFixed(2));
+
     // Assuming sand is 55% and aggregate is 45% of concrete volume
-    setSandVolume((sandVol).toFixed(2));
-    setAggregateVolume((gravelVol).toFixed(2));
-    
+    setSandVolume(sandVol.toFixed(2));
+    setAggregateVolume(gravelVol.toFixed(2));
+
     // Assuming each bag of cement is 50 kg
     const bags = Math.ceil(weight / 50);
     setCementBags(bags);
-    
+
     // Calculate concrete cost
     setDryConcreteVolume(dryVolume.toFixed(2));
     setConcreteCost((dryVolume * pricePerM3).toFixed(2));
@@ -52,7 +52,7 @@ const Concrete = () => {
   return (
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
-        style={style.image}
+        style={ImageStyle.image}
         source={require('../../../../assets/images/individual_estiamte/concrete_dimension.png')}
       />
       <View style={containerStyles.container}>
@@ -125,6 +125,32 @@ const Concrete = () => {
             </View>
           </View>
 
+          {/* Row 5 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Sand Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{sandVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+
+          {/* Row 6 */}
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Gravel Volume</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>{aggregateVolume}</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>m³</Text>
+            </View>
+          </View>
+
           {/* Row 3 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
@@ -134,7 +160,7 @@ const Concrete = () => {
               <Text style={tableStyles.cell}>{cementVol}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>kg</Text>
+              <Text style={tableStyles.cell}>m³</Text>
             </View>
           </View>
 
@@ -160,33 +186,7 @@ const Concrete = () => {
               <Text style={tableStyles.cell}>{cementBags}</Text>
             </View>
             <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}></Text>
-            </View>
-          </View>
-
-          {/* Row 5 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Sand Volume</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{sandVolume}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>m³</Text>
-            </View>
-          </View>
-
-          {/* Row 6 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Aggregate Volume</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{aggregateVolume}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>m³</Text>
+              <Text style={tableStyles.cell}>Bags</Text>
             </View>
           </View>
 
@@ -207,16 +207,5 @@ const Concrete = () => {
     </ScrollView>
   );
 };
-
-const style = StyleSheet.create({
-  image: {
-    width: '100%',
-    objectFit: 'contain',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderColor: primary_color,
-  },
-});
 
 export default Concrete;

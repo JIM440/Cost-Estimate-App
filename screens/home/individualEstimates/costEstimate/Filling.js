@@ -5,6 +5,7 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Filling = () => {
   const [length, setLength] = useState('');
@@ -32,14 +33,17 @@ const Filling = () => {
 
     const totalCost = trips * price;
 
-    setTrips(trips);
+    setTrips(trips.toFixed(1));
     setTotalVolume(totalVolume);
     setTotalCost(totalCost);
   };
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
-      <Image style={image.image} source={require('../../../../assets/images/individual_estiamte/filling_c.jpg')} />
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/filling_c.jpg')}
+      />
 
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Filling</Text>
@@ -75,8 +79,8 @@ const Filling = () => {
         </View>
 
         <TextInputTitle
-          title="Filling Price Per m³"
-          placeholder="price"
+          title="Price Per Trip"
+          placeholder="Enter price"
           value={pricePerM3}
           onChange={(value) => {
             setPricePerM3(value);
@@ -148,10 +152,3 @@ const Filling = () => {
 };
 
 export default Filling;
-
-const image = StyleSheet.create({
-  image: {
-    width: '100vw',
-    marginBottom: 10
-  }
-})

@@ -1,10 +1,12 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { ColumnLayouts } from '../../../../styles/components/cards';
 import tableStyles from '../../../../styles/components/table';
 import TextInputTitle from '../../../../components/InputTitle';
 import ButtonPrimary from '../../../../components/Button';
+import { primary_color } from '../../../../styles/colors';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Tiles = () => {
   const [tileLength, setTileLength] = useState('');
@@ -37,7 +39,7 @@ const Tiles = () => {
     }
 
     const floorArea = floorLength * floorWidth;
-    setFloorArea(floorArea);
+    setFloorArea(floorArea.toFixed(2));
 
     const tileArea = tileLength * tileWidth;
 
@@ -55,6 +57,10 @@ const Tiles = () => {
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/tiles_c.jpg')}
+      />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Tiles</Text>
 
@@ -117,8 +123,8 @@ const Tiles = () => {
             }}
           />
           <TextInputTitle
-            title="Tile Price per m²"
-            placeholder="Tile Price"
+            title="Price per Tile"
+            placeholder="Enter Price"
             style={ColumnLayouts.TwoColumnItem}
             value={tilePrice}
             onChange={(value) => {

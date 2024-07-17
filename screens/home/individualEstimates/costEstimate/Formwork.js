@@ -5,8 +5,8 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
-import { primary_color } from '../../../../styles/colors';
 import { ColumnLayouts } from '../../../../styles/components/cards';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Formwork = () => {
   const [length, setLength] = useState('');
@@ -34,6 +34,10 @@ const Formwork = () => {
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/formwork_c.jpg')}
+      />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Formwork</Text>
         <View style={ColumnLayouts.TwoColumn}>
@@ -109,10 +113,5 @@ const Formwork = () => {
     </ScrollView>
   );
 };
-{
-  /* length
-width
-form work price */
-}
 
 export default Formwork;

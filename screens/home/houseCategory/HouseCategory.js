@@ -22,7 +22,7 @@ const HouseCategory = () => {
         <View style={styles.flexContainer}>
           <Image
             style={styles.flexImage}
-            source={require('../../../assets/images/full_house/single-storey.jpg')}
+            source={require('../../../assets/images/full_house/roof.jpg')}
           />
           <View style={styles.flexContent}>
             <Text style={styles.header}>Single Storey</Text>
@@ -81,9 +81,10 @@ const styles = StyleSheet.create({
   },
   flexImage: {
     width: '45%',
+    maxWidth: 170,
     borderRadius: 8,
-    marginRight: 10,
-    objectFit: 'cover',
+    marginRight: 16,
+    objectFit: 'contian',
     height: 150,
   },
   flexContent: {

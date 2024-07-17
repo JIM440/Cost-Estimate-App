@@ -1,10 +1,12 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
 import tableStyles from '../../../../styles/components/table';
 import ButtonPrimary from '../../../../components/Button';
+import { primary_color } from '../../../../styles/colors';
+import ImageStyle from '../../../../styles/screens/CostEstimate';
 
 const Roofing = () => {
   const [houseLength, setHouseLength] = useState('');
@@ -45,119 +47,125 @@ const Roofing = () => {
       numberOfPurlins: purlin,
     });
   };
-  
+
   return (
-    <ScrollView style={containerStyles.container}>
-      <Text style={titleStyles.boldTitle}>Roofing</Text>
-      <>
-        <View style={inputStyles.threeColumn}>
-          <TextInputTitle
-            style={inputStyles.twoColumnInput}
-            title="House Length (m)"
-            placeholder="Enter length"
-            value={houseLength}
-            onChange={(text) => setHouseLength(text)}
-          />
-          <TextInputTitle
-            style={inputStyles.twoColumnInput}
-            title="House Width (m)"
-            placeholder="Enter width"
-            value={houseWidth}
-            onChange={(text) => setHouseWidth(text)}
-          />
-        </View>
-        <View style={inputStyles.threeColumn}>
-          <TextInputTitle
-            style={inputStyles.threeColumnInput}
-            title="Rise (m)"
-            placeholder="Enter rise"
-            value={rise}
-            onChange={(text) => setRise(text)}
-          />
-          <TextInputTitle
-            style={inputStyles.threeColumnInput}
-            title="Run (m)"
-            placeholder="Enter run"
-            value={run}
-            onChange={(text) => setRun(text)}
-          />
-          <TextInputTitle
-            style={inputStyles.threeColumnInput}
-            title="Span (m)"
-            placeholder="Enter span"
-            value={span}
-            onChange={(text) => setSpan(text)}
-          />
-        </View>
-      </>
-      <ButtonPrimary title="Calculate" onPress={calculateRoofingEstimate} />
-      <Line />
-      <Text style={titleStyles.boldTitle}>Output</Text>
-      <View style={tableStyles.container}>
-        <View style={tableStyles.row}>
-          <Text style={tableStyles.columnHeaderSingle}>Roofing</Text>
-        </View>
-        <View style={tableStyles.row}>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.columnHeaderLeft}>Material</Text>
+    <ScrollView style={containerStyles.scrollContainer}>
+      <Image
+        style={ImageStyle.image}
+        source={require('../../../../assets/images/individual_estiamte/roof_c.jpg')}
+      />
+      <View style={containerStyles.container}>
+        <Text style={titleStyles.boldTitle}>Roofing</Text>
+        <>
+          <View style={inputStyles.threeColumn}>
+            <TextInputTitle
+              style={inputStyles.twoColumnInput}
+              title="House Length (m)"
+              placeholder="Enter length"
+              value={houseLength}
+              onChange={(text) => setHouseLength(text)}
+            />
+            <TextInputTitle
+              style={inputStyles.twoColumnInput}
+              title="House Width (m)"
+              placeholder="Enter width"
+              value={houseWidth}
+              onChange={(text) => setHouseWidth(text)}
+            />
           </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.columnHeader}>Quantity</Text>
+          <View style={inputStyles.threeColumn}>
+            <TextInputTitle
+              style={inputStyles.threeColumnInput}
+              title="Rise (m)"
+              placeholder="Enter rise"
+              value={rise}
+              onChange={(text) => setRise(text)}
+            />
+            <TextInputTitle
+              style={inputStyles.threeColumnInput}
+              title="Run (m)"
+              placeholder="Enter run"
+              value={run}
+              onChange={(text) => setRun(text)}
+            />
+            <TextInputTitle
+              style={inputStyles.threeColumnInput}
+              title="Span (m)"
+              placeholder="Enter span"
+              value={span}
+              onChange={(text) => setSpan(text)}
+            />
           </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.columnHeader}>Unit</Text>
+        </>
+        <ButtonPrimary title="Calculate" onPress={calculateRoofingEstimate} />
+        <Line />
+        <Text style={titleStyles.boldTitle}>Output</Text>
+        <View style={tableStyles.container}>
+          <View style={tableStyles.row}>
+            <Text style={tableStyles.columnHeaderSingle}>Roofing</Text>
           </View>
-        </View>
-        <View style={tableStyles.row}>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cellLeft}>Number of Boards</Text>
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeaderLeft}>Material</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Quantity</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.columnHeader}>Unit</Text>
+            </View>
           </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}>
-              {roofingEstimate.numberOfCeilingBoards}
-            </Text>
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cellLeft}>Number of Ceiling Boards</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>
+                {roofingEstimate.numberOfCeilingBoards}
+              </Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Boards</Text>
+            </View>
           </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}></Text>
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cellLeft}>Number of Roofing Sheets</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>
+                {roofingEstimate.numberOfRoofingSheets}
+              </Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Sheets</Text>
+            </View>
           </View>
-        </View>
-        <View style={tableStyles.row}>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cellLeft}>Number of Roofing Sheets</Text>
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cellLeft}>Number of Purlins</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>
+                {roofingEstimate.numberOfPurlins}
+              </Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Purlins</Text>
+            </View>
           </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}>
-              {roofingEstimate.numberOfRoofingSheets}
-            </Text>
-          </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}></Text>
-          </View>
-        </View>
-        <View style={tableStyles.row}>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cellLeft}>Number of Purlins</Text>
-          </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}>
-              {roofingEstimate.numberOfPurlins}
-            </Text>
-          </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}></Text>
-          </View>
-        </View>
-        <View style={tableStyles.row}>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cellLeft}>Number of Boards</Text>
-          </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}>
-              {roofingEstimate.numberOfBoards}
-            </Text>
-          </View>
-          <View style={tableStyles.column}>
-            <Text style={tableStyles.cell}></Text>
+          <View style={tableStyles.row}>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cellLeft}>Number of Boards</Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>
+                {roofingEstimate.numberOfBoards}
+              </Text>
+            </View>
+            <View style={tableStyles.column}>
+              <Text style={tableStyles.cell}>Boards</Text>
+            </View>
           </View>
         </View>
       </View>

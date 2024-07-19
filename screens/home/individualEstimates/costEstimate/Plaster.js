@@ -13,6 +13,9 @@ const Plaster = () => {
   const [width, setWidth] = useState('');
   const [thickness, setThickness] = useState('');
   const [openingArea, setOpeningArea] = useState('');
+  const [cementRatio, setCementRatio] = useState('');
+  const [sandRatio, setSandRatio] = useState('');
+  const [dryVolumeConstant, setDryVolumeConstant] = useState('');
 
   const [dryMortarVolume, setDryMortarVolume] = useState('');
   const [cementWeight, setCementWeight] = useState('');
@@ -21,6 +24,7 @@ const Plaster = () => {
   const [sandVolume, setSandVolume] = useState('');
   const [bagsOfCement, setBagsOfCement] = useState('');
   const [plasterCost, setPlasterCost] = useState('');
+  const [wastage, setWastage] = useState('');
 
   const calculate = () => {
     if (
@@ -37,6 +41,7 @@ const Plaster = () => {
     const wallWidth = parseFloat(width);
     const wallThickness = parseFloat(thickness) / 1000;
     const openingAreaValue = parseFloat(openingArea);
+    const waste = parseFloat(wastage);
 
     // Calculate total area of the wall to be plastered
     const totalArea = wallLength * wallWidth - openingAreaValue;
@@ -45,18 +50,23 @@ const Plaster = () => {
     const vol = totalArea * wallThickness;
 
     // Calculate total volume considering 30% wastage
-    const totalVolume = vol * (1 + 0.3);
+    const totalVolume = vol * (1 + waste / 100);
 
     // Calculate dry volume of plaster
-    const dryVolume = totalVolume * 1.54;
+    const dryVolume = totalVolume * parseFloat(dryVolumeConstant);
+
+    const CementRatio = parseFloat(cementRatio);
+    const SandRatio = parseFloat(sandRatio);
+
+    const MortarRatio = CementRatio + SandRatio;
 
     // Calculate cement volume and weight
-    const cementVol = dryVolume / 3;
+    const cementVol = (dryVolume * CementRatio) / MortarRatio;
     const cementWeightValue = cementVol * 1440;
     const bagsOfCementValue = cementWeightValue / 50;
 
     // Calculate sand volume
-    const sandVol = (dryVolume * 2) / 3;
+    const sandVol = (dryVolume * SandRatio) / MortarRatio;
 
     // Calculate plaster cost
     const totalPlasterCost = totalArea * pricePerM2;
@@ -79,6 +89,7 @@ const Plaster = () => {
       />
       <View style={containerStyles.container}>
         <Text style={titleStyles.boldTitle}>Plaster</Text>
+        <Text>Wall Dimension</Text>
         <View style={inputStyles.threeColumn}>
           <TextInputTitle
             style={inputStyles.threeColumnInput}
@@ -108,22 +119,65 @@ const Plaster = () => {
             }}
           />
         </View>
-        <TextInputTitle
-          title="Area of Opening"
-          placeholder="area"
-          value={openingArea}
-          onChange={(value) => {
-            setOpeningArea(value);
-          }}
-        />
+
+        <Line />
+
+        <Text>Mix Ratio</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            title="Cement Ratio"
+            placeholder="Enter value"
+            value={cementRatio}
+            onChange={(text) => setCementRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            title="Sand Ratio"
+            placeholder="Enter value"
+            value={sandRatio}
+            onChange={(text) => setSandRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Dry Volume"
+            value={dryVolumeConstant}
+            title="Dry Volume"
+            onChange={(text) => setDryVolumeConstant(text)}
+          />
+        </View>
+
+        <Line />
+
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Area of Opening"
+            placeholder="Enter area"
+            value={openingArea}
+            onChange={(value) => {
+              setOpeningArea(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Percentage Waste"
+            placeholder="Enter % waste"
+            value={wastage}
+            onChange={(value) => {
+              setWastage(value);
+            }}
+          />
+        </View>
         <TextInputTitle
           title="Plaster Price Per m²"
-          placeholder="price"
+          placeholder="Enter price"
           value={plasterPricePerM2}
           onChange={(value) => {
             setPlasterPricePerM2(value);
           }}
         />
+
         <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
         <Line />
 

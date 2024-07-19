@@ -11,6 +11,12 @@ const HollowSlab = () => {
   const [HBSlabLength, setHBSlabLength] = useState('');
   const [HBSlabWidth, setHBSlabWidth] = useState('');
   const [HBSlabThickness, setHBSlabThickness] = useState('');
+
+  const [cementRatio, setCementRatio] = useState('');
+  const [sandRatio, setSandRatio] = useState('');
+  const [gravelRatio, setGravelRatio] = useState('');
+  const [dryVolumeConstant, setDryVolumeConstant] = useState('');
+
   const [HBSlabSpan, setHBSlabSpan] = useState('');
   const [HBSlabBlockLength, setHBSlabBlockLength] = useState('');
   const [HBSlabBlockWidth, setHBSlabBlockWidth] = useState('');
@@ -30,6 +36,12 @@ const HollowSlab = () => {
     const areaOfBlock =
       parseFloat(HBSlabBlockLength) * parseFloat(HBSlabBlockWidth);
 
+    const CementRatio = parseFloat(cementRatio);
+    const SandRatio = parseFloat(sandRatio);
+    const GravelRatio = parseFloat(gravelRatio);
+
+    const ConcreteRatio = CementRatio + SandRatio + GravelRatio;
+
     const numBlocks = Math.ceil(areaOfSlab / areaOfBlock);
     const concreteVolume = areaOfSlab * parseFloat(HBSlabThickness); // Convert to cubic meters (0.4 cm to meters)
     // const concreteVolume = areaOfSlab * 0.004; // Convert to cubic meters (0.4 cm to meters)
@@ -37,12 +49,13 @@ const HollowSlab = () => {
     const numRods = parseFloat(HBSlabSpan) / parseFloat(HBSlabBlockWidth);
     const num12mRods = (numRods * parseFloat(HBSlabWidth)) / 12; // Assuming rods are 12 meters long
 
-    const dryVol = concreteVolume * 1.54; // Dry volume of concrete
-    const gravelVol = dryVol * 0.5; // Dry volume of gravel
+    const dryVol = concreteVolume * dryVolumeConstant; // Dry volume of concrete
 
-    // Calculate volumes based on ratio 1:1:2 (cement:gravel:sand)
-    const cementVol = dryVol * 0.25;
-    const sandVol = cementVol * 0.25;
+    const gravelVol = (dryVol * GravelRatio) / ConcreteRatio;
+
+    // Calculate volumes based on ratio
+    const cementVol = (dryVol * CementRatio) / ConcreteRatio;
+    const sandVol = (dryVol * SandRatio) / ConcreteRatio;
 
     // Calculate number of bags of cement
     const densityOfCement = 1440; // Density of cement in kg/m³
@@ -114,12 +127,50 @@ const HollowSlab = () => {
             onChange={(text) => setHBSlabBlockWidth(text)}
           />
         </View>
-        <TextInputTitle
-          placeholder="Enter Span"
-          value={HBSlabSpan}
-          title="Span between Blocks (m)"
-          onChange={(text) => setHBSlabSpan(text)}
-        />
+
+        <Line />
+
+        <Text>Mix Ratio</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Cement Ratio"
+            value={cementRatio}
+            title="Cement Ratio"
+            onChange={(text) => setCementRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Sand Ratio"
+            value={sandRatio}
+            title="Sand Ratio"
+            onChange={(text) => setSandRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Gravel Ratio"
+            value={gravelRatio}
+            title="Gravel Ratio"
+            onChange={(text) => setGravelRatio(text)}
+          />
+        </View>
+        <Line />
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder="Enter Span"
+            value={HBSlabSpan}
+            title="Span (m)"
+            onChange={(text) => setHBSlabSpan(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder="Enter Dry Volume"
+            value={dryVolumeConstant}
+            title="Dry Volume"
+            onChange={(text) => setDryVolumeConstant(text)}
+          />
+        </View>
         <ButtonPrimary title="Calculate" onPress={HBEstimate} />
         <Line />
         <Text style={titleStyles.boldTitle}>Output:</Text>

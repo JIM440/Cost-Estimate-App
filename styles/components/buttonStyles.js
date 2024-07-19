@@ -13,6 +13,7 @@ export const buttonStyles = StyleSheet.create({
     height: 'auto',
     maxHeight: 45,
     minHeight: 45,
+    marginTop: 10,
   },
   btn_primary_text: {
     color: '#fff',
@@ -20,6 +21,7 @@ export const buttonStyles = StyleSheet.create({
   },
   btn_outline: {
     borderRadius: border_radius_8,
+    marginTop: 10,
     padding: 10,
     borderWidth: 1,
     borderColor: borderColor,

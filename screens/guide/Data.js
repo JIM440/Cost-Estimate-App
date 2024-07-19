@@ -6,34 +6,10 @@ const guides = [
     image: require('../../assets/images/individual_estiamte/block.png'),
   },
   {
-    id: 2,
-    title: 'Concrete',
-    route: 'concreteGuide',
-    image: require('../../assets/images/individual_estiamte/concrete.png'),
-  },
-  {
-    id: 3,
-    title: 'Plastering',
-    route: 'plasterGuide',
-    image: require('../../assets/images/individual_estiamte/plaster.png'),
-  },
-  {
     id: 3.1,
     title: 'Roofing',
     route: 'roofingGuide',
     image: require('../../assets/images/individual_estiamte/roof.png'),
-  },
-  {
-    id: 3.2,
-    title: 'Formwork',
-    route: 'formworkGuide',
-    image: require('../../assets/images/individual_estiamte/formwork.png'),
-  },
-  {
-    id: 3.3,
-    title: 'Rods',
-    route: 'rodsGuide',
-    image: require('../../assets/images/individual_estiamte/rod.png'),
   },
   {
     id: 3.4,
@@ -48,6 +24,30 @@ const guides = [
     image: require('../../assets/images/individual_estiamte/hollow_icon.png'),
   },
   {
+    id: 3.3,
+    title: 'Rods',
+    route: 'rodsGuide',
+    image: require('../../assets/images/individual_estiamte/rod.png'),
+  },
+  {
+    id: 2,
+    title: 'Square Column Concrete',
+    route: 'concreteGuide',
+    image: require('../../assets/images/individual_estiamte/concrete.png'),
+  },
+  {
+    id: 3.2,
+    title: 'Formwork',
+    route: 'formworkGuide',
+    image: require('../../assets/images/individual_estiamte/formwork.png'),
+  },
+  {
+    id: 3,
+    title: 'Plaster',
+    route: 'plasterGuide',
+    image: require('../../assets/images/individual_estiamte/plaster.png'),
+  },
+  {
     id: 4,
     title: 'Tiles',
     route: 'tilesGuide',
@@ -55,13 +55,13 @@ const guides = [
   },
   {
     id: 5,
-    title: 'Painting',
+    title: 'Paint',
     route: 'paintGuide',
     image: require('../../assets/images/individual_estiamte/paint.png'),
   },
   {
     id: 6,
-    title: 'Foundation',
+    title: 'Depth of Foundation',
     route: 'foundationGuide',
     image: require('../../assets/images/individual_estiamte/foundation.png'),
   },

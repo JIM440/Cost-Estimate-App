@@ -16,6 +16,8 @@ const Block = () => {
   const [blockHeight, setBlockHeight] = useState('');
   const [subtractArea, setSubtractArea] = useState('');
   const [blockPrice, setBlockPrice] = useState('');
+  const [cementRatio, setCementRatio] = useState('');
+  const [sandRatio, setSandRatio] = useState('');
 
   const [wallVolume, setWallVolume] = useState('');
   const [numOfBlocks, setNumOfBlocks] = useState('');
@@ -35,6 +37,8 @@ const Block = () => {
       blockWidth == '' ||
       blockHeight == '' ||
       subtractArea == '' ||
+      cementRatio == '' ||
+      sandRatio == '' ||
       blockPrice == ''
     ) {
       return;
@@ -49,6 +53,8 @@ const Block = () => {
     const blockHeightValue = parseFloat(blockHeight);
     const subtractAreaValue = parseFloat(subtractArea);
     const blockPriceValue = parseFloat(blockPrice);
+    const SandRatio = parseFloat(sandRatio);
+    const CementRatio = parseFloat(cementRatio);
 
     // Calculate wall volume
     const wallVolumeValue =
@@ -62,11 +68,12 @@ const Block = () => {
     // Calculate dry mortar volume, assuming standard 1:3 mortar mix
     const dryMortarVol = totalBlockVolume * 1.54;
 
+    const mortarRatio = CementRatio + SandRatio;
     // Calculate sand volume
-    const sandVol = (dryMortarVol * 3) / 4;
+    const sandVol = (dryMortarVol * SandRatio) / mortarRatio;
 
     // Calculate cement volume and weight, assuming density of cement as 1440 kg/m³
-    const cementVol = (dryMortarVol * 1) / 4;
+    const cementVol = (dryMortarVol * CementRatio) / mortarRatio;
     const cementWeightValue = cementVol * 1440;
     // assuming 1 bag =
     const cementBags = Math.ceil(blockNumber / 35);
@@ -104,17 +111,17 @@ const Block = () => {
           />
           <TextInputTitle
             style={inputStyles.threeColumnInput}
-            title="Thickness (m)"
-            placeholder="Enter Thickness"
-            value={width}
-            onChange={(text) => setWidth(text)}
-          />
-          <TextInputTitle
-            style={inputStyles.threeColumnInput}
             title="Height (m)"
             placeholder="Enter height"
             value={height}
             onChange={(text) => setHeight(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            title="Thickness (m)"
+            placeholder="Enter Thickness"
+            value={width}
+            onChange={(text) => setWidth(text)}
           />
         </View>
         <Line />
@@ -129,34 +136,57 @@ const Block = () => {
           />
           <TextInputTitle
             style={inputStyles.threeColumnInput}
-            title="Thickness (m)"
-            placeholder="Enter thickness"
-            value={blockWidth}
-            onChange={(text) => setBlockWidth(text)}
-          />
-          <TextInputTitle
-            style={inputStyles.threeColumnInput}
             title="Height (m)"
             placeholder="Enter height"
             value={blockHeight}
             onChange={(text) => setBlockHeight(text)}
           />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            title="Thickness (m)"
+            placeholder="Enter thickness"
+            value={blockWidth}
+            onChange={(text) => setBlockWidth(text)}
+          />
         </View>
         <Line />
+        <Text>Mix Ratio</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Cement Ratio"
+            placeholder="Cement Ratio"
+            value={cementRatio}
+            onChange={(text) => setCementRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Sand Ratio"
+            placeholder="Sand Ratio"
+            value={sandRatio}
+            onChange={(text) => setSandRatio(text)}
+          />
+        </View>
 
-        <TextInputTitle
-          title="Subtract Area (m²)"
-          placeholder="Enter area"
-          value={subtractArea}
-          onChange={(text) => setSubtractArea(text)}
-        />
+        <Line />
 
-        <TextInputTitle
-          title="Price Per Block"
-          placeholder="Enter price"
-          value={blockPrice}
-          onChange={(text) => setBlockPrice(text)}
-        />
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Subtract Area (m²)"
+            placeholder="Enter area"
+            value={subtractArea}
+            onChange={(text) => setSubtractArea(text)}
+          />
+
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title="Price Per Block"
+            placeholder="Enter price"
+            value={blockPrice}
+            onChange={(text) => setBlockPrice(text)}
+          />
+        </View>
 
         <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
         <Line />
@@ -189,7 +219,7 @@ const Block = () => {
             </View>
           </View>
 
-          {/* Row 4 */}
+          {/* Row 3 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Dry Mortar Volume</Text>
@@ -202,7 +232,7 @@ const Block = () => {
             </View>
           </View>
 
-          {/* Row 5 */}
+          {/* Row 4 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Sand Volume</Text>
@@ -215,7 +245,7 @@ const Block = () => {
             </View>
           </View>
 
-          {/* Row 6 */}
+          {/* Row 5 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Cement Volume</Text>
@@ -227,8 +257,8 @@ const Block = () => {
               <Text style={tableStyles.cell}>m³</Text>
             </View>
           </View>
-
-          {/* Row 7 */}
+          {/* 
+          { Row 6 }
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Cement Weight</Text>
@@ -239,9 +269,9 @@ const Block = () => {
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Kg</Text>
             </View>
-          </View>
+          </View> */}
 
-          {/* Row 8 */}
+          {/* Row 7 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Cement Bags</Text>
@@ -254,7 +284,7 @@ const Block = () => {
             </View>
           </View>
 
-          {/* Row 3 */}
+          {/* Row 8 */}
           <View style={tableStyles.row}>
             <View style={tableStyles.column}>
               <Text style={tableStyles.cell}>Number of Blocks</Text>

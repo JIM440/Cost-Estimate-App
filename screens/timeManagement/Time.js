@@ -6,8 +6,7 @@ import { containerStyles } from '../../styles/utility';
 const Time = () => {
   return (
     <View style={containerStyles.container}>
-      <Text>Time Mnanagement:</Text>
-      <Text>Include Time Mnanagement Functionality Here</Text>
+      <Text>Include Functionality For Time Management Here</Text>
     </View>
   );
 };

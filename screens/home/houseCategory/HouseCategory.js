@@ -47,7 +47,7 @@ const HouseCategory = () => {
         <View style={styles.flexContainer}>
           <Image
             style={styles.flexImage}
-            source={require('../../../assets/images/full_house/multi-storey1.jpg')}
+            source={require('../../../assets/images/full_house/multi-storey1.png')}
           />
           <View style={styles.flexContent}>
             <Text style={styles.header}>Multi Storey</Text>

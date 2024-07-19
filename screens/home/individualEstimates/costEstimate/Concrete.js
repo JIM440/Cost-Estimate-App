@@ -21,16 +21,27 @@ const Concrete = () => {
   const [aggregateVolume, setAggregateVolume] = useState('');
   const [concreteCost, setConcreteCost] = useState('');
 
+  const [cementRatio, setCementRatio] = useState('');
+  const [sandRatio, setSandRatio] = useState('');
+  const [gravelRatio, setGravelRatio] = useState('');
+  const [dryVolumeConstant, setDryVolumeConstant] = useState('');
+
   const calculateEstimate = () => {
     if (sideA == '' || sideB == '' || height == '' || pricePerM3 == '') {
       return;
     }
 
+    const CementRatio = parseFloat(cementRatio);
+    const SandRatio = parseFloat(sandRatio);
+    const GravelRatio = parseFloat(gravelRatio);
+
+    const ConcreteRatio = CementRatio + SandRatio + GravelRatio;
+
     const volume = parseFloat(sideA) * parseFloat(sideB) * parseFloat(height);
-    const dryVolume = volume * 1.54;
-    const cementVol = (dryVolume * 1) / 4;
-    const sandVol = (dryVolume * 1) / 4;
-    const gravelVol = (dryVolume * 2) / 4;
+    const dryVolume = volume * parent(dryVolumeConstant);
+    const cementVol = (dryVolume * CementRatio) / ConcreteRatio;
+    const sandVol = (dryVolume * SandRatio) / ConcreteRatio;
+    const gravelVol = (dryVolume * GravelRatio) / ConcreteRatio;
 
     const weight = cementVol * 1440;
     setCementWeight(weight.toFixed(2));
@@ -86,14 +97,53 @@ const Concrete = () => {
             }}
           />
         </View>
-        <TextInputTitle
-          title="Price per m³"
-          placeholder="Enter price:"
-          value={pricePerM3}
-          onChange={(value) => {
-            setPricePerM3(value);
-          }}
-        />
+
+        <Line />
+
+        <Text>Mix Ratio</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Cement Ratio"
+            value={cementRatio}
+            title="Cement Ratio"
+            onChange={(text) => setCementRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Sand Ratio"
+            value={sandRatio}
+            title="Sand Ratio"
+            onChange={(text) => setSandRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Gravel Ratio"
+            value={gravelRatio}
+            title="Gravel Ratio"
+            onChange={(text) => setGravelRatio(text)}
+          />
+        </View>
+        <Line />
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            title="Price per m³"
+            placeholder="Enter price:"
+            value={pricePerM3}
+            onChange={(value) => {
+              setPricePerM3(value);
+            }}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder="Dry Volume"
+            value={dryVolumeConstant}
+            title="Dry Volume"
+            onChange={(text) => setDryVolumeConstant(text)}
+          />
+        </View>
+
         <ButtonPrimary title="Calculate Estimate" onPress={calculateEstimate} />
         <Line />
         <Text style={titleStyles.boldTitle}>Output:</Text>

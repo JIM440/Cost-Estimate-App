@@ -12,6 +12,10 @@ const RCSlab = () => {
   const [RCSLabWidth, setRCSLabWidth] = useState('');
   const [RCSLabHeight, setRCSLabHeight] = useState('');
   const [RCSLabRodSpacing, setRCSLabRodSpacing] = useState('');
+  const [cementRatio, setCementRatio] = useState('');
+  const [sandRatio, setSandRatio] = useState('');
+  const [gravelRatio, setGravelRatio] = useState('');
+  const [dryVolumeConstant, setDryVolumeConstant] = useState('');
   const [RCSlabEstimate, setRCSlabEstimate] = useState({
     concreteVolume: '',
     num12mRods: '',
@@ -26,6 +30,12 @@ const RCSlab = () => {
     const areaOfSlab = parseInt(RCSLabLength) * parseInt(RCSLabWidth);
     const concreteVolume = areaOfSlab * parseFloat(RCSLabHeight);
 
+    const CementRatio = parseFloat(cementRatio);
+    const SandRatio = parseFloat(sandRatio);
+    const GravelRatio = parseFloat(gravelRatio);
+
+    const ConcreteRatio = CementRatio + SandRatio + GravelRatio;
+
     const numRodsX = parseFloat(RCSLabLength) / parseFloat(RCSLabRodSpacing);
     const num12mRodsX = (numRodsX * parseFloat(RCSLabWidth)) / 12;
 
@@ -34,10 +44,10 @@ const RCSlab = () => {
 
     const num12mRods = num12mRodsX + num12mRodsY;
 
-    const dryVol = concreteVolume * 1.54; // Dry volume of concrete
-    const gravelVol = dryVol * 0.5; // Dry volume of gravel
-    const cementVol = dryVol * 0.25;
-    const sandVol = dryVol * 0.25;
+    const dryVol = concreteVolume * parseFloat(dryVolumeConstant); // Dry volume of concrete
+    const gravelVol = (dryVol * GravelRatio) / ConcreteRatio;
+    const cementVol = (dryVol * CementRatio) / ConcreteRatio;
+    const sandVol = (dryVol * SandRatio) / ConcreteRatio;
 
     // Calculate number of bags of cement
     const densityOfCement = 1440; // Density of cement in kg/m³
@@ -86,12 +96,48 @@ const RCSlab = () => {
             onChange={(text) => setRCSLabHeight(text)}
           />
         </View>
-        <TextInputTitle
-          placeholder="Enter Spacing"
-          value={RCSLabRodSpacing}
-          title="Spacing (m)"
-          onChange={(text) => setRCSLabRodSpacing(text)}
-        />
+        <Line />
+        <Text>Mix Ratio</Text>
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Cement Ratio"
+            value={cementRatio}
+            title="Cement Ratio"
+            onChange={(text) => setCementRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Sand Ratio"
+            value={sandRatio}
+            title="Sand Ratio"
+            onChange={(text) => setSandRatio(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.threeColumnInput}
+            placeholder="Gravel Ratio"
+            value={gravelRatio}
+            title="Gravel Ratio"
+            onChange={(text) => setGravelRatio(text)}
+          />
+        </View>
+        <Line />
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder="Enter Spacing"
+            value={RCSLabRodSpacing}
+            title="Spacing (m)"
+            onChange={(text) => setRCSLabRodSpacing(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder="Dry Volume"
+            value={dryVolumeConstant}
+            title="Dry Volume"
+            onChange={(text) => setDryVolumeConstant(text)}
+          />
+        </View>
 
         <ButtonPrimary onPress={RCEstimate} title="Calculate" />
         <Line />

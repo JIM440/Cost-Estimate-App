@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 16,
     objectFit: 'contian',
-    height: 150,
+    height: 170,
   },
   flexContent: {
     width: '55%',

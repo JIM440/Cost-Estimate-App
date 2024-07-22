@@ -1,51 +1,53 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from "react-native";
-import * as Print from "expo-print";
-import { WebView } from "react-native-webview";
+} from 'react-native';
+import * as Print from 'expo-print';
+import { WebView } from 'react-native-webview';
 
-import { Line, containerStyles, titleStyles } from "../../../../styles/utility";
-import tableStyles from "../../../../styles/components/table";
-import ButtonPrimary from "../../../../components/Button";
-import TextInputTitle from "../../../../components/InputTitle";
-import { inputStyles } from "../../../../styles/components/inputStyles";
-import { primary_color } from "../../../../styles/colors";
-import ButtonOutlined from "../../../../components/ButtonOutlined";
+import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
+import tableStyles from '../../../../styles/components/table';
+import ButtonPrimary from '../../../../components/Button';
+import TextInputTitle from '../../../../components/InputTitle';
+import { inputStyles } from '../../../../styles/components/inputStyles';
+import { primary_color } from '../../../../styles/colors';
+import ButtonOutlined from '../../../../components/ButtonOutlined';
 
 const SingleHouse = () => {
   const [step, setStep] = useState(1);
-  const [outputTab, setOutputTab] = useState("All");
+  const [outputTab, setOutputTab] = useState('All');
 
   // //  //  //  //foundation states
+  const [pricePerBlock, setPricePerBlock] = useState('');
+  const [pricePerM3, setPricePerM3] = useState('');
   // Footing
-  const [footingLength, setFootingLength] = useState("");
-  const [footingWidth, setFootingWidth] = useState("");
-  const [footingThickness, setFootingThickness] = useState("");
-  const [numberFootings, setNumberFootings] = useState("");
-  const [numberRodsPerFooting, setNumberRodsPerFooting] = useState("");
+  const [footingLength, setFootingLength] = useState('');
+  const [footingWidth, setFootingWidth] = useState('');
+  const [footingThickness, setFootingThickness] = useState('');
+  const [numberFootings, setNumberFootings] = useState('');
+  const [numberRodsPerFooting, setNumberRodsPerFooting] = useState('');
   // Column
-  const [columnLength, setColumnLength] = useState("");
-  const [columnWidth, setColumnWidth] = useState("");
-  const [columnHeight, setColumnHeight] = useState("");
-  const [numberColumns, setNumberColumns] = useState("");
-  const [numberRodsPerColumn, setNumberRodsPerColumn] = useState("");
+  const [columnLength, setColumnLength] = useState('');
+  const [columnWidth, setColumnWidth] = useState('');
+  const [columnHeight, setColumnHeight] = useState('');
+  const [numberColumns, setNumberColumns] = useState('');
+  const [numberRodsPerColumn, setNumberRodsPerColumn] = useState('');
   // Beam
-  const [beamLength, setBeamLength] = useState("");
-  const [beamWidth, setBeamWidth] = useState("");
-  const [beamHeight, setBeamHeight] = useState("");
-  const [numerRodsPerBeam, setNumerRodsPerBeam] = useState("");
+  const [beamLength, setBeamLength] = useState('');
+  const [beamWidth, setBeamWidth] = useState('');
+  const [beamHeight, setBeamHeight] = useState('');
+  const [numerRodsPerBeam, setNumerRodsPerBeam] = useState('');
   // Wall
-  const [wallLength, setWallLength] = useState("");
-  const [wallWidth, setWallWidth] = useState("");
-  const [wallHeight, setWallHeight] = useState("");
-  const [blockLength, setBlockLength] = useState("");
-  const [blockWidth, setBlockWidth] = useState("");
-  const [blockHeight, setBlockHeight] = useState("");
+  const [wallLength, setWallLength] = useState('');
+  const [wallWidth, setWallWidth] = useState('');
+  const [wallHeight, setWallHeight] = useState('');
+  const [blockLength, setBlockLength] = useState('');
+  const [blockWidth, setBlockWidth] = useState('');
+  const [blockHeight, setBlockHeight] = useState('');
 
   // output for foundation estimates state
   const [footingEstimate, setFootingEstimate] = useState({});
@@ -56,33 +58,34 @@ const SingleHouse = () => {
 
   // //  //  //  //elevation states
   const [elevationEstimate, setElevationEstimate] = useState({});
-  const [elevationWallLength, setElevationWallLength] = useState("");
-  const [elevationWallWidth, setelevationWallWidth] = useState("");
-  const [elevationWallHeight, setelevationWallHeight] = useState("");
-  const [elevationWBlockLength, setelevationWallBlockLength] = useState("");
-  const [elevationWallBlockWidth, setelevationWallBlockWidth] = useState("");
-  const [elevationWallBlockHeight, setelevationWallBlockHeight] = useState("");
+  const [elevationWallLength, setElevationWallLength] = useState('');
+  const [elevationWallWidth, setelevationWallWidth] = useState('');
+  const [elevationWallHeight, setelevationWallHeight] = useState('');
+  const [elevationWBlockLength, setelevationWallBlockLength] = useState('');
+  const [elevationWallBlockWidth, setelevationWallBlockWidth] = useState('');
+  const [elevationWallBlockHeight, setelevationWallBlockHeight] = useState('');
   const [elevationWallSubtractArea, setelevationWallSubtractArea] =
-    useState("");
-  const [blockPrice, setBlockPrice] = useState("");
-  const [elevationBeamLength, setElevationBeamLength] = useState("");
-  const [elevationBeamWidth, setelevationBeamWidth] = useState("");
-  const [elevationBeamHeight, setelevationBeamHeight] = useState("");
-  const [elevationNumRodsPerBeam, setelevationNumberRodsPerBeam] = useState("");
+    useState('');
+  const [elPricePerM3, setElPricePerM3] = useState('');
+  const [blockPrice, setBlockPrice] = useState('');
+  const [elevationBeamLength, setElevationBeamLength] = useState('');
+  const [elevationBeamWidth, setelevationBeamWidth] = useState('');
+  const [elevationBeamHeight, setelevationBeamHeight] = useState('');
+  const [elevationNumRodsPerBeam, setelevationNumberRodsPerBeam] = useState('');
   // Beam
-  const [elevationColumnLength, setElevationColumnLength] = useState("");
-  const [elevationColumnWidth, setelevationColumnWidth] = useState("");
-  const [elevationColumnHeight, setelevationColumnHeight] = useState("");
+  const [elevationColumnLength, setElevationColumnLength] = useState('');
+  const [elevationColumnWidth, setelevationColumnWidth] = useState('');
+  const [elevationColumnHeight, setelevationColumnHeight] = useState('');
   const [elevationNumberRodsPerColumn, setelevationNumberRodsPerColumn] =
-    useState("");
-  const [elevationColumnNumber, setelevationColumnNumber] = useState("");
+    useState('');
+  const [elevationColumnNumber, setelevationColumnNumber] = useState('');
 
   // // // // // // // Roofing States
-  const [houseLength, setHouseLength] = useState("");
-  const [houseWidth, setHouseWidth] = useState("");
-  const [rise, setRise] = useState("");
-  const [run, setRun] = useState("");
-  const [span, setSpan] = useState("");
+  const [houseLength, setHouseLength] = useState('');
+  const [houseWidth, setHouseWidth] = useState('');
+  const [rise, setRise] = useState('');
+  const [run, setRun] = useState('');
+  const [span, setSpan] = useState('');
   const [roofingEstimate, setRoofingEstimate] = useState(null);
 
   // Calculate volumes and quantities for footings
@@ -178,7 +181,7 @@ const SingleHouse = () => {
     const cementVolume = dryVolume * (1 / 4);
 
     const blockVolume = blockLen * blockWid * blockHei;
-    const numberOfBlocks = volume / blockVolume;
+    const numberOfBlocks = Math.ceil(volume / blockVolume);
 
     return {
       volume,
@@ -198,29 +201,35 @@ const SingleHouse = () => {
     CalculateElevation();
     calculateRoofingEstimate();
 
-    const totalVolume =
+    const totalVolume = (
       footingEstimate.dryVolume +
       columnEstimate.dryVolume +
       beamEstimate.dryVolume +
-      wallEstimate.dryVolume;
-    const totalSandVolume =
+      wallEstimate.dryVolume
+    ).toFixed(2);
+    const totalSandVolume = (
       footingEstimate.sandVolume +
       columnEstimate.sandVolume +
       beamEstimate.sandVolume +
-      wallEstimate.sandVolume;
-    const totalCementVolume =
+      wallEstimate.sandVolume
+    ).toFixed(2);
+    const totalCementVolume = (
       footingEstimate.cementVolume +
       columnEstimate.cementVolume +
       beamEstimate.cementVolume +
-      wallEstimate.cementVolume;
-    const totalGravelVolume =
+      wallEstimate.cementVolume
+    ).toFixed(2);
+    const totalGravelVolume = (
       footingEstimate.gravelVolume +
       columnEstimate.gravelVolume +
-      beamEstimate.gravelVolume;
-    const totalRods =
+      beamEstimate.gravelVolume
+    ).toFixed(2);
+    const totalRods = (
       footingEstimate.totalRods +
       columnEstimate.totalRods +
-      beamEstimate.totalRods;
+      beamEstimate.totalRods
+    ).toFixed(2);
+    const totalPricePerM3 = (pricePerM3 * totalVolume).toFixed(2);
 
     setTotalFoundationEstimate({
       totalVolume,
@@ -228,6 +237,7 @@ const SingleHouse = () => {
       totalSandVolume,
       totalGravelVolume,
       totalRods,
+      totalPricePerM3,
     });
 
     setFootingEstimate(footingEstimate);
@@ -241,17 +251,18 @@ const SingleHouse = () => {
     const columnlength = parseFloat(elevationColumnLength);
     const columnwidth = parseFloat(elevationColumnWidth);
     const columnheight = parseFloat(elevationColumnHeight);
-    const columnnumber = parseInt(elevationColumnNumber);
+    const columnnumber = parseFloat(elevationColumnNumber);
 
     const columnvolume =
       columnlength * columnwidth * columnheight * columnnumber; // Wet volume
-    const columndryVolume = columnvolume * 1.54;
-    const columnsandVolume = columndryVolume * (2 / 4);
+    const columndryVolume = (columnvolume * 1.54).toFixed(2);
+    const columnsandVolume = columndryVolume * (1 / 4);
     const columncementVolume = columndryVolume * (1 / 4);
-    const columngravelVolume = columndryVolume * (1 / 4);
+    const columngravelVolume = columndryVolume * (2 / 4);
 
     const rodsPerColumn = parseFloat(elevationNumberRodsPerColumn);
-    const totalcolumnRods = (columnnumber * rodsPerColumn * columnlength) / 12;
+
+    const totalcolumnRods = (columnnumber * rodsPerColumn * columnheight) / 12;
 
     // elevation beams
     const beamlength = parseFloat(elevationBeamLength);
@@ -259,14 +270,14 @@ const SingleHouse = () => {
     const beamheight = parseFloat(elevationBeamHeight);
 
     const beamvolume = beamlength * beamwidth * beamheight; // Wet volume
-    const beamdryVolume = beamvolume * 1.54;
-    const beamsandVolume = beamdryVolume * (2 / 4);
+    const beamdryVolume = (beamvolume * 1.54).toFixed(2);
+    const beamsandVolume = beamdryVolume * (1 / 4);
     const beamcementVolume = beamdryVolume * (1 / 4);
-    const beamgravelVolume = beamdryVolume * (1 / 4);
+    const beamgravelVolume = beamdryVolume * (2 / 4);
 
     // rods per beam
     const rodsPerBeam = parseFloat(elevationNumRodsPerBeam);
-    const totalBeamRods = rodsPerBeam * 4;
+    const totalBeamRods = (rodsPerBeam * beamlength) / 12;
 
     // elevation wall
     const wallLength = parseFloat(elevationWallLength);
@@ -279,42 +290,55 @@ const SingleHouse = () => {
     const blockPriceValue = parseFloat(blockPrice);
     // Calculate wall volume
     const wallVolumeValue =
-      (wallLength * wallWidth - subtractAreaValue) * wallHeight;
+      (wallLength * wallHeight - subtractAreaValue) * wallWidth;
 
     const blockVolume = blockLengthValue * blockWidthValue * blockHeightValue;
     const totalBlockVolume = wallVolumeValue;
     const blockNumber = Math.ceil(totalBlockVolume / blockVolume);
 
-    // Calculate dry mortar volume, assuming standard 1:6 mortar mix
-    const dryMortarVol = totalBlockVolume * 1.54;
+    // Calculate dry mortar volume
+    const dryMortarVol = (totalBlockVolume * 1.54).toFixed(2);
 
     // Calculate sand volume
-    const sandVol = (dryMortarVol * 3) / 4;
+    const dryMortarSandVol = ((dryMortarVol * 3) / 4).toFixed(2);
 
     // Calculate cement volume and weight, assuming density of cement as 1440 kg/m³
-    const cementVol = (dryMortarVol * 1) / 4;
-    const cementWeightValue = cementVol * 1440;
+    const dryMortarCementVol = ((dryMortarVol * 1) / 4).toFixed(2);
+    // const cementWeightValue = cementVol * 1440;
 
     // Calculate total cost
-    const totalBlockCost = blockNumber * blockPriceValue;
-    const totalSandVol = sandVol + beamsandVolume + columnsandVolume;
-    const totalCementVol = cementVol + beamcementVolume + columncementVolume;
-    const totalGravelVol = beamgravelVolume + columngravelVolume;
-    const dryConcreteVolume = beamdryVolume + columndryVolume;
+    const totalBlockCost = (blockNumber * blockPriceValue).toFixed(2);
+    const concreteSandVol = (beamsandVolume + columnsandVolume).toFixed(2);
+    const concreteCementVol = (beamcementVolume + columncementVolume).toFixed(
+      2
+    );
+    const concreteGravelVol = (beamgravelVolume + columngravelVolume).toFixed(
+      2
+    );
+    const dryConcreteVolume =
+      parseFloat(beamdryVolume) + parseFloat(columndryVolume);
     const totalEleRods = totalBeamRods + totalcolumnRods;
 
+    const ElPrice = parseFloat(elPricePerM3);
+    const totalPricePerM3Elevation = ElPrice * dryConcreteVolume;
+    console.log(ElPrice);
+    console.log(dryConcreteVolume);
+    console.log(totalPricePerM3Elevation);
     // Update state with results
     setElevationEstimate({
       dryMortarVol,
+      dryMortarCementVol,
+      dryMortarSandVol,
       beamdryVolume,
       columndryVolume,
       dryConcreteVolume,
-      totalSandVol,
-      totalCementVol,
-      totalGravelVol,
+      concreteSandVol,
+      concreteCementVol,
+      concreteGravelVol,
       blockNumber,
       totalBlockCost,
       totalEleRods,
+      totalPricePerM3Elevation,
     });
   };
 
@@ -488,13 +512,12 @@ const SingleHouse = () => {
       </body>
     </html>
     `;
-    
 
     try {
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
       console.log(`PDF saved at: ${uri}`);
     } catch (error) {
-      console.error("Failed to print:", error);
+      console.error('Failed to print:', error);
     }
 
     // Display a WebView to preview the content (optional)
@@ -544,7 +567,7 @@ const SingleHouse = () => {
 
               <View style={inputStyles.threeColumn}>
                 <TextInputTitle
-                  style={inputStyles.threeColumnInput}
+                  style={inputStyles.twoColumnInput}
                   placeholder="Enter Value"
                   title="Number of Footings"
                   value={numberFootings}
@@ -553,22 +576,13 @@ const SingleHouse = () => {
                   }}
                 />
                 <TextInputTitle
-                  style={inputStyles.threeColumnInput}
+                  style={inputStyles.twoColumnInput}
                   placeholder="Enter Value"
                   title="# Rods Per Footing"
                   value={numberRodsPerFooting}
                   onChange={(value) => {
                     setNumberRodsPerFooting(value);
                   }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Price per meter"
-                  // value={footingWidth}
-                  // onChange={(value) => {
-                  //   setFootingWidth(value);
-                  // }}
                 />
               </View>
 
@@ -605,7 +619,7 @@ const SingleHouse = () => {
               </View>
               <View style={inputStyles.threeColumn}>
                 <TextInputTitle
-                  style={inputStyles.threeColumnInput}
+                  style={inputStyles.twoColumnInput}
                   placeholder="Enter Value"
                   title="Number of Columns"
                   value={numberColumns}
@@ -614,22 +628,13 @@ const SingleHouse = () => {
                   }}
                 />
                 <TextInputTitle
-                  style={inputStyles.threeColumnInput}
+                  style={inputStyles.twoColumnInput}
                   placeholder="Enter Value"
                   title="# Rods Per Column"
                   value={numberRodsPerColumn}
                   onChange={(value) => {
                     setNumberRodsPerColumn(value);
                   }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Price per meter"
-                  // value={footingWidth}
-                  // onChange={(value) => {
-                  //   setFootingWidth(value);
-                  // }}
                 />
               </View>
               <Line />
@@ -666,7 +671,6 @@ const SingleHouse = () => {
               </View>
               <View style={inputStyles.threeColumn}>
                 <TextInputTitle
-                  style={inputStyles.twoColumnInput}
                   placeholder="Enter Value"
                   title="# Rods Per Beam"
                   value={numerRodsPerBeam}
@@ -674,16 +678,15 @@ const SingleHouse = () => {
                     setNumerRodsPerBeam(value);
                   }}
                 />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Price per meter"
-                  // value={footingWidth}
-                  // onChange={(value) => {
-                  //   setFootingWidth(value);
-                  // }}
-                />
               </View>
+              <TextInputTitle
+                placeholder="Enter value"
+                title="Price per m³"
+                value={pricePerM3}
+                onChange={(value) => {
+                  setPricePerM3(value);
+                }}
+              />
               <Line />
 
               <Text>Foundation Wall:</Text>
@@ -745,6 +748,15 @@ const SingleHouse = () => {
                   }}
                 />
               </View>
+              <TextInputTitle
+                style={inputStyles.twoColumnInput}
+                placeholder="Enter Value"
+                title="Price per Block"
+                value={pricePerBlock}
+                onChange={(value) => {
+                  setPricePerBlock(value);
+                }}
+              />
             </>
             <ButtonPrimary title="Next" onPress={handleNext} />
           </View>
@@ -766,17 +778,17 @@ const SingleHouse = () => {
                 />
                 <TextInputTitle
                   style={inputStyles.threeColumnInput}
-                  title="Width (m)"
-                  placeholder="Enter width"
-                  value={elevationWallWidth}
-                  onChange={(text) => setelevationWallWidth(text)}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
                   title="Height (m)"
                   placeholder="Enter height"
                   value={elevationWallHeight}
                   onChange={(text) => setelevationWallHeight(text)}
+                />
+                <TextInputTitle
+                  style={inputStyles.threeColumnInput}
+                  title="Thickness (m)"
+                  placeholder="Enter thickness"
+                  value={elevationWallWidth}
+                  onChange={(text) => setelevationWallWidth(text)}
                 />
               </View>
               <Line />
@@ -791,17 +803,17 @@ const SingleHouse = () => {
                 />
                 <TextInputTitle
                   style={inputStyles.threeColumnInput}
-                  title="Width (m)"
-                  placeholder="Enter width"
-                  value={elevationWallBlockWidth}
-                  onChange={(text) => setelevationWallBlockWidth(text)}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
                   title="Height (m)"
                   placeholder="Enter height"
                   value={elevationWallBlockHeight}
                   onChange={(text) => setelevationWallBlockHeight(text)}
+                />
+                <TextInputTitle
+                  style={inputStyles.threeColumnInput}
+                  title="Thickness (m)"
+                  placeholder="Enter thickness"
+                  value={elevationWallBlockWidth}
+                  onChange={(text) => setelevationWallBlockWidth(text)}
                 />
               </View>
               <Line />
@@ -818,6 +830,12 @@ const SingleHouse = () => {
                 placeholder="Enter price"
                 value={blockPrice}
                 onChange={(text) => setBlockPrice(text)}
+              />
+              <TextInputTitle
+                title="Price Per m³"
+                placeholder="Enter price"
+                value={elPricePerM3}
+                onChange={(text) => setElPricePerM3(text)}
               />
               <Line />
               <Text>Dimension of Beam</Text>
@@ -838,7 +856,7 @@ const SingleHouse = () => {
                 />
                 <TextInputTitle
                   style={inputStyles.threeColumnInput}
-                  title="Thickness (m)"
+                  title="Height (m)"
                   placeholder="Enter height"
                   value={elevationBeamHeight}
                   onChange={(text) => setelevationBeamHeight(text)}
@@ -956,15 +974,13 @@ const SingleHouse = () => {
         return (
           <View>
             <View style={styles.tabs}>
-            <TouchableOpacity
+              <TouchableOpacity
                 style={styles.tab}
-                onPress={() => setOutputTab("All")}
+                onPress={() => setOutputTab('All')}
               >
                 <Text
                   style={
-                    outputTab === "All"
-                      ? styles.activeTabText
-                      : styles.tabText
+                    outputTab === 'All' ? styles.activeTabText : styles.tabText
                   }
                 >
                   All
@@ -972,11 +988,11 @@ const SingleHouse = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.tab}
-                onPress={() => setOutputTab("FoundationOutput")}
+                onPress={() => setOutputTab('FoundationOutput')}
               >
                 <Text
                   style={
-                    outputTab === "FoundationOutput"
+                    outputTab === 'FoundationOutput'
                       ? styles.activeTabText
                       : styles.tabText
                   }
@@ -986,11 +1002,11 @@ const SingleHouse = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.tab}
-                onPress={() => setOutputTab("ElevationOutput")}
+                onPress={() => setOutputTab('ElevationOutput')}
               >
                 <Text
                   style={
-                    outputTab === "ElevationOutput"
+                    outputTab === 'ElevationOutput'
                       ? styles.activeTabText
                       : styles.tabText
                   }
@@ -1000,11 +1016,11 @@ const SingleHouse = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.tab}
-                onPress={() => setOutputTab("RoofingOutput")}
+                onPress={() => setOutputTab('RoofingOutput')}
               >
                 <Text
                   style={
-                    outputTab === "RoofingOutput"
+                    outputTab === 'RoofingOutput'
                       ? styles.activeTabText
                       : styles.tabText
                   }
@@ -1014,7 +1030,7 @@ const SingleHouse = () => {
               </TouchableOpacity>
             </View>
             <View style={tableStyles.container}>
-              {outputTab === "FoundationOutput" && (
+              {outputTab === 'FoundationOutput' && (
                 /* ======= Foundation ======= */
                 <>
                   <View style={tableStyles.row}>
@@ -1431,13 +1447,13 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cellLeft}>m³</Text>
+                        <Text style={tableStyles.cell}>m³</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Total Dry Sand Volume
+                          Total Sand Volume
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1452,7 +1468,7 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Total Dry Cement Volume
+                          Total Cement Volume
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1467,7 +1483,7 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Total Dry Gravel Volume
+                          Total Gravel Volume
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1482,6 +1498,21 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
+                          Total Price Per m³
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>
+                          {totalFoundationEstimate.totalPricePerM3}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>FCFA</Text>
+                      </View>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cellLeft}>
                           Total Number of 12m rods
                         </Text>
                       </View>
@@ -1491,7 +1522,7 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Rods</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -1506,13 +1537,28 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Blocks</Text>
+                      </View>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cellLeft}>
+                          Price For Blocks{' '}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>
+                          {wallEstimate.numberOfBlocks * pricePerBlock}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>FCFA</Text>
                       </View>
                     </View>
                   </>
                 </>
               )}
-              {outputTab === "ElevationOutput" && (
+              {outputTab === 'ElevationOutput' && (
                 /* ======= Elevation ======= */
                 <>
                   <View style={tableStyles.row}>
@@ -1553,6 +1599,36 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
+                          Cement Volume from Mortar
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>
+                          {elevationEstimate.dryMortarCementVol}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>m³</Text>
+                      </View>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cellLeft}>
+                          Sand Volume from Mortar
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>
+                          {elevationEstimate.dryMortarSandVol}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>m³</Text>
+                      </View>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cellLeft}>
                           Beam Dry Concrete Volume
                         </Text>
                       </View>
@@ -1568,7 +1644,7 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Dry Column Concrete Volume
+                          Column Dry Concrete Volume
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1597,11 +1673,13 @@ const SingleHouse = () => {
                     </View>
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cellLeft}>Sand Volume</Text>
+                        <Text style={tableStyles.cellLeft}>
+                          Sand Volume from Concrete
+                        </Text>
                       </View>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cell}>
-                          {elevationEstimate.totalSandVol}
+                          {elevationEstimate.concreteSandVol}
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1610,11 +1688,13 @@ const SingleHouse = () => {
                     </View>
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cellLeft}>Cement Volume</Text>
+                        <Text style={tableStyles.cellLeft}>
+                          Cement Volume from Concrete
+                        </Text>
                       </View>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cell}>
-                          {elevationEstimate.totalCementVol}
+                          {elevationEstimate.concreteCementVol}
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1623,11 +1703,13 @@ const SingleHouse = () => {
                     </View>
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cellLeft}>Gravel Volume</Text>
+                        <Text style={tableStyles.cellLeft}>
+                          Gravel Volume from Concrete
+                        </Text>
                       </View>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cell}>
-                          {elevationEstimate.totalGravelVol}
+                          {elevationEstimate.concreteGravelVol}
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1646,7 +1728,7 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Blocks</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -1667,22 +1749,37 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Number of 12m Rods
+                          Total Price Per m³
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cell}>
-                          {elevationEstimate.totalEleRods}
+                          {elevationEstimate.totalPricePerM3Elevation}
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cell}>FCFA</Text>
                       </View>
                     </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cellLeft}>
+                          Number of 12m Rods
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>
+                          {elevationEstimate.totalEleRods.toFixed(2)}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={tableStyles.cell}>Rods</Text>
+                      </View>
+                    </View>
                   </>
                 </>
               )}
-              {outputTab === "RoofingOutput" && (
+              {outputTab === 'RoofingOutput' && (
                 /* ======= Roofing ======= */
                 <>
                   <View style={tableStyles.row}>
@@ -1705,7 +1802,7 @@ const SingleHouse = () => {
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
                         <Text style={tableStyles.cellLeft}>
-                          Number of Boards
+                          Number of Ceiling Boards
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
@@ -1714,7 +1811,7 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Boards</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -1729,7 +1826,7 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Sheets</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -1744,7 +1841,7 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Purlins</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -1759,13 +1856,13 @@ const SingleHouse = () => {
                         </Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={tableStyles.cell}></Text>
+                        <Text style={tableStyles.cell}>Boards</Text>
                       </View>
                     </View>
                   </>
                 </>
               )}
-              {outputTab === "All" && (
+              {outputTab === 'All' && (
                 <View>
                   <View style={tableStyles.row}>
                     <Text style={tableStyles.columnHeaderSingle}>
@@ -1805,13 +1902,13 @@ const SingleHouse = () => {
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cellLeft}>m³</Text>
+                          <Text style={tableStyles.cell}>m³</Text>
                         </View>
                       </View>
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Total Dry Sand Volume
+                            Total Sand Volume
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1826,7 +1923,7 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Total Dry Cement Volume
+                            Total Cement Volume
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1841,7 +1938,7 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Total Dry Gravel Volume
+                            Total Gravel Volume
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1856,6 +1953,21 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
+                            Total Price Per m³
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {totalFoundationEstimate.totalPricePerM3}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>FCFA</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
                             Total Number of 12m rods
                           </Text>
                         </View>
@@ -1865,7 +1977,7 @@ const SingleHouse = () => {
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cell}></Text>
+                          <Text style={tableStyles.cell}>Rods</Text>
                         </View>
                       </View>
                       <View style={tableStyles.row}>
@@ -1880,7 +1992,22 @@ const SingleHouse = () => {
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cell}></Text>
+                          <Text style={tableStyles.cell}>Blocks</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Price For Blocks
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {wallEstimate.numberOfBlocks * pricePerBlock}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>FCFA</Text>
                         </View>
                       </View>
                     </>
@@ -1891,6 +2018,7 @@ const SingleHouse = () => {
                           Elevation:
                         </Text>
                       </View>
+
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
@@ -1900,6 +2028,36 @@ const SingleHouse = () => {
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cell}>
                             {elevationEstimate.dryMortarVol}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>m³</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Cement Volume from Mortar
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {elevationEstimate.dryMortarCementVol}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>m³</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Sand Volume from Mortar
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {elevationEstimate.dryMortarSandVol}
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1924,7 +2082,7 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Dry Column Concrete Volume
+                            Column Dry Concrete Volume
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1953,11 +2111,13 @@ const SingleHouse = () => {
                       </View>
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cellLeft}>Sand Volume</Text>
+                          <Text style={tableStyles.cellLeft}>
+                            Sand Volume from Concrete
+                          </Text>
                         </View>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cell}>
-                            {elevationEstimate.totalSandVol}
+                            {elevationEstimate.concreteSandVol}
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1967,12 +2127,12 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Cement Volume
+                            Cement Volume from Concrete
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cell}>
-                            {elevationEstimate.totalCementVol}
+                            {elevationEstimate.concreteCementVol}
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -1982,12 +2142,12 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
-                            Gravel Volume
+                            Gravel Volume from Concrete
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cell}>
-                            {elevationEstimate.totalGravelVol}
+                            {elevationEstimate.concreteGravelVol}
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
@@ -2006,7 +2166,7 @@ const SingleHouse = () => {
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cell}></Text>
+                          <Text style={tableStyles.cell}>Blocks</Text>
                         </View>
                       </View>
                       <View style={tableStyles.row}>
@@ -2027,16 +2187,31 @@ const SingleHouse = () => {
                       <View style={tableStyles.row}>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cellLeft}>
+                            Total Price Per m³
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {elevationEstimate.totalPricePerM3Elevation}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>FCFA</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
                             Number of 12m Rods
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
                           <Text style={tableStyles.cell}>
-                            {elevationEstimate.totalEleRods}
+                            {elevationEstimate.totalEleRods.toFixed(2)}
                           </Text>
                         </View>
                         <View style={tableStyles.column}>
-                          <Text style={tableStyles.cell}>FCFA</Text>
+                          <Text style={tableStyles.cell}>Rods</Text>
                         </View>
                       </View>
                     </>
@@ -2047,257 +2222,68 @@ const SingleHouse = () => {
                           Roofing:
                         </Text>
                       </View>
-                      <>
-                        <View style={tableStyles.row}>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cellLeft}>
-                              Number of Boards
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}>
-                              {roofingEstimate.numberOfCeilingBoards}
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}></Text>
-                          </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Number of Ceiling Boards
+                          </Text>
                         </View>
-                        <View style={tableStyles.row}>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cellLeft}>
-                              Number of Roofing Sheets
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}>
-                              {roofingEstimate.numberOfRoofingSheets}
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}></Text>
-                          </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {roofingEstimate.numberOfCeilingBoards}
+                          </Text>
                         </View>
-                        <View style={tableStyles.row}>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cellLeft}>
-                              Number of Purlins
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}>
-                              {roofingEstimate.numberOfPurlins}
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}></Text>
-                          </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>Boards</Text>
                         </View>
-                        <View style={tableStyles.row}>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cellLeft}>
-                              Number of Boards
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}>
-                              {roofingEstimate.numberOfBoards}
-                            </Text>
-                          </View>
-                          <View style={tableStyles.column}>
-                            <Text style={tableStyles.cell}></Text>
-                          </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Number of Roofing Sheets
+                          </Text>
                         </View>
-                      </>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {roofingEstimate.numberOfRoofingSheets}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>Sheets</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Number of Purlins
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {roofingEstimate.numberOfPurlins}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>Purlins</Text>
+                        </View>
+                      </View>
+                      <View style={tableStyles.row}>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cellLeft}>
+                            Number of Boards
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>
+                            {roofingEstimate.numberOfBoards}
+                          </Text>
+                        </View>
+                        <View style={tableStyles.column}>
+                          <Text style={tableStyles.cell}>Boards</Text>
+                        </View>
+                      </View>
                     </>
                   </>
-
-                  {/* 
-                 ======= Foundation and elevation ======= 
-                <>
-                  <View style={tableStyles.row}>
-                    <Text style={tableStyles.columnHeaderSingle}>Total Outputs</Text>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeaderLeft}>Material</Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeader}>Quantity</Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeader}>Unit</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Dry Volume of Mortar
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {wallEstimate.dryVolume + elevationEstimate.dryMortarVol}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>m³</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Dry Concrete Volume
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {totalFoundationEstimate.totalVolume + elevationEstimate.dryConcreteVolume}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>m³</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Dry Sand Volume
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {totalFoundationEstimate.totalSandVolume + elevationEstimate.totalSandVol}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>m³</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Dry Cement Volume
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {totalFoundationEstimate.totalCementVolume + elevationEstimate.totalCementVol}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>m³</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Dry Gravel Volume
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {totalFoundationEstimate.totalGravelVolume + elevationEstimate.totalGravelVol}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>m³</Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Total Number of 12m Rods
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {totalFoundationEstimate.totalRods + elevationEstimate.totalEleRods}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Total Number of Blocks
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {wallEstimate.numberOfBlocks + elevationEstimate.blockNumber}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                </>
-                 ======= Roofing ======= 
-                <>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Number of Ceiling Boards
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {roofingEstimate.numberOfCeilingBoards}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Number of Roofing Sheets
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {roofingEstimate.numberOfRoofingSheets}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Number of Purlins
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {roofingEstimate.numberOfPurlins}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                  <View style={tableStyles.row}>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cellLeft}>
-                        Number of Boards
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}>
-                        {roofingEstimate.numberOfBoards}
-                      </Text>
-                    </View>
-                    <View style={tableStyles.column}>
-                      <Text style={tableStyles.cell}></Text>
-                    </View>
-                  </View>
-                </> */}
                 </View>
               )}
             </View>
@@ -2315,8 +2301,8 @@ const SingleHouse = () => {
   return (
     <ScrollView style={containerStyles.scrollContainer}>
       <View style={containerStyles.container}>
-      <ProgressBar step={step} steps={4} />
-      {renderContent()}
+        <ProgressBar step={step} steps={4} />
+        {renderContent()}
       </View>
     </ScrollView>
   );
@@ -2340,31 +2326,31 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     padding: 10,
     marginVertical: 10,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
   progressBarContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 10,
   },
   progressBar: {
     height: 10,
-    width: "100%",
-    backgroundColor: "#e0e0df",
+    width: '100%',
+    backgroundColor: '#e0e0df',
     borderRadius: 5,
   },
   progress: {
-    height: "100%",
+    height: '100%',
     backgroundColor: primary_color,
     borderRadius: 5,
   },
@@ -2372,21 +2358,21 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   tabs: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 20,
   },
   tab: {
     paddingVertical: 10,
   },
   tabText: {
-    color: "#888",
+    color: '#888',
     fontSize: 16,
   },
   activeTabText: {
-    color: "#000",
+    color: '#000',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

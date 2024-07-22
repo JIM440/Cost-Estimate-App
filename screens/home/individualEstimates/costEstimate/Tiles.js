@@ -38,21 +38,23 @@ const Tiles = () => {
       return;
     }
 
-    const floorArea = floorLength * floorWidth;
+    const floorArea = parseFloat(floorLength) * parseFloat(floorWidth);
     setFloorArea(floorArea.toFixed(2));
 
-    const tileArea = tileLength * tileWidth;
+    const TileLength = parseFloat(tileLength) / 100;
+    const TileWidth = parseFloat(tileWidth) / 100;
+    const tileArea = TileLength * TileWidth;
 
     const NumberOfTiles = floorArea / tileArea;
 
-    const waste = wastage / 100;
+    const waste = parseFloat(wastage) / 100;
     const wastePercentTiles = waste * NumberOfTiles;
 
-    const TotalNumberOfTiles = NumberOfTiles + wastePercentTiles;
+    const TotalNumberOfTiles = Math.ceil(NumberOfTiles + wastePercentTiles);
     setTotalNumberOfTiles(TotalNumberOfTiles.toFixed(0));
 
     const totalCost = TotalNumberOfTiles * tilePrice;
-    setTileCost(totalCost.toFixed(2));
+    setTileCost(totalCost);
   };
 
   return (
@@ -93,7 +95,7 @@ const Tiles = () => {
 
         <View style={ColumnLayouts.TwoColumn}>
           <TextInputTitle
-            title="Length(m)"
+            title="Length (cm)"
             placeholder="Length"
             style={ColumnLayouts.TwoColumnItem}
             value={tileLength}
@@ -102,7 +104,7 @@ const Tiles = () => {
             }}
           />
           <TextInputTitle
-            title="Width(m)"
+            title="Width (cm)"
             placeholder="Width"
             style={ColumnLayouts.TwoColumnItem}
             value={tileWidth}

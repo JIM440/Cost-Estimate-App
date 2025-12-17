@@ -33,3 +33,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Expo TypeScript
+expo-env.d.ts
+
+# Metro bundler cache
+.metro-health-check*

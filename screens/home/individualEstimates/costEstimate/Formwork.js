@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Line, containerStyles, titleStyles } from '../../../../styles/utility';
 import { inputStyles } from '../../../../styles/components/inputStyles';
 import TextInputTitle from '../../../../components/InputTitle';
-import tableStyles from '../../../../styles/components/table';
+import Table from '../../../../components/Table';
 import ButtonPrimary from '../../../../components/Button';
 import { ColumnLayouts } from '../../../../styles/components/cards';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
@@ -71,44 +71,17 @@ const Formwork = () => {
         <ButtonPrimary title="Calculate Estimate" onPress={calculate} />
         <Line />
         <Text style={titleStyles.boldTitle}>Output:</Text>
-        <View style={tableStyles.container}>
-          {/* Row 1 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.columnHeader}>Material</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.columnHeader}>Quantity</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.columnHeader}>Unit</Text>
-            </View>
-          </View>
-          {/* Row 2 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Area</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{area}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>m²</Text>
-            </View>
-          </View>
-          {/* Row 3 */}
-          <View style={tableStyles.row}>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>Total Cost</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>{totalCost}</Text>
-            </View>
-            <View style={tableStyles.column}>
-              <Text style={tableStyles.cell}>FCFA</Text>
-            </View>
-          </View>
-        </View>
+        <Table
+          columns={[
+            { key: 'material', label: 'Material' },
+            { key: 'quantity', label: 'Quantity' },
+            { key: 'unit', label: 'Unit' },
+          ]}
+          data={[
+            { material: 'Area', quantity: area || '-', unit: 'm²' },
+            { material: 'Total Cost', quantity: totalCost || '-', unit: 'FCFA' },
+          ]}
+        />
       </View>
     </ScrollView>
   );

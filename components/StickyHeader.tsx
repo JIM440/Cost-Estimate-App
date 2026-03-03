@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { primary_color, white } from '../styles/colors';
+import { useTheme } from '../context/ThemeContext';
 
 interface StickyHeaderProps {
   title: string;
@@ -15,13 +15,16 @@ interface StickyHeaderProps {
 
 const StickyHeader: React.FC<StickyHeaderProps> = ({
   title,
-  backgroundColor = primary_color,
-  textColor = white,
+  backgroundColor,
+  textColor,
   style,
   titleStyle,
   leftComponent,
   rightComponent,
 }) => {
+  const { colors } = useTheme();
+  const bg = backgroundColor ?? colors.screen_background;
+  const text = textColor ?? colors.white;
   const insets = useSafeAreaInsets();
 
   return (
@@ -29,7 +32,7 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
       style={[
         styles.header,
         {
-          backgroundColor,
+          backgroundColor: bg,
           paddingTop: insets.top,
         },
         style,
@@ -37,7 +40,7 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
     >
       <View style={styles.content}>
         {leftComponent && <View style={styles.left}>{leftComponent}</View>}
-        <Text style={[styles.title, { color: textColor }, titleStyle]}>
+        <Text style={[styles.title, { color: text }, titleStyle]}>
           {title}
         </Text>
         {rightComponent && <View style={styles.right}>{rightComponent}</View>}

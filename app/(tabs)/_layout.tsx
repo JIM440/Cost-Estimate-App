@@ -1,63 +1,161 @@
+// app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
-import { Image, ImageStyle } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { primary_color } from '../../styles/colors';
+import { View, Platform } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
+import { useLocale } from '../../context/LocaleContext';
 
 export default function TabsLayout() {
+  const { colors } = useTheme();
+  const { t } = useLocale();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: primary_color,
-        tabBarInactiveTintColor: 'gray',
         headerShown: false,
+        tabBarActiveTintColor: colors.primary_color,
+        tabBarInactiveTintColor: colors.muted_text,
+        tabBarStyle: {
+          backgroundColor: colors.tabBarBg,
+          height: Platform.OS === 'ios' ? 80 : 68,
+        },
+        tabBarLabelStyle: {
+          marginTop: 2,
+        },
+        tabBarItemStyle: {
+          marginTop: 4,
+        },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'home-sharp' : 'home-outline'}
-              color={color}
-              size={size}
-            />
+          title: t('tab.home'),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 48,
+                height: 28,
+                borderRadius: 999,
+                backgroundColor: focused ? `${colors.primary_color}2A` : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
+              <Feather
+                name="home"
+                color={focused ? colors.primary_color : color}
+                size={20}
+              />
+            </View>
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="projects"
+        options={{
+          title: t('tab.projects'),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 48,
+                height: 28,
+                borderRadius: 999,
+                backgroundColor: focused ? `${colors.primary_color}2A` : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
+              <Feather
+                name="folder"
+                color={focused ? colors.primary_color : color}
+                size={20}
+              />
+            </View>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="tools"
+        options={{
+          title: t('tab.tools'),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 48,
+                height: 28,
+                borderRadius: 999,
+                backgroundColor: focused ? `${colors.primary_color}2A` : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
+              <Feather
+                name="tool"
+                color={focused ? colors.primary_color : color}
+                size={20}
+              />
+            </View>
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="guides"
         options={{
-          title: 'Guides',
-          tabBarIcon: ({ focused }) => {
-            return focused ? (
-              <Image
-                source={require('../../assets/icons/IconParkSolidBook.png')}
-                style={{ width: 24, height: 24 } as ImageStyle}
+          title: t('tab.guides'),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 48,
+                height: 28,
+                borderRadius: 999,
+                backgroundColor: focused ? `${colors.primary_color}2A` : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
+              <Feather
+                name="book"
+                color={focused ? colors.primary_color : color}
+                size={20}
               />
-            ) : (
-              <Image
-                source={require('../../assets/icons/IconParkOutlineBook.png')}
-                style={{ width: 24, height: 24 } as ImageStyle}
-              />
-            );
-          },
+            </View>
+          ),
         }}
       />
+
       <Tabs.Screen
-        name="time"
+        name="settings/index"
         options={{
-          title: 'Time Management',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'time' : 'time-outline'}
-              color={color}
-              size={size}
-            />
+          title: t('tab.settings'),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 48,
+                height: 28,
+                borderRadius: 999,
+                backgroundColor: focused ? `${colors.primary_color}2A` : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
+              <Feather
+                name="settings"
+                color={focused ? colors.primary_color : color}
+                size={20}
+              />
+            </View>
           ),
         }}
       />
     </Tabs>
   );
 }
-

@@ -1,55 +1,50 @@
 import React from 'react';
-import { ScrollView, StyleSheet, ViewStyle } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { white } from '../styles/colors';
+import { View, StyleSheet, ViewStyle, ScrollView } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 interface ScreenWrapperProps {
   children: React.ReactNode;
-  scrollable?: boolean;
   style?: ViewStyle;
-  contentContainerStyle?: ViewStyle;
-  edges?: ('top' | 'bottom' | 'left' | 'right')[];
+  scrollable?: boolean;
 }
 
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({
   children,
-  scrollable = true,
   style,
-  contentContainerStyle,
-  edges = ['top', 'bottom'],
+  scrollable = true,
 }) => {
-  if (scrollable) {
+  const { colors } = useTheme();
+
+  if (!scrollable) {
     return (
-      <SafeAreaView style={[styles.container, style]} edges={edges}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
-          showsVerticalScrollIndicator={false}
-        >
-          {children}
-        </ScrollView>
-      </SafeAreaView>
+      <View
+        style={[styles.container, styles.containerFlex, { backgroundColor: colors.screen_background }, style]}
+      >
+        {children}
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, style]} edges={edges}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.screen_background }, style]}
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
       {children}
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 16,
+  },
+  containerFlex: {
     flex: 1,
-    backgroundColor: white,
   },
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexGrow: 1,
-  },
+  contentContainer: {},
 });
 
 export default ScreenWrapper;

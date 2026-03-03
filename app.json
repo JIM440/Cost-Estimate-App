@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "DesV2",
+    "name": "Cost Estimate",
     "slug": "DesV2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0D6B7A"
     },
     "ios": {
       "supportsTablet": true
@@ -18,19 +18,26 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jim440.DesV2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "scheme": "desv2",
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-sqlite",
+      ["expo-file-system", { "enableFileSharing": true }]
     ],
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "8be1241b-4da7-4e5b-b27d-792ec0e721a8"
       }
-    }
+    },
+    "newArchEnabled": true
   }
 }

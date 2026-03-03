@@ -1,0 +1,103 @@
+import React from 'react';
+import { ScrollView, View, Text } from 'react-native';
+import createGuideStyles from '../../styles/screens/Guides';
+import { useTheme } from '../../context/ThemeContext';
+
+const HBEstimateGuide: React.FC = () => {
+  const { colors } = useTheme();
+  const styles = createGuideStyles(colors);
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.heading}>
+        Step-by-Step Guide: Estimating Hollow Block Slab
+      </Text>
+
+      <Text style={styles.step}>1. Gather Required Inputs</Text>
+      <Text style={styles.text}>
+        To estimate the materials and quantities for the hollow block slab, you
+        will need the following inputs:
+      </Text>
+      <Text style={styles.bullet}>- Length of slab (m)</Text>
+      <Text style={styles.bullet}>- Width of slab (m)</Text>
+      <Text style={styles.bullet}>- Length of block (m)</Text>
+      <Text style={styles.bullet}>- Width of block (m)</Text>
+      <Text style={styles.bullet}>- Span (m)</Text>
+      <Text style={styles.bullet}>- Mix Ratio (cement : sand : gravel)</Text>
+      <Text style={styles.bullet}>- Dry Volume Constant</Text>
+
+      <Text style={styles.step}>2. Calculate Area of Slab and Blocks</Text>
+      <Text style={styles.text}>
+        Determine the area of the slab and each block:
+      </Text>
+      <Text style={styles.equation}>Area of Slab (m²) = Length × Width</Text>
+      <Text style={styles.equation}>
+        Area of Block (m²) = Length of Block × Width of Block
+      </Text>
+
+      <Text style={styles.step}>3. Calculate Number of Blocks</Text>
+      <Text style={styles.text}>
+        Determine the number of blocks required to cover the slab area:
+      </Text>
+      <Text style={styles.equation}>
+        Number of Blocks = Ceiling(Area of Slab / Area of Block)
+      </Text>
+
+      <Text style={styles.step}>4. Calculate Concrete Volume</Text>
+      <Text style={styles.text}>
+        Calculate the volume of concrete needed for the slab:
+      </Text>
+      <Text style={styles.equation}>
+        Concrete Volume (m³) = Area of Slab (m²) × Thickness
+      </Text>
+
+      <Text style={styles.step}>5. Calculate Number of Reinforcement Rods</Text>
+      <Text style={styles.text}>
+        Determine the number of 12-meter rods required:
+      </Text>
+      <Text style={styles.equation}>
+        Number of Rods = Ceiling(Span / Width of Block)
+      </Text>
+      <Text style={styles.equation}>
+        Number of 12m Rods = Ceiling(Number of Rods × Width of Slab / 12)
+      </Text>
+
+      <Text style={styles.step}>6. Calculate Dry Volume of Concrete</Text>
+      <Text style={styles.text}>Calculate the dry volume of concrete:</Text>
+      <Text style={styles.equation}>
+        Dry Volume of Concrete = Concrete Volume × Dry Volume Constant
+      </Text>
+
+      <Text style={styles.step}>
+        7. Calculate Volume of Gravel, Sand, and Cement
+      </Text>
+      <Text style={styles.text}>
+        Determine the volumes of gravel, sand, and cement based on the ratio
+        (cement:sand:gravel):
+      </Text>
+      <Text style={styles.equation}>
+        Volume of Gravel = Dry Volume of Concrete × Gravel Ratio / Sum of Ratio
+      </Text>
+      <Text style={styles.equation}>
+        Volume of Sand = Volume of Cement × Sand Ratio / Sum of Ratio
+      </Text>
+      <Text style={styles.equation}>
+        Volume of Cement = Dry Volume of Concrete × Cement Ratio / Sum of Ratio
+      </Text>
+
+      <Text style={styles.step}>8. Calculate Number of Cement Bags</Text>
+      <Text style={styles.text}>
+        Determine the number of 50 kg bags of cement required:
+      </Text>
+      <Text style={styles.equation}>
+        Number of Bags of Cement = Ceiling((Volume of Cement × Density of
+        Cement) / 50)
+      </Text>
+      <Text style={styles.note}>
+        Assuming 1 bag of cement = 50 kg and Density of Cement = 1440 kg/m³
+      </Text>
+    </ScrollView>
+  );
+};
+
+export default HBEstimateGuide;

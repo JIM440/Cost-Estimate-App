@@ -6,17 +6,17 @@ import { useRouter } from 'expo-router';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
 import ToolCard from '../../../../components/cards/ToolCard';
-import BlockIcon from '../../../../assets/images/individual_estiamte/block.svg';
-import ConcreteIcon from '../../../../assets/images/individual_estiamte/concrete.svg';
-import RodIcon from '../../../../assets/images/individual_estiamte/rod.svg';
-import TilesIcon from '../../../../assets/images/individual_estiamte/tiles.svg';
-import PaintIcon from '../../../../assets/images/individual_estiamte/paint.svg';
-import ExcavationIcon from '../../../../assets/images/individual_estiamte/excavation.svg';
-import FillingIcon from '../../../../assets/images/individual_estiamte/filling.svg';
+import BlockIcon from '../../../../assets/images/individual_estimate/block.svg';
+import ConcreteIcon from '../../../../assets/images/individual_estimate/concrete.svg';
+import RodIcon from '../../../../assets/images/individual_estimate/rod.svg';
+import TilesIcon from '../../../../assets/images/individual_estimate/tiles.svg';
+import PaintIcon from '../../../../assets/images/individual_estimate/paint.svg';
+import ExcavationIcon from '../../../../assets/images/individual_estimate/excavation.svg';
+import FillingIcon from '../../../../assets/images/individual_estimate/filling.svg';
 
-const RoofingIcon = require('../../../../assets/images/individual_estiamte/roof.png');
-const HollowSlabIcon = require('../../../../assets/images/individual_estiamte/hollow_slab.png');
-const PlasterIcon = require('../../../../assets/images/individual_estiamte/plaster_c.jpg');
+const RoofingIcon = require('../../../../assets/images/individual_estimate/roof.png');
+const HollowSlabIcon = require('../../../../assets/images/individual_estimate/hollow_slab.png');
+const PlasterIcon = require('../../../../assets/images/individual_estimate/plaster_c.jpg');
 
 const estimates = [
   { nameKey: 'items.block', route: 'Block', icon: BlockIcon },
@@ -29,7 +29,7 @@ const estimates = [
   { nameKey: 'items.plaster', route: 'Plaster', icon: PlasterIcon },
   { nameKey: 'items.tiles', route: 'Tiles', icon: TilesIcon },
   { nameKey: 'items.paint', route: 'Paint', icon: PaintIcon },
-  { nameKey: 'items.foundationDepth', route: 'Foundation', icon: BlockIcon },
+  { nameKey: 'items.bricks', route: 'Bricks', icon: BlockIcon },
   { nameKey: 'items.excavation', route: 'Excavation', icon: ExcavationIcon },
   { nameKey: 'items.filling', route: 'Filling', icon: FillingIcon },
 ];
@@ -37,7 +37,7 @@ const estimates = [
 const routeMap: Record<string, string> = {
   Block: '/block', Roofing: '/roofing', RCSlab: '/rcslab', HollowSlab: '/hollowslab',
   Rods: '/rods', Concrete: '/concrete', Formwork: '/formwork', Plaster: '/plaster',
-  Tiles: '/tiles', Paint: '/paint', Foundation: '/foundation', Excavation: '/excavation', Filling: '/filling',
+  Tiles: '/tiles', Paint: '/paint', Bricks: '/bricks', Excavation: '/excavation', Filling: '/filling',
 };
 const CostEstimate: React.FC = () => {
   const router = useRouter();

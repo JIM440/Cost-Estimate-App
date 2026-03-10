@@ -38,7 +38,10 @@ const ListCard: React.FC<ListCardProps> = ({
     <View
       style={[
         longCardStyles.longCardBox,
-        { backgroundColor: colors.card },
+        { backgroundColor: colors.card, 
+          borderColor: colors.borderColor, borderWidth: 1 
+
+        },
         containerStyle,
       ]}
     >

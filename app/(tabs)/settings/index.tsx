@@ -12,12 +12,12 @@ import {
 import { useRouter } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
 import TabHeader from '../../../components/TabHeader';
-import ScreenWrapper from '../../../components/ScreenWrapper';
 import Image from '../../../components/Image';
 import { useTheme, ThemeMode } from '../../../context/ThemeContext';
 import { page_padding, border_radius_8 } from '../../../styles/global';
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from '../../../context/LocaleContext';
+import { useWalkthrough } from '../../../context/WalkthroughContext';
 
 type LanguageCode = 'en-GB' | 'fr';
 type Units = 'metric' | 'imperial';
@@ -27,6 +27,7 @@ export default function SettingsTabScreen() {
   const router = useRouter();
   const { colors, theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLocale();
+  const { reset } = useWalkthrough();
 
   const [languageState, setLanguageState] = useState<LanguageCode>(language);
   const [units, setUnits] = useState<Units>('metric');
@@ -36,10 +37,13 @@ export default function SettingsTabScreen() {
   return (
     <>
       <TabHeader titleKey="tab.settings" />
-      <ScreenWrapper>
+      <View style={{ flex: 1, backgroundColor: colors.screen_background, position: 'relative' }}>
         <ScrollView
           style={{ flex: 1, backgroundColor: colors.screen_background }}
-          contentContainerStyle={{ paddingBottom: 32 }}
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            paddingBottom: 32,
+          }}
         >
           {/* GENERAL */}
           <Text style={[styles.sectionLabel, { color: colors.muted_text }]}>
@@ -69,7 +73,7 @@ export default function SettingsTabScreen() {
               </View>
               <Picker
                 selectedValue={languageState}
-                style={[styles.picker, { color: colors.heading_text }]}
+                style={[styles.picker, { color: colors.heading_text, backgroundColor: 'transparent' }]}
                 mode="dropdown"
                 onValueChange={(value: LanguageCode) => {
                   setLanguageState(value);
@@ -180,7 +184,7 @@ export default function SettingsTabScreen() {
               </View>
               <Picker
                 selectedValue={currency}
-                style={[styles.picker, { color: colors.heading_text }]}
+                style={[styles.picker, { color: colors.heading_text, backgroundColor: 'transparent' }]}
                 mode="dropdown"
                 onValueChange={(value: CurrencyCode) => setCurrency(value)}
               >
@@ -213,7 +217,7 @@ export default function SettingsTabScreen() {
               </View>
               <Picker
                 selectedValue={units}
-                style={[styles.picker, { color: colors.heading_text }]}
+                style={[styles.picker, { color: colors.heading_text, backgroundColor: 'transparent' }]}
                 mode="dropdown"
                 onValueChange={(value: Units) => setUnits(value)}
               >
@@ -336,6 +340,30 @@ export default function SettingsTabScreen() {
                 </Text>
               </View>
             </Pressable>
+
+            {/* Restart walkthrough (helper for user) */}
+            <Pressable
+              style={styles.row}
+              onPress={() => {
+                reset();
+                router.push({
+                  pathname: '/home',
+                  params: { tab: 'house-category' },
+                });
+              }}
+            >
+              <View style={styles.rowLeft}>
+                <Feather name="compass" size={18} color={colors.muted_text} />
+                <Text
+                  style={[
+                    styles.rowLabel,
+                    { marginLeft: 12, color: colors.muted_text },
+                  ]}
+                >
+                  {t('walkthrough.start')}
+                </Text>
+              </View>
+            </Pressable>
           </View>
         </ScrollView>
 
@@ -357,7 +385,7 @@ export default function SettingsTabScreen() {
             >
               <View style={styles.modalHeader}>
                 <Image
-                  source={require('../../../assets/icon.png')}
+                  source={require('../../../assets/icons/icon.png')}
                   style={styles.logoImage}
                 />
                 <View style={{ marginLeft: 12, gap: 4 }}>
@@ -387,7 +415,7 @@ export default function SettingsTabScreen() {
             </View>
           </View>
         </Modal>
-      </ScreenWrapper>
+      </View>
     </>
   );
 }
@@ -457,6 +485,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 200,
+    backgroundColor: 'transparent',
   },
   modalBackdrop: {
     flex: 1,

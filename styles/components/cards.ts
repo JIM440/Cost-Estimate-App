@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { light_bg_blue, primary_color, white } from '../colors';
-import { border_radius_22, border_radius_8 } from '../global';
+import { border_radius_22, border_radius_12 } from '../global';
 
 const longCardStyles = StyleSheet.create({
   longCardContainer: {
@@ -21,12 +21,12 @@ const longCardStyles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 10,
     marginTop: 10,
-    borderRadius: border_radius_8,
-    shadowColor: '#0F172A',
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2,
+    borderRadius: border_radius_12,
+    // shadowColor: '#0F172A',
+    // shadowOpacity: 0.06,
+    // shadowRadius: 12,
+    // shadowOffset: { width: 0, height: 6 },
+    // elevation: 2,
   },
   chevron_right: {
     marginLeft: 'auto',
@@ -42,21 +42,16 @@ const wideCardStyles = StyleSheet.create({
   },
   wideCardBox: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: white,
     borderRadius: border_radius_22,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 16,
     paddingVertical: 20,
     width: '30.5%',
-    shadowColor: '#0F172A',
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2,
+    height: 120,
   },
   title: {
-    marginTop: 10,
     fontSize: 13,
     textAlign: 'center',
     textTransform: 'capitalize',
@@ -67,6 +62,7 @@ const ColumnLayouts = StyleSheet.create({
   TwoColumn: {
     flexDirection: 'row',
     paddingBottom: 10,
+    justifyContent: 'space-between',
   },
   TwoColumnItem: {
     width: '48%',

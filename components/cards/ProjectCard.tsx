@@ -13,6 +13,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLocale } from '../../context/LocaleContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { ProjectType } from '../../context/ProjectsContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -20,7 +21,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const LEGACY_LABEL_KEYS: Record<string, string> = {
   'Total Dry Concrete Volume': 'projects.summary.totalDryConcreteVolume',
   'Total Dry Mortar Volume': 'projects.summary.totalDryMortarVolume',
-  'Dry Concrete Volume (Foundation + Elevation)': 'projects.summary.dryConcreteFoundationElevation',
+  'Dry Concrete Volume': 'projects.summary.dryConcreteFoundationElevation',
   'Dry Mortar Volume': 'projects.summary.dryMortarVolume',
   'Roofing Boards': 'projects.summary.roofingBoards',
 };
@@ -49,6 +50,8 @@ export interface ProjectCardProps {
   title: string;
   createdAt: string | Date;
   summary?: ProjectSummaryItem[];
+  type?: ProjectType;
+  floors?: number;
   onPress?: () => void;
   onExport?: () => void;
   onEdit?: () => void;
@@ -59,6 +62,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
   createdAt,
   summary,
+  type,
+  floors,
   onPress,
   onExport,
   onEdit,
@@ -75,10 +80,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   if (onPress) wrapperProps.onPress = onPress;
   if (onDelete) wrapperProps.onLongPress = () => onDelete();
 
+  const categoryLabel = (() => {
+    if (!type) return '';
+    if (type === 'multi-house') {
+      if (floors === 4) return t('projects.category.four');
+      if (floors === 3) return t('projects.category.three');
+      if (floors === 2) return t('projects.category.two');
+      return t('projects.category.multi');
+    }
+    if (type === 'single-house') return t('projects.category.single');
+    return '';
+  })();
+
   return (
     <Wrapper
       {...wrapperProps}
-      style={[styles.card, { backgroundColor: colors.card }]}
+      style={[styles.card, { backgroundColor: colors.card, borderColor: colors.borderColor, shadowColor: colors.heading_text }]}
     >
       <View style={styles.cardHeader}>
         <View style={styles.cardTitleRow}>
@@ -101,6 +118,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <Text style={[styles.cardMeta, { color: colors.muted_text }]}>
         {new Date(createdAt).toLocaleString(language)}
       </Text>
+      {categoryLabel ? (
+        <Text style={[styles.cardMeta, { color: colors.muted_text }]}>
+          {categoryLabel}
+        </Text>
+      ) : null}
       {summary?.slice(0, 3).map((s) => (
         <View key={s.label} style={styles.summaryRow}>
           <Text style={[styles.summaryLabel, { color: colors.muted_text }]}>
@@ -116,7 +138,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <Modal
         transparent
         visible={menuVisible}
-        animationType="slide"
+        animationType="fade"
         onRequestClose={() => setMenuVisible(false)}
       >
         <Pressable
@@ -124,7 +146,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           onPress={() => setMenuVisible(false)}
         >
           <View style={[StyleSheet.absoluteFill, styles.menuOverlayDim]} />
-          <Pressable style={[styles.menuSheet, { backgroundColor: colors.card }]} onPress={() => {}}>
+          <Pressable style={[styles.menuSheet, { backgroundColor: colors.card, shadowColor: colors.heading_text }]} onPress={() => {}}>
             <View style={[styles.menuHandle, { backgroundColor: colors.muted_text }]} />
             <View
               style={[
@@ -202,9 +224,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     borderRadius: 18,
+    borderWidth: 1,
     padding: 14,
     marginBottom: 12,
-    shadowColor: '#0F172A',
     shadowOpacity: 0.04,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
@@ -254,7 +276,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#0F172A',
     shadowOpacity: 0.2,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: -4 },

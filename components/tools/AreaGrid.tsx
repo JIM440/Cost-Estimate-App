@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { containerStyles } from '../../styles/utility';
 import { wideCardStyles } from '../../styles/components/cards';
 import ToolCard from '../cards/ToolCard';
-import { Circle, Square, Triangle, RectangleHorizontal } from 'lucide-react-native';
+import { Circle, Square, Triangle, RectangleHorizontal, Box, Cylinder, Pyramid, Archive, Globe, CircleDot } from 'lucide-react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
@@ -68,6 +68,36 @@ export default function AreaGrid() {
         title={t('tools.area.ellipse')}
         iconNode={<MaterialCommunityIcons name="ellipse-outline" size={iconSize} color={iconColor} />}
         onPress={() => router.push('/ellipse')}
+      />
+      <ToolCard
+        title={t('tools.volume.rectPrism')}
+        iconNode={<Pyramid color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/rectangular-prism')}
+      />
+      <ToolCard
+        title={t('tools.volume.cylinder')}
+        iconNode={<Cylinder color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/cylinder')}
+      />
+      <ToolCard
+        title={t('tools.volume.rectTank')}
+        iconNode={<Archive color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/rectangular-tank')}
+      />
+      <ToolCard
+        title={t('tools.volume.sphere')}
+        iconNode={<Globe color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/sphere')}
+      />
+      <ToolCard
+        title={t('tools.volume.cube')}
+        iconNode={<Box color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/cube')}
+      />
+      <ToolCard
+        title={t('tools.volume.halfSphere')}
+        iconNode={<CircleDot color={iconColor} size={iconSize} />}
+        onPress={() => router.push('/half-sphere')}
       />
     </View>
   );

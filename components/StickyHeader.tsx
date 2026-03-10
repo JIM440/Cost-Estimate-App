@@ -34,6 +34,7 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
         {
           backgroundColor: bg,
           paddingTop: insets.top,
+          shadowColor: colors.heading_text,
         },
         style,
       ]}
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1000,
     elevation: 4,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

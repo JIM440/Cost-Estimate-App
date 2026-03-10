@@ -9,6 +9,7 @@ import ButtonPrimary from '../../../../components/buttons/Button';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Plaster: React.FC = () => {
   const { t } = useLocale();
@@ -92,7 +93,7 @@ const Plaster: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/plaster_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/plaster_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('items.plaster')}</Text>
@@ -166,15 +167,19 @@ const Plaster: React.FC = () => {
             onChange={(value) => setWastage(value)}
           />
         </View>
-        <TextInputTitle
-          title={t('estimate.plaster.pricePerM2')}
-          placeholder={t('common.enterPrice')}
-          value={plasterPricePerM2}
-          onChange={(value) => setPlasterPricePerM2(value)}
-        />
+        <View style={inputStyles.twoColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title={t('estimate.plaster.pricePerM2')}
+            placeholder={t('common.enterPrice')}
+            value={plasterPricePerM2}
+            onChange={(value) => setPlasterPricePerM2(value)}
+          />
+        </View>
 
         <ButtonPrimary
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           onPress={() => {
             setCalculating(true);
             setTimeout(() => {

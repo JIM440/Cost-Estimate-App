@@ -9,6 +9,7 @@ import ButtonPrimary from '../../../../components/buttons/Button';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Filling: React.FC = () => {
   const { t } = useLocale();
@@ -49,7 +50,7 @@ const Filling: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/filling_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/filling_c.jpg')}
       />
 
       <View style={containerStyles.container}>
@@ -79,15 +80,19 @@ const Filling: React.FC = () => {
           />
         </View>
 
-        <TextInputTitle
-          title={t('estimate.filling.pricePerTrip')}
-          placeholder={t('common.enterPrice')}
-          value={pricePerM3}
-          onChange={(value) => setPricePerM3(value)}
-        />
+        <View style={inputStyles.twoColumn}>
+          <TextInputTitle
+            style={inputStyles.oneColumnInput}
+            title={t('estimate.filling.pricePerTrip')}
+            placeholder={t('common.enterPrice')}
+            value={pricePerM3}
+            onChange={(value) => setPricePerM3(value)}
+          />
+        </View>
 
         <ButtonPrimary
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           onPress={() => {
             setCalculating(true);
             setTimeout(() => {

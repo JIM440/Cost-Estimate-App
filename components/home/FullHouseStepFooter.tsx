@@ -12,6 +12,7 @@ type FullHouseStepFooterProps = {
   showPrevious?: boolean;
   showNext?: boolean;
   loadingNext?: boolean;
+  disabledNext?: boolean;
 };
 
 const FullHouseStepFooter: React.FC<FullHouseStepFooterProps> = ({
@@ -22,6 +23,7 @@ const FullHouseStepFooter: React.FC<FullHouseStepFooterProps> = ({
   showPrevious = true,
   showNext = true,
   loadingNext = false,
+  disabledNext = false,
 }) => {
   return (
     <View style={styles.container}>
@@ -35,7 +37,12 @@ const FullHouseStepFooter: React.FC<FullHouseStepFooterProps> = ({
 
       {showNext ? (
         <View style={styles.buttonWrapper}>
-          <ButtonPrimary title={nextLabel} onPress={onNext || (() => {})} loading={loadingNext} />
+          <ButtonPrimary
+            title={nextLabel}
+            onPress={onNext || (() => {})}
+            loading={loadingNext}
+            disabled={disabledNext}
+          />
         </View>
       ) : (
         <View style={styles.buttonWrapper} />

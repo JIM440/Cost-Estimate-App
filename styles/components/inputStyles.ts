@@ -3,6 +3,14 @@ import { border_radius_8 } from '../global';
 
 export const inputStyles = StyleSheet.create({
   container: {},
+  twoColumn: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginVertical: 10,
+    flexWrap: 'wrap',
+    gap: 10,
+    justifyContent: 'space-between',
+  },
   title: {
     fontSize: 14,
     fontWeight: '500',
@@ -21,11 +29,13 @@ export const inputStyles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     borderColor: 'gray',
+    backgroundColor: 'transparent',
   },
   threeColumn: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginVertical: 10,
+    justifyContent: 'space-between',
   },
   threeColumnInput: {
     marginRight: 10,
@@ -33,8 +43,14 @@ export const inputStyles = StyleSheet.create({
     borderColor: 'gray',
   },
   twoColumnInput: {
-    marginRight: 10,
-    width: '47%',
+    flexGrow: 1,
+    flexBasis: '47%',
+    maxWidth: '47%',
+    borderColor: 'gray',
+  },
+  oneColumnInput: {
+    width: '30%',
+    minWidth: 120,
     borderColor: 'gray',
   },
 });

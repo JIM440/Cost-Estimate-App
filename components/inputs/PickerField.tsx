@@ -33,14 +33,16 @@ const PickerField: React.FC<PickerFieldProps> = ({
       <View
         style={[
           styles.pickerWrapper,
-          { borderColor: colors.borderColor, backgroundColor: colors.card },
+          { borderColor: colors.borderColor, backgroundColor: 'transparent' },
         ]}
       >
         <Picker
           selectedValue={selectedValue}
           onValueChange={(value) => onValueChange(value as string)}
-          style={[styles.picker, { color: colors.heading_text }]}
+          style={[styles.picker, { color: colors.heading_text, backgroundColor: 'transparent' }]}
           mode="dialog"
+          // Android dropdown arrow color (prevents default black icon in dark mode)
+          dropdownIconColor={colors.muted_text}
           itemStyle={{ fontSize: 14, color: colors.muted_text }}
         >
           {options.map((opt) => (

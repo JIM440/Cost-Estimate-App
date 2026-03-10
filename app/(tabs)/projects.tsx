@@ -20,6 +20,14 @@ export default function ProjectsScreen() {
   const [clearAllVisible, setClearAllVisible] = useState(false);
 
   const handleExportProject = async (project: import('../../context/ProjectsContext').Project) => {
+    const isComplete = project.data?.meta?.complete as boolean | undefined;
+    if (isComplete === false) {
+      Alert.alert(
+        t('projects.export.notAvailable'),
+        t('projects.export.completeRequired')
+      );
+      return;
+    }
     const uri = project.data?.pdfUri as string | undefined;
     if (!uri) {
       Alert.alert(
@@ -82,9 +90,9 @@ export default function ProjectsScreen() {
         <TabHeader titleKey="tab.projects" />
         <ScreenWrapper scrollable={false}>
           <View style={[styles.container, { backgroundColor: colors.screen_background }]}>
-            <View style={styles.skeletonCard} />
-            <View style={styles.skeletonCard} />
-            <View style={styles.skeletonCard} />
+            <View style={[styles.skeletonCard, { backgroundColor: colors.borderColor }]} />
+            <View style={[styles.skeletonCard, { backgroundColor: colors.borderColor }]} />
+            <View style={[styles.skeletonCard, { backgroundColor: colors.borderColor }]} />
           </View>
         </ScreenWrapper>
       </>
@@ -97,7 +105,7 @@ export default function ProjectsScreen() {
         <TabHeader titleKey="tab.projects" />
         <ScreenWrapper scrollable={false}>
           <View style={[styles.emptyContainer, { backgroundColor: colors.screen_background }]}>
-            <View style={[styles.emptyIconWrapper, { backgroundColor: colors.card }]}>
+            <View style={[styles.emptyIconWrapper, { backgroundColor: colors.card, shadowColor: colors.heading_text }]}>
               <Feather name="folder-plus" size={40} color={colors.primary_color} />
             </View>
             <Text style={[styles.emptyTitle, { color: colors.heading_text }]}>
@@ -108,7 +116,12 @@ export default function ProjectsScreen() {
             </Text>
             <Pressable
               style={[styles.emptyCta, { backgroundColor: colors.primary_color }]}
-              onPress={() => router.push('/home')}
+              onPress={() =>
+                router.push({
+                  pathname: '/home',
+                  params: { tab: 'house-category' },
+                })
+              }
             >
               <Text style={[styles.emptyCtaText, { color: colors.white }]}>
                 {t('projects.empty.cta')}
@@ -158,6 +171,8 @@ export default function ProjectsScreen() {
                 title={item.title}
                 createdAt={item.createdAt}
                 summary={item.summary}
+                type={item.type}
+                floors={item.data?.meta?.floors as number | undefined}
                 onPress={() => handleEditProject(item)}
                 onExport={() => handleExportProject(item)}
                 onEdit={() => handleEditProject(item)}
@@ -194,7 +209,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
-    shadowColor: '#0F172A',
     shadowOpacity: 0.06,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
@@ -226,7 +240,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginHorizontal: 16,
     marginBottom: 12,
-    backgroundColor: '#E5E7EB',
     opacity: 0.6,
   },
 });

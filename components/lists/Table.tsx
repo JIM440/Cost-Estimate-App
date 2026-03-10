@@ -31,6 +31,25 @@ const Table: React.FC<TableProps> = ({
   const borderColor = colors.borderColor;
   const textColor = colors.heading_text;
 
+  const formatValue = (value: TableRow[string]): React.ReactNode => {
+    if (value == null) return '-';
+    if (typeof value === 'number') {
+      if (Number.isInteger(value)) return String(value);
+      return value.toFixed(2);
+    }
+    if (typeof value === 'string') {
+      // If it's a plain numeric string with too many decimals, trim to 2dp
+      if (/^-?\d+(\.\d+)?$/.test(value)) {
+        const n = Number(value);
+        if (!Number.isNaN(n) && value.includes('.') && (value.split('.')[1]?.length ?? 0) > 2) {
+          return n.toFixed(2);
+        }
+      }
+      return value;
+    }
+    return value; // ReactNode
+  };
+
   const getHeaderStyle = (align?: 'left' | 'center' | 'right') => {
     switch (align) {
       case 'left':
@@ -71,7 +90,7 @@ const Table: React.FC<TableProps> = ({
           {columns.map((column, colIndex) => (
             <View key={colIndex} style={tableStyles.column}>
               <Text style={[getCellStyle(column.align), { color: textColor }]}>
-                {row[column.key] ?? '-'}
+                {formatValue(row[column.key])}
               </Text>
             </View>
           ))}

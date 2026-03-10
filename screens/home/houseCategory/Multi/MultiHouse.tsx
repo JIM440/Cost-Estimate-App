@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as Print from 'expo-print';
@@ -16,11 +16,22 @@ import { useLocale } from '../../../../context/LocaleContext';
 import ButtonOutlined from '../../../../components/buttons/ButtonOutlined';
 import { useProjects } from '../../../../context/ProjectsContext';
 import FullHouseStepFooter from '../../../../components/home/FullHouseStepFooter';
+import FoundationInputsSection from '../../../../components/house/FoundationInputsSection';
+import RoofingInputsSection from '../../../../components/house/RoofingInputsSection';
+import HouseOutputTabs from '../../../../components/house/HouseOutputTabs';
+import FloorElevationInputs from '../../../../components/house/FloorElevationInputs';
+import {
+  computeFooting,
+  computeColumn,
+  computeBeam,
+  computeWall,
+} from '../../../../domain/house/foundation';
 
 type MultiHouseProps = {
   floors?: number;
   projectId?: string;
   onRegisterSave?: (fn: () => Promise<void>) => void;
+  saveHandlerRef?: React.MutableRefObject<(() => Promise<void>) | null>;
 };
 
 function sanitizeForFilename(name: string): string {
@@ -28,7 +39,7 @@ function sanitizeForFilename(name: string): string {
   return s.slice(0, 100);
 }
 
-const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegisterSave }) => {
+const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegisterSave, saveHandlerRef: parentSaveHandlerRef }) => {
   const [step, setStep] = useState(1);
   const [outputTab, setOutputTab] = useState('All');
   const [exporting, setExporting] = useState(false);
@@ -157,6 +168,90 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     if (!existing) return;
     const inputs = existing.data?.inputs || {};
     setProjectName(existing.title || inputs.projectName || '');
+    setDeckingType(inputs.deckingType ?? '');
+    setFloorNumber(inputs.floorNumber ?? 1);
+
+    setPricePerBlock(inputs.pricePerBlock ?? '');
+    setPricePerM3(inputs.pricePerM3 ?? '');
+    setFootingLength(inputs.footingLength ?? '');
+    setFootingWidth(inputs.footingWidth ?? '');
+    setFootingThickness(inputs.footingThickness ?? '');
+    setNumberFootings(inputs.numberFootings ?? '');
+    setNumberRodsPerFooting(inputs.numberRodsPerFooting ?? '');
+
+    setColumnLength(inputs.columnLength ?? '');
+    setColumnWidth(inputs.columnWidth ?? '');
+    setColumnHeight(inputs.columnHeight ?? '');
+    setNumberColumns(inputs.numberColumns ?? '');
+    setNumberRodsPerColumn(inputs.numberRodsPerColumn ?? '');
+
+    setBeamLength(inputs.beamLength ?? '');
+    setBeamWidth(inputs.beamWidth ?? '');
+    setBeamHeight(inputs.beamHeight ?? '');
+    setNumerRodsPerBeam(inputs.numerRodsPerBeam ?? '');
+
+    setWallLength(inputs.wallLength ?? '');
+    setWallWidth(inputs.wallWidth ?? '');
+    setWallHeight(inputs.wallHeight ?? '');
+    setBlockLength(inputs.blockLength ?? '');
+    setBlockWidth(inputs.blockWidth ?? '');
+    setBlockHeight(inputs.blockHeight ?? '');
+
+    setElevationWallLength(inputs.elevationWallLength ?? '');
+    setelevationWallWidth(inputs.elevationWallWidth ?? '');
+    setelevationWallHeight(inputs.elevationWallHeight ?? '');
+    setelevationWallBlockLength(inputs.elevationWBlockLength ?? '');
+    setelevationWallBlockWidth(inputs.elevationWallBlockWidth ?? '');
+    setelevationWallBlockHeight(inputs.elevationWallBlockHeight ?? '');
+    setelevationWallSubtractArea(inputs.elevationWallSubtractArea ?? '');
+    setElPricePerM3(inputs.elPricePerM3 ?? '');
+    setBlockPrice(inputs.blockPrice ?? '');
+    setElevationBeamLength(inputs.elevationBeamLength ?? '');
+    setelevationBeamWidth(inputs.elevationBeamWidth ?? '');
+    setelevationBeamHeight(inputs.elevationBeamHeight ?? '');
+    setelevationNumberRodsPerBeam(inputs.elevationNumRodsPerBeam ?? '');
+    setElevationColumnLength(inputs.elevationColumnLength ?? '');
+    setelevationColumnWidth(inputs.elevationColumnWidth ?? '');
+    setelevationColumnHeight(inputs.elevationColumnHeight ?? '');
+    setelevationNumberRodsPerColumn(inputs.elevationNumberRodsPerColumn ?? '');
+    setelevationColumnNumber(inputs.elevationColumnNumber ?? '');
+
+    setElevationWallLength2(inputs.elevationWallLength2 ?? '');
+    setelevationWallWidth2(inputs.elevationWallWidth2 ?? '');
+    setelevationWallHeight2(inputs.elevationWallHeight2 ?? '');
+    setelevationWallBlockLength2(inputs.elevationWBlockLength2 ?? '');
+    setelevationWallBlockWidth2(inputs.elevationWallBlockWidth2 ?? '');
+    setelevationWallBlockHeight2(inputs.elevationWallBlockHeight2 ?? '');
+    setelevationWallSubtractArea2(inputs.elevationWallSubtractArea2 ?? '');
+    setBlockPrice2(inputs.blockPrice2 ?? '');
+    setElPricePerM32(inputs.elPricePerM32 ?? '');
+    setElevationBeamLength2(inputs.elevationBeamLength2 ?? '');
+    setelevationBeamWidth2(inputs.elevationBeamWidth2 ?? '');
+    setelevationBeamHeight2(inputs.elevationBeamHeight2 ?? '');
+    setelevationNumberRodsPerBeam2(inputs.elevationNumRodsPerBeam2 ?? '');
+    setElevationColumnLength2(inputs.elevationColumnLength2 ?? '');
+    setelevationColumnWidth2(inputs.elevationColumnWidth2 ?? '');
+    setelevationColumnHeight2(inputs.elevationColumnHeight2 ?? '');
+    setelevationNumberRodsPerColumn2(inputs.elevationNumberRodsPerColumn2 ?? '');
+    setelevationColumnNumber2(inputs.elevationColumnNumber2 ?? '');
+
+    setHouseLength(inputs.houseLength ?? '');
+    setHouseWidth(inputs.houseWidth ?? '');
+    setRise(inputs.rise ?? '');
+    setRun(inputs.run ?? '');
+    setSpan(inputs.span ?? '');
+
+    setRCSLabLength(inputs.RCSLabLength ?? '');
+    setRCSLabWidth(inputs.RCSLabWidth ?? '');
+    setRCSLabHeight(inputs.RCSLabHeight ?? '');
+    setRCSLabRodSpacing(inputs.RCSLabRodSpacing ?? '');
+
+    setHBSlabLength(inputs.HBSlabLength ?? '');
+    setHBSlabWidth(inputs.HBSlabWidth ?? '');
+    setHBSlabThickness(inputs.HBSlabThickness ?? '');
+    setHBSlabSpan(inputs.HBSlabSpan ?? '');
+    setHBSlabBlockLength(inputs.HBSlabBlockLength ?? '');
+    setHBSlabBlockWidth(inputs.HBSlabBlockWidth ?? '');
   }, [projectId, projects]);
 
   // // // // // // // deckig - rc slab
@@ -272,108 +367,44 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
   };
 
   // Calculate volumes and quantities for footings
-  const calculateFooting = () => {
-    const length = parseFloat(footingLength);
-    const width = parseFloat(footingWidth);
-    const thickness = parseFloat(footingThickness);
-    const number = parseInt(numberFootings);
-
-    const volume = length * width * thickness * number; // Wet volume
-    const dryVolume = volume * 1.54; // Assuming 54% increase for dry volume
-    const sandVolume = dryVolume * (2 / 4); // Assuming 40% sand
-    const cementVolume = dryVolume * (1 / 4); // Assuming 30% cement
-    const gravelVolume = dryVolume * (1 / 4); // Assuming 30% gravel
-
-    // Assuming number of rods needed per footing
-    const rodsPerFooting = parseFloat(numberRodsPerFooting);
-    const totalRods = (number * rodsPerFooting * thickness) / 12;
-
-    return {
-      volume,
-      dryVolume,
-      sandVolume,
-      cementVolume,
-      gravelVolume,
-      totalRods,
-    };
-  };
+  const calculateFooting = () =>
+    computeFooting({
+      length: parseFloat(footingLength),
+      width: parseFloat(footingWidth),
+      thickness: parseFloat(footingThickness),
+      count: parseInt(numberFootings),
+      rodsPerFooting: parseFloat(numberRodsPerFooting),
+    });
 
   // Calculate volumes and quantities for columns
-  const calculateColumn = () => {
-    const length = parseFloat(columnLength);
-    const width = parseFloat(columnWidth);
-    const height = parseFloat(columnHeight);
-    const number = parseInt(numberColumns);
-
-    const volume = length * width * height * number; // Wet volume
-    const dryVolume = volume * 1.54;
-    const sandVolume = dryVolume * (2 / 4);
-    const cementVolume = dryVolume * (1 / 4);
-    const gravelVolume = dryVolume * (1 / 4);
-
-    const rodsPerColumn = parseFloat(numberRodsPerColumn);
-    const totalRods = (number * rodsPerColumn * length) / 12;
-
-    return {
-      volume,
-      dryVolume,
-      sandVolume,
-      cementVolume,
-      gravelVolume,
-      totalRods,
-    };
-  };
+  const calculateColumn = () =>
+    computeColumn({
+      length: parseFloat(columnLength),
+      width: parseFloat(columnWidth),
+      height: parseFloat(columnHeight),
+      count: parseInt(numberColumns),
+      rodsPerColumn: parseFloat(numberRodsPerColumn),
+    });
 
   // Calculate volumes and quantities for beams
-  const calculateBeam = () => {
-    const length = parseFloat(beamLength);
-    const width = parseFloat(beamWidth);
-    const height = parseFloat(beamHeight);
-
-    const volume = length * width * height; // Wet volume
-    const dryVolume = volume * 1.54;
-    const sandVolume = dryVolume * (2 / 4);
-    const cementVolume = dryVolume * (1 / 4);
-    const gravelVolume = dryVolume * (1 / 4);
-
-    // number 12m rods needed per beam length
-    const totalRods = (parseFloat(numerRodsPerBeam) * length) / 12;
-
-    return {
-      volume,
-      dryVolume,
-      sandVolume,
-      cementVolume,
-      gravelVolume,
-      totalRods,
-    };
-  };
+  const calculateBeam = () =>
+    computeBeam({
+      length: parseFloat(beamLength),
+      width: parseFloat(beamWidth),
+      height: parseFloat(beamHeight),
+      rodsPerBeam: parseFloat(numerRodsPerBeam),
+    });
 
   // Calculate volumes and quantities for foundation walls
-  const calculateWall = () => {
-    const length = parseFloat(wallLength);
-    const width = parseFloat(wallWidth);
-    const height = parseFloat(wallHeight);
-    const blockLen = parseFloat(blockLength);
-    const blockWid = parseFloat(blockWidth);
-    const blockHei = parseFloat(blockHeight);
-
-    const volume = length * width * height; // Wet volume
-    const dryVolume = volume * 1.54;
-    const sandVolume = dryVolume * (3 / 4);
-    const cementVolume = dryVolume * (1 / 4);
-
-    const blockVolume = blockLen * blockWid * blockHei;
-    const numberOfBlocks = volume / blockVolume;
-
-    return {
-      volume,
-      dryVolume,
-      sandVolume,
-      cementVolume,
-      numberOfBlocks,
-    };
-  };
+  const calculateWall = () =>
+    computeWall({
+      length: parseFloat(wallLength),
+      width: parseFloat(wallWidth),
+      height: parseFloat(wallHeight),
+      blockLength: parseFloat(blockLength),
+      blockWidth: parseFloat(blockWidth),
+      blockHeight: parseFloat(blockHeight),
+    });
 
   // Calculate All Estimates
   const calculateEstimates = () => {
@@ -491,7 +522,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     const blockNumber = Math.ceil(totalBlockVolume / blockVolume);
 
     // Calculate dry mortar volume
-    const dryMortarVol = (totalBlockVolume * 1.54).toFixed(2);
+    const dryMortarVol = (totalBlockVolume * 1.33).toFixed(2);
 
     // Calculate sand volume
     const dryMortarSandVol = ((dryMortarVol * 3) / 4).toFixed(2);
@@ -586,7 +617,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     const blockNumber = Math.ceil(totalBlockVolume / blockVolume);
 
     // Calculate dry mortar volume
-    const dryMortarVol = (totalBlockVolume * 1.54).toFixed(2);
+    const dryMortarVol = (totalBlockVolume * 1.33).toFixed(2);
 
     // Calculate sand volume
     const dryMortarSandVol = ((dryMortarVol * 3) / 4).toFixed(2);
@@ -663,31 +694,31 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     // Simple validation: require key inputs for each step before moving on.
     if (step === 1) {
       if (!projectName.trim()) {
-        alert(t('house.alert.projectName'));
+        Alert.alert(t('house.alert.projectName'));
         return;
       }
       if (!footingLength || !footingWidth || !footingThickness || !numberFootings) {
-        alert(t('house.alert.footing'));
+        Alert.alert(t('house.alert.footing'));
         return;
       }
       if (!columnLength || !columnWidth || !columnHeight || !numberColumns) {
-        alert(t('house.alert.column'));
+        Alert.alert(t('house.alert.column'));
         return;
       }
     }
     if (step === 2) {
       if (!elevationWallLength || !elevationWallHeight || !elevationWallWidth) {
-        alert(t('house.alert.elevationWall'));
+        Alert.alert(t('house.alert.elevationWall'));
         return;
       }
       if (!elevationWBlockLength || !elevationWallBlockWidth || !elevationWallBlockHeight) {
-        alert(t('house.alert.elevationBlock'));
+        Alert.alert(t('house.alert.elevationBlock'));
         return;
       }
     }
     if (step === 3) {
       if (!houseLength || !houseWidth || !rise || !run || !span) {
-        alert(t('house.alert.roofing'));
+        Alert.alert(t('house.alert.roofing'));
         return;
       }
     }
@@ -711,101 +742,216 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             ? t('projects.defaultTitle.two') || 'Two Storey House Estimate'
             : t('projects.defaultTitle.multi') || 'Multi Storey House Estimate';
     const projectTitle = projectName.trim() || defaultTitle;
+    const buildingType =
+      floors === 4
+        ? 'Four-storey building'
+        : floors === 3
+          ? 'Three-storey building'
+          : floors === 2
+            ? 'Two-storey building'
+            : 'Multi-storey building';
+    const formatNumber = (value: any): string => {
+      if (value === null || value === undefined) return '';
+      const n = typeof value === 'number' ? value : Number(value);
+      if (Number.isNaN(n)) return String(value ?? '');
+      if (Number.isInteger(n)) return String(n);
+      return n.toFixed(2);
+    };
+    const safe = (value: any): string => {
+      if (value === null || value === undefined) return '';
+      if (typeof value === 'number') {
+        if (Number.isNaN(value)) return '';
+        return formatNumber(value);
+      }
+      if (typeof value === 'string') {
+        const trimmed = value.trim();
+        if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+          return formatNumber(trimmed);
+        }
+        return trimmed;
+      }
+      return String(value);
+    };
 
+    const primaryColor = '#0D6B7A';
+    const totalMaterialCost =
+      (parseFloat(totalFoundationEstimate.totalPricePerM3) || 0) +
+      ((wallEstimate.numberOfBlocks || 0) * (parseFloat(pricePerBlock) || 0)) +
+      (parseFloat(elevationEstimate.totalBlockCost) || 0) +
+      (parseFloat(elevationEstimate.totalPricePerM3Elevation) || 0) +
+      (parseFloat(elevationEstimate2.totalBlockCost) || 0) +
+      (parseFloat(elevationEstimate2.totalPricePerM3Elevation) || 0);
+    const labourCost = totalMaterialCost * 0.2;
+    const grandTotal = totalMaterialCost + labourCost;
     const htmlContent = `
       <html>
         <head>
           <style>
-            body { font-family: Arial, sans-serif; }
+            body { font-family: Arial, sans-serif; color: #0F172A; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid black; padding: 8px; }
+            th, td { border: 1px solid #E2E8F0; padding: 8px 10px; text-align: left; }
+            .title-bar { background-color: ${primaryColor}; padding: 16px 20px; margin-bottom: 24px; }
+            .title-bar h1 { color: #FFFFFF; margin: 0; font-size: 22px; }
+            .subtitle { color: #FFFFFF; margin-top: 4px; font-size: 14px; }
           </style>
         </head>
         <body>
-          <h1>${projectTitle}</h1>
-          <h2>${t('house.pdf.roofingEstimate')}</h2>
+          <div class="title-bar">
+            <h1>${projectTitle}</h1>
+            <div class="subtitle">${buildingType}</div>
+          </div>
+          <h2>${t('house.roofing')}</h2>
           <table>
             <tr>
-              <td>Number of Ceiling Boards</td>
-              <td>${roofingEstimate.numberOfCeilingBoards}</td>
+              <th>#</th>
+              <th>${t('house.pdf.description')}</th>
+              <th>${t('house.pdf.unit')}</th>
+              <th>${t('house.pdf.quantity')}</th>
+              <th>${t('house.pdf.unitPrice')}</th>
+              <th>${t('house.pdf.total')}</th>
             </tr>
             <tr>
-              <td>Number of Roofing Sheets</td>
-              <td>${roofingEstimate.numberOfRoofingSheets}</td>
+              <td>1</td>
+              <td>${t('estimate.roofing.ceilingBoards')}</td>
+              <td>Boards</td>
+              <td>${safe(roofingEstimate.numberOfCeilingBoards)}</td>
+              <td>${safe(pricePerCeilingBoardM)}</td>
+              <td>${safe(roofingEstimate.ceilingCost != null ? roofingEstimate.ceilingCost.toFixed(2) : '')}</td>
             </tr>
             <tr>
-              <td>Number of Purlins</td>
-              <td>${roofingEstimate.numberOfPurlins}</td>
+              <td>2</td>
+              <td>${t('estimate.roofing.roofingSheets')}</td>
+              <td>Sheets</td>
+              <td>${safe(roofingEstimate.numberOfRoofingSheets)}</td>
+              <td>${safe(pricePerRoofingSheet)}</td>
+              <td>${safe(roofingEstimate.sheetsCost != null ? roofingEstimate.sheetsCost.toFixed(2) : '')}</td>
             </tr>
             <tr>
-              <td>Number of Boards</td>
-              <td>${roofingEstimate.numberOfBoards}</td>
+              <td>3</td>
+              <td>${t('estimate.roofing.purlins')}</td>
+              <td>Purlins</td>
+              <td>${safe(roofingEstimate.numberOfPurlins)}</td>
+              <td>${safe(pricePerPurlin)}</td>
+              <td>${safe(roofingEstimate.purlinsCost != null ? roofingEstimate.purlinsCost.toFixed(2) : '')}</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>${t('estimate.roofing.rafters')}</td>
+              <td>${t('estimate.roofing.raftersUnit')}</td>
+              <td>${safe(roofingEstimate.numberOfBoards)}</td>
+              <td>${safe(pricePerBoard)}</td>
+              <td>${safe(roofingEstimate.boardsCost != null ? roofingEstimate.boardsCost.toFixed(2) : '')}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>${t('house.pdf.subtotal') || 'Subtotal'}</td>
+              <td>FCFA</td>
+              <td></td>
+              <td></td>
+              <td>${safe(
+                (roofingEstimate.ceilingCost || 0) +
+                  (roofingEstimate.sheetsCost || 0) +
+                  (roofingEstimate.purlinsCost || 0) +
+                  (roofingEstimate.boardsCost || 0)
+              )}</td>
             </tr>
           </table>
 
           <h2>${t('house.pdf.foundationElevationEstimate')}</h2>
           <table>
             <tr>
-              <td>${t('house.pdf.material')}</td>
-              <td>${t('house.pdf.quantity')}</td>
-              <td>${t('house.pdf.unit')}</td>
+              <th>#</th>
+              <th>${t('house.pdf.description')}</th>
+              <th>${t('house.pdf.unit')}</th>
+              <th>${t('house.pdf.quantity')}</th>
+              <th>${t('house.pdf.unitPrice')}</th>
+              <th>${t('house.pdf.total')}</th>
             </tr>
             <tr>
-              <td>Dry Volume of Mortar</td>
-              <td>${
-                wallEstimate.dryVolume + elevationEstimate.dryMortarVol
-              }</td>
+              <td>1</td>
+              <td>${t('house.output.dryMortarVolume')}</td>
               <td>m³</td>
-            </tr>
-            <tr>
-              <td>Dry Concrete Volume</td>
               <td>${
-                totalFoundationEstimate.totalVolume +
-                elevationEstimate.dryConcreteVolume
+                (wallEstimate.dryVolume || 0) + (elevationEstimate.dryMortarVol || 0)
               }</td>
-              <td>m³</td>
-            </tr>
-            <tr>
-              <td>Dry Sand Volume</td>
-              <td>${
-                totalFoundationEstimate.totalSandVolume +
-                elevationEstimate.totalSandVol
-              }</td>
-              <td>m³</td>
-            </tr>
-            <tr>
-              <td>Dry Cement Volume</td>
-              <td>${
-                totalFoundationEstimate.totalCementVolume +
-                elevationEstimate.totalCementVol
-              }</td>
-              <td>m³</td>
-            </tr>
-            <tr>
-              <td>Dry Gravel Volume</td>
-              <td>${
-                totalFoundationEstimate.totalGravelVolume +
-                elevationEstimate.totalGravelVol
-              }</td>
-              <td>m³</td>
-            </tr>
-            <tr>
-              <td>Total Number of 12m Rods</td>
-              <td>${
-                totalFoundationEstimate.totalRods +
-                elevationEstimate.totalEleRods
-              }</td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
-              <td>Total Number of Blocks</td>
+              <td>2</td>
+              <td>${t('house.output.dryConcreteVolume')}</td>
+              <td>m³</td>
               <td>${
-                wallEstimate.numberOfBlocks + elevationEstimate.blockNumber
+                (totalFoundationEstimate.totalVolume || 0) +
+                (elevationEstimate.dryConcreteVolume || 0)
               }</td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>${t('house.output.sandVolumeFromConcrete')}</td>
+              <td>m³</td>
+              <td>${
+                (totalFoundationEstimate.totalSandVolume || 0) +
+                (elevationEstimate.totalSandVol || 0)
+              }</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>${t('house.output.cementVolumeFromConcrete')}</td>
+              <td>m³</td>
+              <td>${
+                (totalFoundationEstimate.totalCementVolume || 0) +
+                (elevationEstimate.totalCementVol || 0)
+              }</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>${t('house.output.gravelVolumeFromConcrete')}</td>
+              <td>m³</td>
+              <td>${
+                (totalFoundationEstimate.totalGravelVolume || 0) +
+                (elevationEstimate.totalGravelVol || 0)
+              }</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>${t('house.output.totalNumberOf12mRods')}</td>
+              <td>${t('house.pdf.unitRods') || 'Rods'}</td>
+              <td>${
+                (totalFoundationEstimate.totalRods || 0) +
+                (elevationEstimate.totalEleRods || 0)
+              }</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>${t('house.output.totalNumberOfBlocks')}</td>
+              <td>${t('house.pdf.unitBlocks') || 'Blocks'}</td>
+              <td>${
+                (wallEstimate.numberOfBlocks || 0) + (elevationEstimate.blockNumber || 0)
+              }</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>${t('house.pdf.subtotal') || 'Subtotal'}</td>
+              <td>FCFA</td>
+              <td></td>
+              <td></td>
+              <td>${safe(totalMaterialCost)}</td>
             </tr>
           </table>
-          <h2>Key Input Dimensions</h2>
+          <h2>${t('house.pdf.keyInputDimensions')}</h2>
           <table>
             <tr>
               <th>Section</th>
@@ -815,27 +961,63 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             <tr>
               <td>Foundation - Footing</td>
               <td>Length / Width / Thickness / # Footings / # Rods per Footing</td>
-              <td>${footingLength} / ${footingWidth} / ${footingThickness} / ${numberFootings} / ${numberRodsPerFooting}</td>
+              <td>${safe(footingLength)} / ${safe(footingWidth)} / ${safe(footingThickness)} / ${safe(numberFootings)} / ${safe(numberRodsPerFooting)}</td>
             </tr>
             <tr>
               <td>Foundation - Column</td>
               <td>Length / Width / Height / # Columns / # Rods per Column</td>
-              <td>${columnLength} / ${columnWidth} / ${columnHeight} / ${numberColumns} / ${numberRodsPerColumn}</td>
+              <td>${safe(columnLength)} / ${safe(columnWidth)} / ${safe(columnHeight)} / ${safe(numberColumns)} / ${safe(numberRodsPerColumn)}</td>
             </tr>
             <tr>
               <td>Foundation - Beam</td>
               <td>Length / Width / Height / # Rods per Beam</td>
-              <td>${beamLength} / ${beamWidth} / ${beamHeight} / ${numerRodsPerBeam}</td>
+              <td>${safe(beamLength)} / ${safe(beamWidth)} / ${safe(beamHeight)} / ${safe(numerRodsPerBeam)}</td>
             </tr>
             <tr>
               <td>Foundation - Wall</td>
               <td>Length / Width / Height / Block (L×W×H) / Price per Block</td>
-              <td>${wallLength} / ${wallWidth} / ${wallHeight} / ${blockLength}×${blockWidth}×${blockHeight} / ${pricePerBlock}</td>
+              <td>${safe(wallLength)} / ${safe(wallWidth)} / ${safe(wallHeight)} / ${safe(blockLength)}×${safe(blockWidth)}×${safe(blockHeight)} / ${safe(pricePerBlock)}</td>
             </tr>
             <tr>
               <td>Roofing</td>
               <td>House Length / Width / Rise / Run / Span</td>
               <td>${houseLength} / ${houseWidth} / ${rise} / ${run} / ${span}</td>
+            </tr>
+          </table>
+
+          <h2>${t('house.costSummary')}</h2>
+          <table>
+            <tr>
+              <th>#</th>
+              <th>${t('house.pdf.description')}</th>
+              <th>${t('house.pdf.unit')}</th>
+              <th>${t('house.pdf.quantity')}</th>
+              <th>${t('house.pdf.unitPrice')}</th>
+              <th>${t('house.pdf.total')}</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>${t('projects.summary.totalCost')}</td>
+              <td>FCFA</td>
+              <td></td>
+              <td></td>
+              <td>${Number(totalMaterialCost).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>${t('projects.summary.labourEstimate')}</td>
+              <td>FCFA</td>
+              <td></td>
+              <td></td>
+              <td>${Number(labourCost).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>${t('house.pdf.grandTotal') || 'Grand Total'}</td>
+              <td>FCFA</td>
+              <td></td>
+              <td></td>
+              <td>${Number(grandTotal).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
             </tr>
           </table>
         </body>
@@ -844,66 +1026,112 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     return htmlContent;
   };
 
-  const validateForExportOrSave = () => {
-    // Step 1: project name + foundation + columns
-    if (!projectName.trim()) {
-      alert(t('house.alert.projectName'));
-      return false;
+  const isFilled = (v: any) => String(v ?? '').trim().length > 0;
+
+  const isExportReady = () => {
+    const required: any[] = [
+      projectName,
+      deckingType,
+      pricePerBlock,
+      pricePerM3,
+      footingLength,
+      footingWidth,
+      footingThickness,
+      numberFootings,
+      numberRodsPerFooting,
+      columnLength,
+      columnWidth,
+      columnHeight,
+      numberColumns,
+      numberRodsPerColumn,
+      beamLength,
+      beamWidth,
+      beamHeight,
+      numerRodsPerBeam,
+      wallLength,
+      wallWidth,
+      wallHeight,
+      blockLength,
+      blockWidth,
+      blockHeight,
+      elevationWallLength,
+      elevationWallWidth,
+      elevationWallHeight,
+      elevationWBlockLength,
+      elevationWallBlockWidth,
+      elevationWallBlockHeight,
+      elevationWallSubtractArea,
+      elPricePerM3,
+      blockPrice,
+      elevationBeamLength,
+      elevationBeamWidth,
+      elevationBeamHeight,
+      elevationNumRodsPerBeam,
+      elevationColumnLength,
+      elevationColumnWidth,
+      elevationColumnHeight,
+      elevationNumberRodsPerColumn,
+      elevationColumnNumber,
+      elevationWallLength2,
+      elevationWallWidth2,
+      elevationWallHeight2,
+      elevationWBlockLength2,
+      elevationWallBlockWidth2,
+      elevationWallBlockHeight2,
+      elevationWallSubtractArea2,
+      elPricePerM32,
+      blockPrice2,
+      elevationBeamLength2,
+      elevationBeamWidth2,
+      elevationBeamHeight2,
+      elevationNumRodsPerBeam2,
+      elevationColumnLength2,
+      elevationColumnWidth2,
+      elevationColumnHeight2,
+      elevationNumberRodsPerColumn2,
+      elevationColumnNumber2,
+      houseLength,
+      houseWidth,
+      rise,
+      run,
+      span,
+    ];
+
+    if (deckingType === 'rc') {
+      required.push(RCSLabLength, RCSLabWidth, RCSLabHeight, RCSLabRodSpacing);
     }
-    if (!footingLength || !footingWidth || !footingThickness || !numberFootings) {
-      alert(t('house.alert.foundationExport'));
-      return false;
-    }
-    if (!columnLength || !columnWidth || !columnHeight || !numberColumns) {
-      alert(t('house.alert.column'));
-      return false;
+    if (deckingType === 'hollow') {
+      required.push(
+        HBSlabLength,
+        HBSlabWidth,
+        HBSlabThickness,
+        HBSlabSpan,
+        HBSlabBlockLength,
+        HBSlabBlockWidth
+      );
     }
 
-    // Step 2: elevation walls + blocks
-    if (!elevationWallLength || !elevationWallHeight || !elevationWallWidth) {
-      alert(t('house.alert.elevationWall'));
-      return false;
-    }
-    if (!elevationWBlockLength || !elevationWallBlockWidth || !elevationWallBlockHeight) {
-      alert(t('house.alert.elevationBlock'));
-      return false;
-    }
-
-    // Step 3: roofing
-    if (!houseLength || !houseWidth || !rise || !run || !span) {
-      alert(t('house.alert.roofingExport'));
-      return false;
-    }
-    return true;
+    return required.every(isFilled);
   };
 
   const handleSave = async () => {
-    if (!validateForExportOrSave()) return;
-    const htmlContent = buildExportHtml();
     setSaving(true);
     try {
-      const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      let pdfUri = uri;
-      if (FileSystem.documentDirectory) {
-        try {
-          const defaultTitle =
-            floors === 4
-              ? t('projects.defaultTitle.four') || 'Four Storey House Estimate'
-              : floors === 3
-                ? t('projects.defaultTitle.three') || 'Three Storey House Estimate'
-                : floors === 2
-                  ? t('projects.defaultTitle.two') || 'Two Storey House Estimate'
-                  : t('projects.defaultTitle.multi') || 'Multi Storey House Estimate';
-          const baseName = sanitizeForFilename(projectName.trim() || defaultTitle);
-          const destUri = `${FileSystem.documentDirectory}estimates/${baseName}.pdf`;
-          await FileSystem.makeDirectoryAsync(`${FileSystem.documentDirectory}estimates`, { intermediates: true });
-          await FileSystem.copyAsync({ from: uri, to: destUri });
-          pdfUri = destUri;
-        } catch (copyErr) {
-          console.warn('Could not copy PDF to documents, using temp uri:', copyErr);
-        }
-      }
+      const complete = isExportReady();
+      const existing =
+        projectId
+          ? projects.find((p) => p.id === projectId && p.type === 'multi-house')
+          : undefined;
+      const existingPdfUri = (existing?.data?.pdfUri as string | undefined) ?? undefined;
 
+      const totalMaterialCost =
+        (parseFloat(totalFoundationEstimate.totalPricePerM3) || 0) +
+        ((wallEstimate.numberOfBlocks || 0) * (parseFloat(pricePerBlock) || 0)) +
+        (parseFloat(elevationEstimate.totalBlockCost) || 0) +
+        (parseFloat(elevationEstimate.totalPricePerM3Elevation) || 0) +
+        (parseFloat(elevationEstimate2.totalBlockCost) || 0) +
+        (parseFloat(elevationEstimate2.totalPricePerM3Elevation) || 0);
+      const labourCost = totalMaterialCost * 0.2;
       const summary = [
         {
           label: 'projects.summary.dryConcreteFoundationElevation',
@@ -925,6 +1153,8 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
           value: String(roofingEstimate?.numberOfBoards || ''),
           unit: 'projects.summary.unitBoards',
         },
+        { label: 'projects.summary.totalCost', value: String(Math.round(totalMaterialCost)), unit: 'FCFA' },
+        { label: 'projects.summary.labourEstimate', value: String(Math.round(labourCost)), unit: 'FCFA' },
       ];
 
       const defaultTitle =
@@ -941,7 +1171,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
         title,
         summary,
         data: {
-          meta: { floors },
+          meta: { floors, complete },
           inputs: {
             projectName: projectName.trim() || title,
             deckingType,
@@ -968,11 +1198,57 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             blockLength,
             blockWidth,
             blockHeight,
+            elevationWallLength,
+            elevationWallWidth,
+            elevationWallHeight,
+            elevationWBlockLength,
+            elevationWallBlockWidth,
+            elevationWallBlockHeight,
+            elevationWallSubtractArea,
+            elPricePerM3,
+            blockPrice,
+            elevationBeamLength,
+            elevationBeamWidth,
+            elevationBeamHeight,
+            elevationNumRodsPerBeam,
+            elevationColumnLength,
+            elevationColumnWidth,
+            elevationColumnHeight,
+            elevationNumberRodsPerColumn,
+            elevationColumnNumber,
+            elevationWallLength2,
+            elevationWallWidth2,
+            elevationWallHeight2,
+            elevationWBlockLength2,
+            elevationWallBlockWidth2,
+            elevationWallBlockHeight2,
+            elevationWallSubtractArea2,
+            elPricePerM32,
+            blockPrice2,
+            elevationBeamLength2,
+            elevationBeamWidth2,
+            elevationBeamHeight2,
+            elevationNumRodsPerBeam2,
+            elevationColumnLength2,
+            elevationColumnWidth2,
+            elevationColumnHeight2,
+            elevationNumberRodsPerColumn2,
+            elevationColumnNumber2,
             houseLength,
             houseWidth,
             rise,
             run,
             span,
+            RCSLabLength,
+            RCSLabWidth,
+            RCSLabHeight,
+            RCSLabRodSpacing,
+            HBSlabLength,
+            HBSlabWidth,
+            HBSlabThickness,
+            HBSlabSpan,
+            HBSlabBlockLength,
+            HBSlabBlockWidth,
           },
           outputs: {
             wallEstimate,
@@ -980,27 +1256,25 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             elevationEstimate2,
             totalFoundationEstimate,
             roofingEstimate,
+            RCSlabEstimate,
+            HBSlabEstimate,
           },
-          pdfUri,
+          pdfUri: existingPdfUri,
         },
       };
 
-      if (projectId) {
-        const existing = projects.find((p) => p.id === projectId && p.type === 'multi-house');
-        if (existing) {
-          await updateProject({
-            ...existing,
-            ...projectData,
-            id: existing.id,
-            createdAt: existing.createdAt,
-          });
-        } else {
-          await addProject(projectData);
-        }
+      if (existing) {
+        await updateProject({
+          ...existing,
+          ...projectData,
+          id: existing.id,
+          createdAt: existing.createdAt,
+        });
       } else {
         await addProject(projectData);
       }
-      Alert.alert(t('house.saveSuccess'));
+
+      Alert.alert(complete ? t('house.saveSuccess') : (t('house.saveDraftSuccess') || t('house.saveSuccess')));
     } catch (error) {
       console.error('Failed to save:', error);
       Alert.alert(t('projects.export.failed'), t('projects.export.failedMessage'));
@@ -1009,13 +1283,19 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
     }
   };
 
-  saveHandlerRef.current = handleSave;
+  const internalSaveRef = useRef<() => Promise<void>>();
+  internalSaveRef.current = handleSave;
+  const invokeSave = useCallback(() => internalSaveRef.current?.(), []);
   useEffect(() => {
-    onRegisterSave?.(() => saveHandlerRef.current?.());
-  }, [onRegisterSave]);
+    if (parentSaveHandlerRef) parentSaveHandlerRef.current = invokeSave;
+    else onRegisterSave?.(invokeSave);
+  }, [onRegisterSave, parentSaveHandlerRef, invokeSave]);
 
   const handleExport = async () => {
-    if (!validateForExportOrSave()) return;
+    if (!isExportReady()) {
+      Alert.alert(t('house.alert.completeAllInputsToExport') || t('house.alert.roofingExport'));
+      return;
+    }
     const htmlContent = buildExportHtml();
     setExporting(true);
     try {
@@ -1040,6 +1320,161 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             shareUri = destUri;
           } catch (_) {}
         }
+
+        // Persist PDF uri for export-from-card later
+        const existing =
+          projectId
+            ? projects.find((p) => p.id === projectId && p.type === 'multi-house')
+            : undefined;
+        const defaultTitleForSave =
+          floors === 4
+            ? t('projects.defaultTitle.four') || 'Four Storey House Estimate'
+            : floors === 3
+              ? t('projects.defaultTitle.three') || 'Three Storey House Estimate'
+              : floors === 2
+                ? t('projects.defaultTitle.two') || 'Two Storey House Estimate'
+                : t('projects.defaultTitle.multi') || 'Multi Storey House Estimate';
+        const title = projectName.trim() || defaultTitleForSave;
+        const totalMaterialCost =
+          (parseFloat(totalFoundationEstimate.totalPricePerM3) || 0) +
+          ((wallEstimate.numberOfBlocks || 0) * (parseFloat(pricePerBlock) || 0)) +
+          (parseFloat(elevationEstimate.totalBlockCost) || 0) +
+          (parseFloat(elevationEstimate.totalPricePerM3Elevation) || 0) +
+          (parseFloat(elevationEstimate2.totalBlockCost) || 0) +
+          (parseFloat(elevationEstimate2.totalPricePerM3Elevation) || 0);
+        const labourCost = totalMaterialCost * 0.2;
+        const summary = [
+          {
+            label: 'projects.summary.dryConcreteFoundationElevation',
+            value: String(
+              (totalFoundationEstimate.totalVolume || 0) +
+                (elevationEstimate.dryConcreteVolume || 0)
+            ),
+            unit: 'm³',
+          },
+          {
+            label: 'projects.summary.dryMortarVolume',
+            value: String(
+              (wallEstimate.dryVolume || 0) + (elevationEstimate.dryMortarVol || 0)
+            ),
+            unit: 'm³',
+          },
+          {
+            label: 'projects.summary.roofingBoards',
+            value: String(roofingEstimate?.numberOfBoards || ''),
+            unit: 'projects.summary.unitBoards',
+          },
+          { label: 'projects.summary.totalCost', value: String(Math.round(totalMaterialCost)), unit: 'FCFA' },
+          { label: 'projects.summary.labourEstimate', value: String(Math.round(labourCost)), unit: 'FCFA' },
+        ];
+        const projectData = {
+          type: 'multi-house' as const,
+          title,
+          summary,
+          data: {
+            meta: { floors, complete: true },
+            inputs: {
+              projectName: projectName.trim() || title,
+              deckingType,
+              floorNumber,
+              pricePerBlock,
+              pricePerM3,
+              footingLength,
+              footingWidth,
+              footingThickness,
+              numberFootings,
+              numberRodsPerFooting,
+              columnLength,
+              columnWidth,
+              columnHeight,
+              numberColumns,
+              numberRodsPerColumn,
+              beamLength,
+              beamWidth,
+              beamHeight,
+              numerRodsPerBeam,
+              wallLength,
+              wallWidth,
+              wallHeight,
+              blockLength,
+              blockWidth,
+              blockHeight,
+              elevationWallLength,
+              elevationWallWidth,
+              elevationWallHeight,
+              elevationWBlockLength,
+              elevationWallBlockWidth,
+              elevationWallBlockHeight,
+              elevationWallSubtractArea,
+              elPricePerM3,
+              blockPrice,
+              elevationBeamLength,
+              elevationBeamWidth,
+              elevationBeamHeight,
+              elevationNumRodsPerBeam,
+              elevationColumnLength,
+              elevationColumnWidth,
+              elevationColumnHeight,
+              elevationNumberRodsPerColumn,
+              elevationColumnNumber,
+              elevationWallLength2,
+              elevationWallWidth2,
+              elevationWallHeight2,
+              elevationWBlockLength2,
+              elevationWallBlockWidth2,
+              elevationWallBlockHeight2,
+              elevationWallSubtractArea2,
+              elPricePerM32,
+              blockPrice2,
+              elevationBeamLength2,
+              elevationBeamWidth2,
+              elevationBeamHeight2,
+              elevationNumRodsPerBeam2,
+              elevationColumnLength2,
+              elevationColumnWidth2,
+              elevationColumnHeight2,
+              elevationNumberRodsPerColumn2,
+              elevationColumnNumber2,
+              houseLength,
+              houseWidth,
+              rise,
+              run,
+              span,
+              RCSLabLength,
+              RCSLabWidth,
+              RCSLabHeight,
+              RCSLabRodSpacing,
+              HBSlabLength,
+              HBSlabWidth,
+              HBSlabThickness,
+              HBSlabSpan,
+              HBSlabBlockLength,
+              HBSlabBlockWidth,
+            },
+            outputs: {
+              wallEstimate,
+              elevationEstimate,
+              elevationEstimate2,
+              totalFoundationEstimate,
+              roofingEstimate,
+              RCSlabEstimate,
+              HBSlabEstimate,
+            },
+            pdfUri: shareUri,
+          },
+        };
+
+        if (existing) {
+          await updateProject({
+            ...existing,
+            ...projectData,
+            id: existing.id,
+            createdAt: existing.createdAt,
+          });
+        } else {
+          await addProject(projectData);
+        }
+
         await Sharing.shareAsync(shareUri, {
           mimeType: 'application/pdf',
           dialogTitle: t('projects.export.shareTitle'),
@@ -1067,233 +1502,51 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
                 onChange={setProjectName}
                 inputMode="text"
               />
-              <Line />
-              <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('house.foundation')}</Text>
-              <Line />
-
-              <Text style={{ color: colors.heading_text }}>Footing:</Text>
-
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title={t('house.input.lengthM')}
-                  value={footingLength}
-                  onChange={(value) => {
-                    setFootingLength(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title={t('house.input.widthM')}
-                  value={footingWidth}
-                  onChange={(value) => {
-                    setFootingWidth(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title={t('house.input.thicknessM')}
-                  value={footingThickness}
-                  onChange={(value) => {
-                    setFootingThickness(value);
-                  }}
-                />
-              </View>
-
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  placeholder="Enter Value"
-                  title={t('house.input.numFootings')}
-                  value={numberFootings}
-                  onChange={(value) => {
-                    setNumberFootings(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  placeholder="Enter Value"
-                  title={t('house.input.numRodsPerFooting')}
-                  value={numberRodsPerFooting}
-                  onChange={(value) => {
-                    setNumberRodsPerFooting(value);
-                  }}
-                />
-              </View>
-
-              <Line />
-              <Text style={{ color: colors.heading_text }}>Column:</Text>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Length"
-                  value={columnLength}
-                  onChange={(value) => {
-                    setColumnLength(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Width"
-                  value={columnWidth}
-                  onChange={(value) => {
-                    setColumnWidth(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Thickness"
-                  value={columnHeight}
-                  onChange={(value) => {
-                    setColumnHeight(value);
-                  }}
-                />
-              </View>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  placeholder="Enter Value"
-                  title="Number of Columns"
-                  value={numberColumns}
-                  onChange={(value) => {
-                    setNumberColumns(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  placeholder="Enter Value"
-                  title="# Rods Per Column"
-                  value={numberRodsPerColumn}
-                  onChange={(value) => {
-                    setNumberRodsPerColumn(value);
-                  }}
-                />
-              </View>
-              <Line />
-
-              <Text style={{ color: colors.heading_text }}>Beam:</Text>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Beam Length"
-                  value={beamLength}
-                  onChange={(value) => {
-                    setBeamLength(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Beam Width"
-                  value={beamWidth}
-                  onChange={(value) => {
-                    setBeamWidth(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Beam Height"
-                  value={beamHeight}
-                  onChange={(value) => {
-                    setBeamHeight(value);
-                  }}
-                />
-              </View>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  placeholder="Enter Value"
-                  title="# Rods Per Beam"
-                  value={numerRodsPerBeam}
-                  onChange={(value) => {
-                    setNumerRodsPerBeam(value);
-                  }}
-                />
-              </View>
-              <TextInputTitle
-                placeholder="Enter value"
-                title="Price per m³"
-                value={pricePerM3}
-                onChange={(value) => {
-                  setPricePerM3(value);
-                }}
-              />
-              <Line />
-
-              <Text style={{ color: colors.heading_text }}>Foundation Wall:</Text>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Wall Length"
-                  value={wallLength}
-                  onChange={(value) => {
-                    setWallLength(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Wall Width"
-                  value={wallWidth}
-                  onChange={(value) => {
-                    setWallWidth(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Wall Height"
-                  value={wallHeight}
-                  onChange={(value) => {
-                    setWallHeight(value);
-                  }}
-                />
-              </View>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Block Length"
-                  value={blockLength}
-                  onChange={(value) => {
-                    setBlockLength(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Block Width"
-                  value={blockWidth}
-                  onChange={(value) => {
-                    setBlockWidth(value);
-                  }}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  placeholder="Enter Value"
-                  title="Block Height"
-                  value={blockHeight}
-                  onChange={(value) => {
-                    setBlockHeight(value);
-                  }}
-                />
-              </View>
-              <TextInputTitle
-                style={inputStyles.twoColumnInput}
-                placeholder="Enter Value"
-                title="Price per Block"
-                value={pricePerBlock}
-                onChange={(value) => {
-                  setPricePerBlock(value);
-                }}
+              <FoundationInputsSection
+                footingLength={footingLength}
+                footingWidth={footingWidth}
+                footingThickness={footingThickness}
+                numberFootings={numberFootings}
+                numberRodsPerFooting={numberRodsPerFooting}
+                columnLength={columnLength}
+                columnWidth={columnWidth}
+                columnHeight={columnHeight}
+                numberColumns={numberColumns}
+                numberRodsPerColumn={numberRodsPerColumn}
+                beamLength={beamLength}
+                beamWidth={beamWidth}
+                beamHeight={beamHeight}
+                numerRodsPerBeam={numerRodsPerBeam}
+                wallLength={wallLength}
+                wallWidth={wallWidth}
+                wallHeight={wallHeight}
+                blockLength={blockLength}
+                blockWidth={blockWidth}
+                blockHeight={blockHeight}
+                pricePerM3={pricePerM3}
+                pricePerBlock={pricePerBlock}
+                onChangeFootingLength={setFootingLength}
+                onChangeFootingWidth={setFootingWidth}
+                onChangeFootingThickness={setFootingThickness}
+                onChangeNumberFootings={setNumberFootings}
+                onChangeNumberRodsPerFooting={setNumberRodsPerFooting}
+                onChangeColumnLength={setColumnLength}
+                onChangeColumnWidth={setColumnWidth}
+                onChangeColumnHeight={setColumnHeight}
+                onChangeNumberColumns={setNumberColumns}
+                onChangeNumberRodsPerColumn={setNumberRodsPerColumn}
+                onChangeBeamLength={setBeamLength}
+                onChangeBeamWidth={setBeamWidth}
+                onChangeBeamHeight={setBeamHeight}
+                onChangeNumerRodsPerBeam={setNumerRodsPerBeam}
+                onChangeWallLength={setWallLength}
+                onChangeWallWidth={setWallWidth}
+                onChangeWallHeight={setWallHeight}
+                onChangeBlockLength={setBlockLength}
+                onChangeBlockWidth={setBlockWidth}
+                onChangeBlockHeight={setBlockHeight}
+                onChangePricePerM3={setPricePerM3}
+                onChangePricePerBlock={setPricePerBlock}
               />
             </>
             <ButtonPrimary title="Next" onPress={handleNext} />
@@ -1303,7 +1556,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
         return (
           <View>
             <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('house.elevation')}</Text>
-            <Text style={{ color: colors.heading_text }}>Enter the inputs for each floor</Text>
+            <Text style={{ color: colors.heading_text }}>{t('house.elevation.enterPerFloor')}</Text>
             <Line />
 
             <View style={styles.tabs}>
@@ -1313,7 +1566,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
                 return (
                   <ButtonPrimary
                     key={n}
-                    title={`Floor ${n}`}
+                    title={`${t('house.floor')} ${n}`}
                     variant={isActive ? 'primary' : 'outline'}
                     fullRound
                     onPress={() => setFloorNumber(n)}
@@ -1324,312 +1577,89 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             </View>
 
             {floorNumber === 1 && (
-              <>
-                <Text style={titleStyles.boldTitle}>Floor 1</Text>
-                <Text style={{ color: colors.heading_text }}>Dimension of Wall</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationWallLength}
-                    onChange={(text) => setElevationWallLength(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationWallWidth}
-                    onChange={(text) => setelevationWallWidth(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationWallHeight}
-                    onChange={(text) => setelevationWallHeight(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Block</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationWBlockLength}
-                    onChange={(text) => setelevationWallBlockLength(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationWallBlockWidth}
-                    onChange={(text) => setelevationWallBlockWidth(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationWallBlockHeight}
-                    onChange={(text) => setelevationWallBlockHeight(text)}
-                  />
-                </View>
-                <Line />
-
-                <TextInputTitle
-                  title="Subtract Area (m²)"
-                  placeholder="Enter area"
-                  value={elevationWallSubtractArea}
-                  onChange={(text) => setelevationWallSubtractArea(text)}
-                />
-
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Price Per Block"
-                    placeholder="Enter price"
-                    value={blockPrice}
-                    onChange={(text) => setBlockPrice(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Price Per m³"
-                    placeholder="Enter price"
-                    value={elPricePerM3}
-                    onChange={(text) => setElPricePerM3(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Beam</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter total beam length"
-                    value={elevationBeamLength}
-                    onChange={(text) => setElevationBeamLength(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationBeamWidth}
-                    onChange={(text) => setelevationBeamWidth(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Thickness (m)"
-                    placeholder="Enter height"
-                    value={elevationBeamHeight}
-                    onChange={(text) => setelevationBeamHeight(text)}
-                  />
-                </View>
-
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    title="Number of rods per beam"
-                    placeholder="Enter Value"
-                    value={elevationNumRodsPerBeam}
-                    onChange={(text) => setelevationNumberRodsPerBeam(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Columns</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationColumnLength}
-                    onChange={(text) => setElevationColumnLength(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationColumnWidth}
-                    onChange={(text) => setelevationColumnWidth(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationColumnHeight}
-                    onChange={(text) => setelevationColumnHeight(text)}
-                  />
-                </View>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Number of Columns"
-                    placeholder="Enter Value"
-                    value={elevationColumnNumber}
-                    onChange={(text) => setelevationColumnNumber(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Number of rods per column"
-                    placeholder="Enter Value"
-                    value={elevationNumberRodsPerColumn}
-                    onChange={(text) => setelevationNumberRodsPerColumn(text)}
-                  />
-                </View>
-              </>
+              <FloorElevationInputs
+                floorLabel={`${t('house.floor')} 1`}
+                wallLength={elevationWallLength}
+                wallWidth={elevationWallWidth}
+                wallHeight={elevationWallHeight}
+                onChangeWallLength={setElevationWallLength}
+                onChangeWallWidth={setelevationWallWidth}
+                onChangeWallHeight={setelevationWallHeight}
+                blockLength={elevationWBlockLength}
+                blockWidth={elevationWallBlockWidth}
+                blockHeight={elevationWallBlockHeight}
+                onChangeBlockLength={setelevationWallBlockLength}
+                onChangeBlockWidth={setelevationWallBlockWidth}
+                onChangeBlockHeight={setelevationWallBlockHeight}
+                subtractArea={elevationWallSubtractArea}
+                onChangeSubtractArea={setelevationWallSubtractArea}
+                pricePerBlock={blockPrice}
+                pricePerM3={elPricePerM3}
+                onChangePricePerBlock={setBlockPrice}
+                onChangePricePerM3={setElPricePerM3}
+                beamLength={elevationBeamLength}
+                beamWidth={elevationBeamWidth}
+                beamHeight={elevationBeamHeight}
+                numRodsPerBeam={elevationNumRodsPerBeam}
+                onChangeBeamLength={setElevationBeamLength}
+                onChangeBeamWidth={setelevationBeamWidth}
+                onChangeBeamHeight={setelevationBeamHeight}
+                onChangeNumRodsPerBeam={setelevationNumberRodsPerBeam}
+                columnLength={elevationColumnLength}
+                columnWidth={elevationColumnWidth}
+                columnHeight={elevationColumnHeight}
+                columnNumber={elevationColumnNumber}
+                numRodsPerColumn={elevationNumberRodsPerColumn}
+                onChangeColumnLength={setElevationColumnLength}
+                onChangeColumnWidth={setelevationColumnWidth}
+                onChangeColumnHeight={setelevationColumnHeight}
+                onChangeColumnNumber={setelevationColumnNumber}
+                onChangeNumRodsPerColumn={setelevationNumberRodsPerColumn}
+              />
             )}
+
             {floorNumber > 1 && (
-              <>
-                <Text style={titleStyles.boldTitle}>{`Floor ${floorNumber}`}</Text>
-                <Text style={{ color: colors.heading_text }}>Dimension of Wall</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationWallLength2}
-                    onChange={(text) => setElevationWallLength2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationWallWidth2}
-                    onChange={(text) => setelevationWallWidth2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationWallHeight2}
-                    onChange={(text) => setelevationWallHeight2(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Block</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationWBlockLength2}
-                    onChange={(text) => setelevationWallBlockLength2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationWallBlockWidth2}
-                    onChange={(text) => setelevationWallBlockWidth2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationWallBlockHeight2}
-                    onChange={(text) => setelevationWallBlockHeight2(text)}
-                  />
-                </View>
-                <Line />
-
-                <TextInputTitle
-                  title="Subtract Area (m²)"
-                  placeholder="Enter area"
-                  value={elevationWallSubtractArea2}
-                  onChange={(text) => setelevationWallSubtractArea2(text)}
-                />
-
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Price Per Block"
-                    placeholder="Enter price"
-                    value={blockPrice2}
-                    onChange={(text) => setBlockPrice2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Price Per m³"
-                    placeholder="Enter price"
-                    value={elPricePerM32}
-                    onChange={(text) => setElPricePerM32(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Beam</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter total beam length"
-                    value={elevationBeamLength2}
-                    onChange={(text) => setElevationBeamLength2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationBeamWidth2}
-                    onChange={(text) => setelevationBeamWidth2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Thickness (m)"
-                    placeholder="Enter height"
-                    value={elevationBeamHeight2}
-                    onChange={(text) => setelevationBeamHeight2(text)}
-                  />
-                </View>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    title="Number of rods per beam"
-                    placeholder="Enter Value"
-                    value={elevationNumRodsPerBeam2}
-                    onChange={(text) => setelevationNumberRodsPerBeam2(text)}
-                  />
-                </View>
-                <Line />
-                <Text style={{ color: colors.heading_text }}>Dimension of Columns</Text>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Length (m)"
-                    placeholder="Enter length"
-                    value={elevationColumnLength2}
-                    onChange={(text) => setElevationColumnLength2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Width (m)"
-                    placeholder="Enter width"
-                    value={elevationColumnWidth2}
-                    onChange={(text) => setelevationColumnWidth2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.threeColumnInput}
-                    title="Height (m)"
-                    placeholder="Enter height"
-                    value={elevationColumnHeight2}
-                    onChange={(text) => setelevationColumnHeight2(text)}
-                  />
-                </View>
-                <View style={inputStyles.threeColumn}>
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Number of Columns"
-                    placeholder="Enter Value"
-                    value={elevationColumnNumber2}
-                    onChange={(text) => setelevationColumnNumber2(text)}
-                  />
-                  <TextInputTitle
-                    style={inputStyles.twoColumnInput}
-                    title="Number of rods per column"
-                    placeholder="Enter Value"
-                    value={elevationNumberRodsPerColumn2}
-                    onChange={(text) => setelevationNumberRodsPerColumn2(text)}
-                  />
-                </View>
-              </>
+              <FloorElevationInputs
+                floorLabel={`${t('house.floor')} ${floorNumber}`}
+                wallLength={elevationWallLength2}
+                wallWidth={elevationWallWidth2}
+                wallHeight={elevationWallHeight2}
+                onChangeWallLength={setElevationWallLength2}
+                onChangeWallWidth={setelevationWallWidth2}
+                onChangeWallHeight={setelevationWallHeight2}
+                blockLength={elevationWBlockLength2}
+                blockWidth={elevationWallBlockWidth2}
+                blockHeight={elevationWallBlockHeight2}
+                onChangeBlockLength={setelevationWallBlockLength2}
+                onChangeBlockWidth={setelevationWallBlockWidth2}
+                onChangeBlockHeight={setelevationWallBlockHeight2}
+                subtractArea={elevationWallSubtractArea2}
+                onChangeSubtractArea={setelevationWallSubtractArea2}
+                pricePerBlock={blockPrice2}
+                pricePerM3={elPricePerM32}
+                onChangePricePerBlock={setBlockPrice2}
+                onChangePricePerM3={setElPricePerM32}
+                beamLength={elevationBeamLength2}
+                beamWidth={elevationBeamWidth2}
+                beamHeight={elevationBeamHeight2}
+                numRodsPerBeam={elevationNumRodsPerBeam2}
+                onChangeBeamLength={setElevationBeamLength2}
+                onChangeBeamWidth={setelevationBeamWidth2}
+                onChangeBeamHeight={setelevationBeamHeight2}
+                onChangeNumRodsPerBeam={setelevationNumberRodsPerBeam2}
+                columnLength={elevationColumnLength2}
+                columnWidth={elevationColumnWidth2}
+                columnHeight={elevationColumnHeight2}
+                columnNumber={elevationColumnNumber2}
+                numRodsPerColumn={elevationNumberRodsPerColumn2}
+                onChangeColumnLength={setElevationColumnLength2}
+                onChangeColumnWidth={setelevationColumnWidth2}
+                onChangeColumnHeight={setelevationColumnHeight2}
+                onChangeColumnNumber={setelevationColumnNumber2}
+                onChangeNumRodsPerColumn={setelevationNumberRodsPerColumn2}
+              />
             )}
+
             <FullHouseStepFooter
               onPrevious={handlePrevious}
               onNext={handleNext}
@@ -1648,7 +1678,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
             <Picker
               selectedValue={deckingType}
               onValueChange={(itemValue) => setDeckingType(itemValue)}
-              style={[inputStyles.picker, { color: colors.heading_text, borderColor: colors.borderColor }]}
+              style={[inputStyles.picker, { color: colors.heading_text, borderColor: colors.borderColor, backgroundColor: 'transparent' }]}
             >
               <Picker.Item label="Select Decking Type" value="" />
               <Picker.Item label="RC Slab" value="rcSlab" />
@@ -1758,54 +1788,24 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
       case 4:
         return (
           <View>
-            <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('house.roofing')}</Text>
-            <>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  title="House Length (m)"
-                  placeholder="Enter length"
-                  value={houseLength}
-                  onChange={(text) => setHouseLength(text)}
-                />
-                <TextInputTitle
-                  style={inputStyles.twoColumnInput}
-                  title="House Width (m)"
-                  placeholder="Enter width"
-                  value={houseWidth}
-                  onChange={(text) => setHouseWidth(text)}
-                />
-              </View>
-              <View style={inputStyles.threeColumn}>
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  title="Rise (m)"
-                  placeholder="Enter rise"
-                  value={rise}
-                  onChange={(text) => setRise(text)}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  title="Run (m)"
-                  placeholder="Enter run"
-                  value={run}
-                  onChange={(text) => setRun(text)}
-                />
-                <TextInputTitle
-                  style={inputStyles.threeColumnInput}
-                  title="Span (m)"
-                  placeholder="Enter span"
-                  value={span}
-                  onChange={(text) => setSpan(text)}
-                />
-              </View>
-            </>
+            <RoofingInputsSection
+              houseLength={houseLength}
+              houseWidth={houseWidth}
+              rise={rise}
+              run={run}
+              span={span}
+              onChangeHouseLength={setHouseLength}
+              onChangeHouseWidth={setHouseWidth}
+              onChangeRise={setRise}
+              onChangeRun={setRun}
+              onChangeSpan={setSpan}
+            />
             <View style={styles.buttonContainer}>
               <View style={styles.navButton}>
-                <ButtonOutlined title="Previous" onPress={handlePrevious} />
+                <ButtonOutlined title={t('house.previous')} onPress={handlePrevious} />
               </View>
               <View style={styles.navButton}>
-                <ButtonPrimary title="Next" onPress={handleNext} />
+                <ButtonPrimary title={t('house.next')} onPress={handleNext} />
               </View>
             </View>
           </View>
@@ -1813,85 +1813,19 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
       case 5:
         return (
           <View>
-            <View style={styles.tabs}>
-              <TouchableOpacity
-                style={styles.tab}
-                onPress={() => setOutputTab('All')}
-              >
-                <Text
-                  style={
-                    outputTab === 'All'
-                      ? [styles.activeTabText, { color: colors.heading_text }]
-                      : [styles.tabText, { color: colors.muted_text }]
-                  }
-                >
-                  All
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.tab}
-                onPress={() => setOutputTab('FoundationOutput')}
-              >
-                <Text
-                  style={
-                    outputTab === 'FoundationOutput'
-                      ? [styles.activeTabText, { color: colors.heading_text }]
-                      : [styles.tabText, { color: colors.muted_text }]
-                  }
-                >
-                  Foundation
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.tab}
-                onPress={() => setOutputTab('ElevationOutput')}
-              >
-                <Text
-                  style={
-                    outputTab === 'ElevationOutput'
-                      ? [styles.activeTabText, { color: colors.heading_text }]
-                      : [styles.tabText, { color: colors.muted_text }]
-                  }
-                >
-                  Elevation
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.tab}
-                onPress={() => setOutputTab('DeckingOutput')}
-              >
-                <Text
-                  style={
-                    outputTab === 'DeckingOutput'
-                      ? [styles.activeTabText, { color: colors.heading_text }]
-                      : [styles.tabText, { color: colors.muted_text }]
-                  }
-                >
-                  Decking
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.tab}
-                onPress={() => setOutputTab('RoofingOutput')}
-              >
-                <Text
-                  style={
-                    outputTab === 'RoofingOutput'
-                      ? [styles.activeTabText, { color: colors.heading_text }]
-                      : [styles.tabText, { color: colors.muted_text }]
-                  }
-                >
-                  Roofing
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <HouseOutputTabs
+              current={outputTab}
+              onChange={setOutputTab}
+              styles={styles}
+              showDeckingTab
+            />
             <View style={tableStyles.container}>
               {outputTab === 'FoundationOutput' && (
                 /* ======= Foundation Output ======= */
                 <>
                   <View style={tableStyles.row}>
                     <Text style={[tableStyles.columnHeaderSingle, { color: colors.heading_text }]}>
-                      Foundation Outputs
+                      {t('house.foundation')}
                     </Text>
                   </View>
                   {/* Row 1 */}
@@ -2073,7 +2007,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
                 <>
                   <View style={tableStyles.row}>
                     <Text style={[tableStyles.columnHeaderSingle, { color: colors.heading_text }]}>
-                      Elevation Outputs
+                      {t('house.elevation')}
                     </Text>
                   </View>
                   <>
@@ -2779,34 +2713,30 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
                 <>
                   <View style={tableStyles.row}>
                     <Text style={[tableStyles.columnHeaderSingle, { color: colors.heading_text }]}>
-                      Roofing Outputs
+                      {t('house.roofing')}
                     </Text>
                   </View>
                   <View style={tableStyles.row}>
                     <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeaderLeft}>Material</Text>
+                      <Text style={tableStyles.columnHeaderLeft}>{t('house.pdf.material')}</Text>
                     </View>
                     <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeader}>Quantity</Text>
+                      <Text style={tableStyles.columnHeader}>{t('house.pdf.quantity')}</Text>
                     </View>
                     <View style={tableStyles.column}>
-                      <Text style={tableStyles.columnHeader}>Unit</Text>
+                      <Text style={tableStyles.columnHeader}>{t('house.pdf.unit')}</Text>
                     </View>
                   </View>
                   <>
                     <View style={tableStyles.row}>
                       <View style={tableStyles.column}>
-                        <Text style={[tableStyles.cellLeft, { color: colors.heading_text }]}>
-                          Number of Ceiling Boards
-                        </Text>
+                        <Text style={tableStyles.cellLeft}>{t('house.output.numberOfCeilingBoards')}</Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>
-                          {roofingEstimate.numberOfCeilingBoards}
-                        </Text>
+                        <Text style={tableStyles.cell}>{roofingEstimate.numberOfCeilingBoards}</Text>
                       </View>
                       <View style={tableStyles.column}>
-                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>Boards</Text>
+                        <Text style={tableStyles.cell}>Boards</Text>
                       </View>
                     </View>
                     <View style={tableStyles.row}>
@@ -3585,6 +3515,59 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
                       </View>
                     </View>
                   </>
+                  {/* Cost summary */}
+                  <>
+                    <View style={tableStyles.row}>
+                      <Text style={[tableStyles.columnSubHeader, { color: colors.heading_text }]}>
+                        {t('house.costSummary')}:
+                      </Text>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cellLeft, { color: colors.heading_text }]}>
+                          {t('projects.summary.totalCost')}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>
+                          {(
+                            (parseFloat(totalFoundationEstimate.totalPricePerM3) || 0) +
+                            ((wallEstimate.numberOfBlocks || 0) * (parseFloat(pricePerBlock) || 0)) +
+                            (parseFloat(elevationEstimate.totalBlockCost) || 0) +
+                            (parseFloat(elevationEstimate.totalPricePerM3Elevation) || 0) +
+                            (parseFloat(elevationEstimate2.totalBlockCost) || 0) +
+                            (parseFloat(elevationEstimate2.totalPricePerM3Elevation) || 0)
+                          ).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>FCFA</Text>
+                      </View>
+                    </View>
+                    <View style={tableStyles.row}>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cellLeft, { color: colors.heading_text }]}>
+                          {t('projects.summary.labourEstimate')}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>
+                          {(
+                            ((parseFloat(totalFoundationEstimate.totalPricePerM3) || 0) +
+                              ((wallEstimate.numberOfBlocks || 0) * (parseFloat(pricePerBlock) || 0)) +
+                              (parseFloat(elevationEstimate.totalBlockCost) || 0) +
+                              (parseFloat(elevationEstimate.totalPricePerM3Elevation) || 0) +
+                              (parseFloat(elevationEstimate2.totalBlockCost) || 0) +
+                              (parseFloat(elevationEstimate2.totalPricePerM3Elevation) || 0)) *
+                            0.2
+                          ).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </Text>
+                      </View>
+                      <View style={tableStyles.column}>
+                        <Text style={[tableStyles.cell, { color: colors.heading_text }]}>FCFA</Text>
+                      </View>
+                    </View>
+                  </>
                 </View>
               )}
             </View>
@@ -3594,6 +3577,7 @@ const MultiHouse: React.FC<MultiHouseProps> = ({ floors = 2, projectId, onRegist
               previousLabel={t('house.previous')}
               nextLabel={t('house.exportAll')}
               loadingNext={exporting}
+              disabledNext={!isExportReady()}
             />
           </View>
         );

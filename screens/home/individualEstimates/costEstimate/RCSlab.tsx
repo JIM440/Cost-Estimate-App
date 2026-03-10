@@ -9,6 +9,7 @@ import TextInputTitle from '../../../../components/inputs/InputTitle';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const RCSlab: React.FC = () => {
   const { t } = useLocale();
@@ -76,7 +77,7 @@ const RCSlab: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/rc_slab_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/rc_slab_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('estimate.rcslab.title')}</Text>
@@ -155,6 +156,7 @@ const RCSlab: React.FC = () => {
             }, 0);
           }}
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           loading={calculating}
         />
         <Line />

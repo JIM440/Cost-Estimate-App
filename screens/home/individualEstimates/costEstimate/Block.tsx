@@ -9,6 +9,7 @@ import ImageStyle from '../../../../styles/screens/CostEstimate';
 import Table from '../../../../components/lists/Table';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Block: React.FC = () => {
   const { t } = useLocale();
@@ -24,6 +25,9 @@ const Block: React.FC = () => {
   const [blockPrice, setBlockPrice] = useState('');
   const [cementRatio, setCementRatio] = useState('');
   const [sandRatio, setSandRatio] = useState('');
+
+  const [dryVolumeConstant, setDryVolumeConstant] = useState('1.33');
+  const [quantity, setQuantity] = useState('1');
 
   const [wallVolume, setWallVolume] = useState('');
   const [numOfBlocks, setNumOfBlocks] = useState('');
@@ -63,16 +67,17 @@ const Block: React.FC = () => {
     const CementRatio = parseFloat(cementRatio);
 
     // Calculate wall volume
+    const qty = Math.max(1, parseFloat(quantity) || 1);
     const wallVolumeValue =
-      (wallLength * wallHeight - subtractAreaValue) * wallWidth;
+      (wallLength * wallHeight - subtractAreaValue) * wallWidth * qty;
 
     // Calculate number of blocks
     const blockVolume = blockLengthValue * blockWidthValue * blockHeightValue;
     const totalBlockVolume = wallVolumeValue;
     const blockNumber = Math.ceil((1.1 * totalBlockVolume) / blockVolume); //wastage volume
 
-    // Calculate dry mortar volume, assuming standard 1:3 mortar mix
-    const dryMortarVol = totalBlockVolume * 1.54;
+    // Calculate dry mortar volume
+    const dryMortarVol = totalBlockVolume * (parseFloat(dryVolumeConstant) || 1.33);
 
     const mortarRatio = CementRatio + SandRatio;
     // Calculate sand volume
@@ -102,7 +107,7 @@ const Block: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/block_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/block_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('items.block')}</Text>
@@ -191,6 +196,23 @@ const Block: React.FC = () => {
             placeholder={t('common.enterPrice')}
             value={blockPrice}
             onChange={(text) => setBlockPrice(text)}
+          />
+        </View>
+
+        <View style={inputStyles.threeColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title={t('common.dryVolume')}
+            placeholder={t('common.dryVolume')}
+            value={dryVolumeConstant}
+            onChange={(text) => setDryVolumeConstant(text)}
+          />
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title={t('common.quantity')}
+            placeholder={t('common.enterQuantity')}
+            value={quantity}
+            onChange={(text) => setQuantity(text)}
           />
         </View>
 

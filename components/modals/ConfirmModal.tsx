@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal, Pressable, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import { useLocale } from '../../context/LocaleContext';
 
 const MAX_CARD_WIDTH = 340;
 
@@ -23,9 +24,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   confirmText,
   onConfirm,
   confirmDanger = false,
-  cancelText = 'Cancel',
+  cancelText,
 }) => {
   const { colors } = useTheme();
+  const { t } = useLocale();
+  const displayCancelText = cancelText ?? t('common.cancel');
 
   const handleConfirm = () => {
     onClose();
@@ -40,7 +43,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       onRequestClose={onClose}
     >
       <Pressable style={styles.overlay} onPress={onClose}>
-        <Pressable style={[styles.card, { backgroundColor: colors.card }]} onPress={() => {}}>
+        <Pressable style={[styles.card, { backgroundColor: colors.card, shadowColor: colors.heading_text }]} onPress={() => {}}>
           <Text style={[styles.title, { color: colors.heading_text }]}>{title}</Text>
           <Text style={[styles.message, { color: colors.muted_text }]}>{message}</Text>
           <View style={styles.actions}>
@@ -50,7 +53,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               activeOpacity={0.7}
             >
               <Text style={[styles.cancelText, { color: colors.heading_text }]}>
-                {cancelText}
+                {displayCancelText}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -89,7 +92,6 @@ const styles = StyleSheet.create({
     maxWidth: MAX_CARD_WIDTH,
     borderRadius: 20,
     padding: 24,
-    shadowColor: '#0F172A',
     shadowOpacity: 0.2,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 8 },

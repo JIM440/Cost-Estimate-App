@@ -10,51 +10,58 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../context/ThemeContext';
 import { useLocale } from '../context/LocaleContext';
+import { useWalkthrough } from '../context/WalkthroughContext';
 import Image from '../components/Image';
-import PagerView from 'react-native-pager-view';
+import OnboardingPager, { type OnboardingPagerRef } from '../components/onboarding/OnboardingPager';
 import { Feather } from '@expo/vector-icons';
-import { border_radius_full, page_padding } from '../styles/global';
+import { page_padding } from '../styles/global';
 import Button from '../components/buttons/Button';
 
 const ONBOARDING_KEY = '@cost_estimate_has_seen_onboarding';
+const WALKTHROUGH_STATE_KEY = '@cost_estimate_walkthrough_state';
 
 const slides = [
   {
     key: 'welcome',
     titleKey: 'onboarding.slide1.title',
     descKey: 'onboarding.slide1.desc',
-    image: require('../assets/onboarding-hero.webp'),
+    image: require('../assets/onboarding/onboarding-hero.png'),
   },
   {
     key: 'full-building',
     titleKey: 'onboarding.slide2.title',
     descKey: 'onboarding.slide2.desc',
-    image: require('../assets/onboarding-2.png'),
+    image: require('../assets/onboarding/onboarding-2.png'),
   },
   {
     key: 'materials',
     titleKey: 'onboarding.slide3.title',
     descKey: 'onboarding.slide3.desc',
-    image: require('../assets/onboarding-3.png'),
+    image: require('../assets/onboarding/onboarding-3.png'),
   },
   {
     key: 'projects',
     titleKey: 'onboarding.slide4.title',
     descKey: 'onboarding.slide4.desc',
-    image: require('../assets/onboarding-4.png'),
+    image: require('../assets/onboarding/onboarding-4.png'),
   },
 ];
 
 export default function OnboardingScreen() {
   const [index, setIndex] = useState(0);
-  const pagerRef = useRef<PagerView | null>(null);
+  const pagerRef = useRef<OnboardingPagerRef | null>(null);
   const router = useRouter();
   const { colors } = useTheme();
   const { t } = useLocale();
+   const { reset } = useWalkthrough();
 
   const goToApp = async () => {
     try {
       await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+      // Mark the guided walkthrough to start on first visit to Home after onboarding.
+      await AsyncStorage.setItem(WALKTHROUGH_STATE_KEY, 'pending');
+      // Also update in-memory walkthrough state so it starts immediately.
+      reset();
     } catch (_) {}
   // After onboarding, go to the Home tab route ("/home").
   router.replace('/home');
@@ -83,24 +90,22 @@ export default function OnboardingScreen() {
       <View style={[styles.container, { backgroundColor: colors.screen_background }]}>
         <View style={styles.topRow}>
           <View />
-          {index < slides.length - 1 && (
-            <Pressable hitSlop={10} onPress={goToApp}>
+          <Pressable hitSlop={10} onPress={goToApp} disabled={!(index < slides.length - 1)}>
               <View style={styles.skipContent}>
                 <Text style={[styles.skipText, { color: colors.muted_text }]}>
-                  {t('onboarding.skip')}
+                  {index < slides.length - 1 ? t('onboarding.skip') : ''}
                 </Text>
-                <Feather name="chevron-right" size={16} color={colors.muted_text} />
+                {index < slides.length - 1 && <Feather name="chevron-right" size={16} color={colors.muted_text} />}
               </View>
             </Pressable>
-          )}
         </View>
 
         <View style={styles.pagerContainer}>
-          <PagerView
-            style={styles.pager}
-            initialPage={0}
+          <OnboardingPager
             ref={pagerRef}
-            onPageSelected={(e) => setIndex(e.nativeEvent.position)}
+            index={index}
+            onIndexChange={setIndex}
+            style={styles.pager}
           >
             {slides.map((slide) => (
               <View key={slide.key} style={styles.page}>
@@ -108,7 +113,7 @@ export default function OnboardingScreen() {
                   <Image
                     source={slide.image}
                     style={styles.illustration}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </View>
                 <View style={styles.content}>
@@ -121,7 +126,7 @@ export default function OnboardingScreen() {
                 </View>
               </View>
             ))}
-          </PagerView>
+          </OnboardingPager>
         </View>
 
         <View style={styles.dotsRow}>
@@ -182,6 +187,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: page_padding,
+    paddingVertical: 8,
   },
   skipText: {
     fontSize: 14,
@@ -197,16 +204,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
   illustration: {
     width: '100%',
-    height: '100%',
-    maxHeight: 400
+    aspectRatio: 1,
   },
   content: {
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: page_padding,
   },
   title: {
     fontSize: 24,
@@ -230,14 +237,12 @@ const styles = StyleSheet.create({
   },
   pagerContainer: {
     flex: 5,
-    marginTop: 16,
   },
   pager: {
     flex: 1,
   },
   page: {
     flex: 1,
-    paddingHorizontal: page_padding,
   },
   dot: {
     width: 8,

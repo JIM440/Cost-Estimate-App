@@ -10,6 +10,7 @@ import { ColumnLayouts } from '../../../../styles/components/cards';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Formwork: React.FC = () => {
   const { t } = useLocale();
@@ -42,7 +43,7 @@ const Formwork: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/formwork_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/formwork_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('items.formwork')}</Text>
@@ -62,14 +63,18 @@ const Formwork: React.FC = () => {
             onChange={(value) => setWidth(value)}
           />
         </View>
-        <TextInputTitle
-          placeholder={t('common.enterPrice')}
-          title={t('estimate.formwork.pricePerM2')}
-          value={formWorkPrice}
-          onChange={(value) => setFormWorkPrice(value)}
-        />
+        <View style={inputStyles.twoColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder={t('common.enterPrice')}
+            title={t('estimate.formwork.pricePerM2')}
+            value={formWorkPrice}
+            onChange={(value) => setFormWorkPrice(value)}
+          />
+        </View>
         <ButtonPrimary
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           onPress={() => {
             setCalculating(true);
             setTimeout(() => {

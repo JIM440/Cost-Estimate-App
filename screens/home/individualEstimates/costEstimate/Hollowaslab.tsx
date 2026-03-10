@@ -9,6 +9,7 @@ import { inputStyles } from '../../../../styles/components/inputStyles';
 import ImageStyle from '../../../../styles/screens/CostEstimate';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const HollowSlab: React.FC = () => {
   const { t } = useLocale();
@@ -86,7 +87,7 @@ const HollowSlab: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/hollow_slab_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/hollow_slab_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('estimate.hollowslab.title')}</Text>

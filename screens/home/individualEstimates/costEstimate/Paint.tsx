@@ -10,6 +10,7 @@ import ImageStyle from '../../../../styles/screens/CostEstimate';
 import Table from '../../../../components/lists/Table';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Paint: React.FC = () => {
   const { t } = useLocale();
@@ -63,7 +64,7 @@ const Paint: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/paint_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/paint_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('items.paint')}</Text>
@@ -81,9 +82,10 @@ const Paint: React.FC = () => {
             title={t('common.width')}
             value={width}
             onChange={(value) => setWidth(value)}
-          />
+            />
         </View>
         <TextInputTitle
+          style={inputStyles.twoColumnInput}
           placeholder={t('estimate.paint.subtractArea')}
           title={t('estimate.subtractArea')}
           value={subtractArea}
@@ -106,16 +108,20 @@ const Paint: React.FC = () => {
             onChange={(value) => setCoveragePerLiter(value)}
           />
         </View>
-        <TextInputTitle
-          placeholder={t('common.enterPricePerLiter')}
-          title={t('common.pricePerLiter')}
-          value={paintPricePerLiter}
-          onChange={(value) => {
-            setPaintPricePerLiter(value);
-          }}
-        />
+        <View style={inputStyles.twoColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            placeholder={t('common.enterPricePerLiter')}
+            title={t('common.pricePerLiter')}
+            value={paintPricePerLiter}
+            onChange={(value) => {
+              setPaintPricePerLiter(value);
+            }}
+          />
+        </View>
         <ButtonPrimary
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           onPress={() => {
             setCalculating(true);
             setTimeout(() => {

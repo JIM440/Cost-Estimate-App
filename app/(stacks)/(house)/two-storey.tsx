@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { View, Pressable } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Pressable, Alert } from 'react-native';
 import StackHeader from '../../../components/StackHeader';
 import ScreenWrapper from '../../../components/ScreenWrapper';
 import Screen from '../../../screens/home/houseCategory/Multi/MultiHouse';
@@ -10,11 +10,19 @@ import { useTheme } from '../../../context/ThemeContext';
 export default function TwoStoreyScreen() {
   const params = useLocalSearchParams<{ projectId?: string }>();
   const { colors } = useTheme();
-  const [onSave, setOnSave] = useState<(() => Promise<void>) | null>(null);
+  const saveHandlerRef = useRef<(() => Promise<void>) | null>(null);
 
-  const handleSavePress = useCallback(async () => {
-    if (onSave) await onSave();
-  }, [onSave]);
+  const handleSavePress = async () => {
+    if (!saveHandlerRef.current) {
+      Alert.alert('Save is not ready yet.');
+      return;
+    }
+    try {
+      await saveHandlerRef.current();
+    } catch (e) {
+      Alert.alert('Failed to save project.');
+    }
+  };
 
   const rightElement = (
     <Pressable onPress={handleSavePress} hitSlop={10} style={{ padding: 4 }}>
@@ -26,7 +34,7 @@ export default function TwoStoreyScreen() {
     <View style={{ flex: 1, backgroundColor: colors.screen_background }}>
       <StackHeader titleKey="home.two.title" rightElement={rightElement} />
       <ScreenWrapper style={{ paddingVertical: 16, paddingBottom: 100 }}>
-        <Screen floors={2} projectId={params.projectId} onRegisterSave={setOnSave} />
+        <Screen floors={2} projectId={params.projectId} saveHandlerRef={saveHandlerRef} />
       </ScreenWrapper>
     </View>
   );

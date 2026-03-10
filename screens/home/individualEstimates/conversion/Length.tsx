@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import Image from '../../../../components/Image';
 import TextInputTitle from '../../../../components/inputs/InputTitle';
 import PickerField from '../../../../components/inputs/PickerField';
 import SectionCard from '../../../../components/cards/SectionCard';
 import ResultCard from '../../../../components/cards/ResultCard';
+import Area from '../../../../styles/screens/Area';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
 
@@ -64,7 +66,13 @@ const Length: React.FC = () => {
   };
 
   return (
-    <View style={{ gap: 16 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 16 }}>
+      <View style={[Area.imgContainer, { backgroundColor: colors.card }]}>
+        <Image
+          source={require('../../../../assets/onboarding/onboarding-hero.png')}
+          style={Area.img}
+        />
+      </View>
       <SectionCard title={t('conversion.length')}>
         <TextInputTitle
           title={t('conversion.length')}
@@ -98,7 +106,7 @@ const Length: React.FC = () => {
           options={Object.entries(unitLabels).map(([v, l]) => ({ label: l, value: v }))}
         />
       </SectionCard>
-    </View>
+    </ScrollView>
   );
 };
 

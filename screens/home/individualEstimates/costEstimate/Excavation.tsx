@@ -9,6 +9,7 @@ import ImageStyle from '../../../../styles/screens/CostEstimate';
 import Table from '../../../../components/lists/Table';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
 
 const Excavation: React.FC = () => {
   const { t } = useLocale();
@@ -48,7 +49,7 @@ const Excavation: React.FC = () => {
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/excavation_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/excavation_c.jpg')}
       />
 
       <View style={containerStyles.container}>
@@ -78,12 +79,15 @@ const Excavation: React.FC = () => {
           />
         </View>
 
-        <TextInputTitle
-          title={t('estimate.excavation.pricePerM3')}
-          placeholder={t('common.enterPrice')}
-          value={pricePerM3}
-          onChange={(value) => setPricePerM3(value)}
-        />
+        <View style={inputStyles.twoColumn}>
+          <TextInputTitle
+            style={inputStyles.twoColumnInput}
+            title={t('estimate.excavation.pricePerM3')}
+            placeholder={t('common.enterPrice')}
+            value={pricePerM3}
+            onChange={(value) => setPricePerM3(value)}
+          />
+        </View>
 
         <ButtonPrimary
           title={t('estimate.calculate')}

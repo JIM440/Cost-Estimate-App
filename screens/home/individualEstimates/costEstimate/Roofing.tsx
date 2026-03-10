@@ -9,6 +9,8 @@ import ImageStyle from '../../../../styles/screens/CostEstimate';
 import Table from '../../../../components/lists/Table';
 import { useLocale } from '../../../../context/LocaleContext';
 import { useTheme } from '../../../../context/ThemeContext';
+import { estimate_section_spacing } from '../../../../styles/global';
+import { computeFullRoofEstimate, DEFAULT_ROOF_MATERIAL_CONFIG } from '../../../../domain/roof/roofing';
 
 const Roofing: React.FC = () => {
   const { t } = useLocale();
@@ -18,12 +20,13 @@ const Roofing: React.FC = () => {
   const [rise, setRise] = useState('');
   const [run, setRun] = useState('');
   const [span, setSpan] = useState('');
-  const [roofingEstimate, setRoofingEstimate] = useState<{
-    numberOfCeilingBoards?: number;
-    numberOfRoofingSheets?: number;
-    numberOfPurlins?: number;
-    numberOfBoards?: number;
-  }>({});
+  const [sheetUnitPrice, setSheetUnitPrice] = useState('');
+  const [boardUnitPrice, setBoardUnitPrice] = useState('');
+  const [purlinUnitPrice, setPurlinUnitPrice] = useState('');
+  const [rafterUnitPrice, setRafterUnitPrice] = useState('');
+  const [wastePercent, setWastePercent] = useState('0.05');
+
+  const [roofResult, setRoofResult] = useState<ReturnType<typeof computeFullRoofEstimate> | null>(null);
   const [calculating, setCalculating] = useState(false);
 
   const calculateRoofingEstimate = () => {
@@ -33,36 +36,54 @@ const Roofing: React.FC = () => {
     const Ru = parseFloat(run);
     const S = parseFloat(span);
 
-    const rafterLength = Math.sqrt(Math.pow(R, 2) + Math.pow(Ru, 2));
-    const pitch = R / Ru;
-    const pitchInDegrees = Math.atan(pitch) * (180 / Math.PI);
-    const numberOfRafters = Math.ceil(L / S) + 1;
-    const totalNumberOfRafters = numberOfRafters * rafterLength * 2;
-    const numberOfRisers = Math.ceil(L / S) + 1;
-    const totalNumberOfRisers = numberOfRisers * R * 2;
-    const chaining = (W * L) / 4;
-    const baseArea = W * L;
-    const areaOfRoofing = baseArea / Math.cos(pitchInDegrees * (Math.PI / 180));
-    const sheet = Math.ceil(areaOfRoofing / 30);
-    const ceiling = Math.ceil(baseArea / 32);
-    const purlin = Math.ceil((rafterLength * L) / 0.9);
-    const boards = Math.ceil(
-      totalNumberOfRafters + totalNumberOfRisers + chaining
+    const sheetPrice = parseFloat(sheetUnitPrice);
+    const boardPrice = parseFloat(boardUnitPrice);
+    const purlinPrice = parseFloat(purlinUnitPrice);
+    const rafterPrice = parseFloat(rafterUnitPrice);
+    const waste = parseFloat(wastePercent || '0');
+
+    if (!L || !W || !R || !Ru || !S || L <= 0 || W <= 0 || R <= 0 || Ru <= 0 || S <= 0) {
+      // Basic validation
+      return;
+    }
+
+    const result = computeFullRoofEstimate(
+      {
+        houseLength: L,
+        houseWidth: W,
+        rise: R,
+        run: Ru,
+        span: S,
+        roofType: 'gable',
+      },
+      {
+        sheetUnitPrice: sheetPrice || 0,
+        boardUnitPrice: boardPrice || 0,
+        purlinUnitPrice: purlinPrice || 0,
+        rafterUnitPrice: rafterPrice || 0,
+        wastePercent: Number.isNaN(waste) ? 0 : waste,
+      },
+      DEFAULT_ROOF_MATERIAL_CONFIG
     );
 
-    setRoofingEstimate({
-      numberOfCeilingBoards: ceiling,
-      numberOfRoofingSheets: sheet,
-      numberOfBoards: boards,
-      numberOfPurlins: purlin,
-    });
+    setRoofResult(result);
+  };
+
+  // Calculate the total cost if roofResult exists - handles undefined gracefully
+  const getTotalCost = () => {
+    if (!roofResult || !roofResult.costs) return '-';
+    const { sheetCost = 0, boardCost = 0, purlinCost = 0, rafterCost = 0 } = roofResult.costs as any;
+    const total = [sheetCost, boardCost, purlinCost, rafterCost]
+      .map((v) => (typeof v === 'number' && !isNaN(v) ? v : 0))
+      .reduce((a, b) => a + b, 0);
+    return total.toFixed(2);
   };
 
   return (
     <ScrollView style={containerStyles.scrollContainer}>
       <Image
         style={ImageStyle.image}
-        source={require('../../../../assets/images/individual_estiamte/roof_c.jpg')}
+        source={require('../../../../assets/images/individual_estimate/roof_c.jpg')}
       />
       <View style={containerStyles.container}>
         <Text style={[titleStyles.boldTitle, { color: colors.heading_text }]}>{t('items.roofing')}</Text>
@@ -70,14 +91,14 @@ const Roofing: React.FC = () => {
           <View style={inputStyles.threeColumn}>
             <TextInputTitle
               style={inputStyles.twoColumnInput}
-              title={t('estimate.roofing.length')}
+              title={t('house.input.houseLengthM')}
               placeholder={t('common.enterLength')}
               value={houseLength}
               onChange={(text) => setHouseLength(text)}
             />
             <TextInputTitle
               style={inputStyles.twoColumnInput}
-              title={t('estimate.roofing.width')}
+              title={t('house.input.houseWidthM')}
               placeholder={t('common.enterWidth')}
               value={houseWidth}
               onChange={(text) => setHouseWidth(text)}
@@ -106,9 +127,51 @@ const Roofing: React.FC = () => {
               onChange={(text) => setSpan(text)}
             />
           </View>
+          <View style={inputStyles.threeColumn}>
+            <TextInputTitle
+              style={inputStyles.oneColumnInput}
+              title={t('estimate.roofing.pricePerSheet')}
+              placeholder={t('common.enterPricePerSheet')}
+              value={sheetUnitPrice}
+              onChange={(text) => setSheetUnitPrice(text)}
+            />
+            <TextInputTitle
+              style={inputStyles.oneColumnInput}
+              title="Ceiling board unit price"
+              placeholder={t('common.enterPrice')}
+              value={boardUnitPrice}
+              onChange={(text) => setBoardUnitPrice(text)}
+            />
+          </View>
+          <View style={inputStyles.threeColumn}>
+            <TextInputTitle
+              style={inputStyles.oneColumnInput}
+              title="Purlin unit price"
+              placeholder={t('common.enterPrice')}
+              value={purlinUnitPrice}
+              onChange={(text) => setPurlinUnitPrice(text)}
+            />
+            <TextInputTitle
+              style={inputStyles.oneColumnInput}
+              title="Rafter unit price"
+              placeholder={t('common.enterPrice')}
+              value={rafterUnitPrice}
+              onChange={(text) => setRafterUnitPrice(text)}
+            />
+          </View>
+          <View style={inputStyles.threeColumn}>
+            <TextInputTitle
+              style={inputStyles.oneColumnInput}
+              title="Waste factor (%)"
+              placeholder="e.g. 0.05 for 5%"
+              value={wastePercent}
+              onChange={(text) => setWastePercent(text)}
+            />
+          </View>
         </>
         <ButtonPrimary
           title={t('estimate.calculate')}
+          style={{ marginBottom: estimate_section_spacing }}
           onPress={() => {
             setCalculating(true);
             setTimeout(() => {
@@ -129,23 +192,57 @@ const Roofing: React.FC = () => {
           data={[
             {
               material: t('estimate.roofing.ceilingBoards'),
-              quantity: roofingEstimate.numberOfCeilingBoards ?? '-',
+              quantity: roofResult ? roofResult.materials.numberOfBoards : '-',
               unit: 'Boards',
+            },
+            {
+              material: t('estimate.roofing.ceilingBoardsCost') || 'Ceiling Board Cost',
+              quantity:
+                roofResult?.costs && typeof roofResult.costs.boardCost === 'number'
+                  ? roofResult.costs.boardCost.toFixed(2)
+                  : '-',
+              unit: 'FCFA',
             },
             {
               material: t('estimate.roofing.roofingSheets'),
-              quantity: roofingEstimate.numberOfRoofingSheets ?? '-',
+              quantity: roofResult ? roofResult.materials.numberOfSheets : '-',
               unit: 'Sheets',
             },
             {
+              material: t('estimate.roofing.sheetsCost'),
+              quantity: roofResult?.costs ? roofResult.costs.sheetCost.toFixed(2) : '-',
+              unit: 'FCFA',
+            },
+            {
               material: t('estimate.roofing.purlins'),
-              quantity: roofingEstimate.numberOfPurlins ?? '-',
+              quantity: roofResult ? roofResult.materials.numberOfPurlins : '-',
               unit: 'Purlins',
             },
             {
-              material: t('estimate.roofing.boards'),
-              quantity: roofingEstimate.numberOfBoards ?? '-',
-              unit: 'Boards',
+              material: t('estimate.roofing.purlinsCost') || 'Purlin Cost',
+              quantity:
+                roofResult?.costs && typeof roofResult.costs.purlinCost === 'number'
+                  ? roofResult.costs.purlinCost.toFixed(2)
+                  : '-',
+              unit: 'FCFA',
+            },
+            {
+              material: t('estimate.roofing.rafters'),
+              quantity: roofResult ? roofResult.materials.numberOfRafters : '-',
+              unit: t('estimate.roofing.raftersUnit'),
+            },
+            {
+              material: t('estimate.roofing.raftersCost') || 'Rafter Cost',
+              quantity:
+                roofResult?.costs && typeof roofResult.costs.rafterCost === 'number'
+                  ? roofResult.costs.rafterCost.toFixed(2)
+                  : '-',
+              unit: 'FCFA',
+            },
+            {
+              material: t('estimate.roofing.totalCost') || 'Total Cost',
+              quantity: getTotalCost(),
+              unit: 'FCFA',
             },
           ]}
         />

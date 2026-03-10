@@ -49,8 +49,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           styles.container,
           {
             backgroundColor: colors.card,
-            borderColor:
-              variant === 'section' ? 'transparent' : colors.borderColor,
+            borderColor: colors.borderColor,
             transform: [{ scale: pressed ? 0.99 : 1 }],
             opacity: pressed ? 0.98 : 1,
           },
@@ -63,8 +62,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           {
             backgroundColor:
               variant === 'section' ? tintColor ?? colors.light_bg_blue : colors.card,
-            borderColor:
-              variant === 'section' ? 'transparent' : colors.borderColor,
+            borderColor: colors.borderColor,
           },
           style,
         ],
@@ -129,11 +127,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 18,
     borderWidth: 1,
-    shadowColor: '#0F172A',
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 1,
   },
   accentStrip: {
     width: 4,

@@ -11,16 +11,47 @@ import TabHeader from '../../components/TabHeader';
 
 function GuideIcon({ icon }: { icon: GuideConfig['iconSource'] }) {
   const { colors } = useTheme();
+  const wrapper = { width: 60, height: 60, padding: 10, backgroundColor: colors.borderColor, borderRadius: 10 };
   if (icon == null) return null;
-  if (typeof icon === 'number') {
-    return <View style={{ width: 60, height: 60, padding: 10, backgroundColor: colors.borderColor, borderRadius: 10 }}><Image source={icon} style={{ width: 40, height: 40 }} /></View>;
+
+  // Resolve default export (web bundler often wraps in { default })
+  const resolved =
+    typeof icon === 'object' && icon !== null && 'default' in icon
+      ? (icon as { default: unknown }).default
+      : icon;
+
+  // Image: number (RN asset), uri object, or string URL (web)
+  const imageSource: number | { uri: string } | null =
+    typeof resolved === 'number'
+      ? resolved
+      : typeof resolved === 'string'
+        ? { uri: resolved }
+        : resolved &&
+          typeof resolved === 'object' &&
+          'uri' in (resolved as object)
+        ? (resolved as { uri: string })
+        : null;
+  if (imageSource != null) {
+    return (
+      <View style={wrapper}>
+        <Image source={imageSource} style={{ width: 40, height: 40 }} />
+      </View>
+    );
   }
-  const IconComponent = icon;
-  return (
-    <View style={{ width: 60, height: 60, padding: 10, backgroundColor: colors.borderColor, borderRadius: 10 }}>
-      <IconComponent width={40} height={40} />
-    </View>
-  );
+
+  // Component (function or object.default that is a function)
+  const IconComponent =
+    typeof resolved === 'function'
+      ? (resolved as React.ComponentType<{ width?: number; height?: number }>)
+      : null;
+  if (IconComponent != null) {
+    return (
+      <View style={wrapper}>
+        <IconComponent width={40} height={40} />
+      </View>
+    );
+  }
+  return null;
 }
 
 const routeMap: Record<string, string> = {
@@ -34,7 +65,6 @@ const routeMap: Record<string, string> = {
   plasterGuide: '/guide/plaster',
   tilesGuide: '/guide/tiles',
   paintGuide: '/guide/paint',
-  foundationGuide: '/guide/foundation',
   excavationGuide: '/guide/excavation',
   fillingGuide: '/guide/filling',
 };
@@ -51,6 +81,7 @@ export default function Guides() {
   const router = useRouter();
   const { colors } = useTheme();
   const { t } = useLocale();
+
   return (
     <>
    <TabHeader titleKey="tab.guides" />

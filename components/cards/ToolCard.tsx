@@ -23,10 +23,25 @@ const ToolCard: React.FC<ToolCardProps> = ({
   if (iconNode != null) {
     iconEl = iconNode;
   } else if (icon != null) {
-    if (typeof icon === 'number') {
-      iconEl = <Image source={icon} style={{ width: 60, height: 60 }} />;
-    } else if (typeof icon === 'function') {
-      const IconComponent = icon;
+    // Resolve default export (web bundler often wraps in { default })
+    const resolved =
+      typeof icon === 'object' && icon !== null && 'default' in icon
+        ? (icon as { default: unknown }).default
+        : icon;
+
+    // Image: number (RN asset) or uri object (web)
+    const imageSource =
+      typeof resolved === 'number'
+        ? resolved
+        : resolved &&
+          typeof resolved === 'object' &&
+          'uri' in (resolved as object)
+        ? (resolved as { uri: string })
+        : null;
+    if (imageSource != null) {
+      iconEl = <Image source={imageSource} style={{ width: 60, height: 60 }} />;
+    } else if (typeof resolved === 'function') {
+      const IconComponent = resolved as React.ComponentType<{ width?: number; height?: number }>;
       iconEl = (
         <View style={{ width: 60, height: 60 }}>
           <IconComponent width={60} height={60} />
@@ -42,11 +57,6 @@ const ToolCard: React.FC<ToolCardProps> = ({
         wideCardStyles.wideCardBox,
         {
           backgroundColor: colors.card,
-          shadowColor: colors.borderColor,
-          shadowOpacity: 0.04,
-          shadowRadius: 12,
-          shadowOffset: { width: 0, height: 6 },
-          elevation: 2,
           borderWidth: 1,
           borderColor: colors.borderColor,
         },
@@ -63,7 +73,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
 
 const styles = StyleSheet.create({
   title: {
-    marginTop: 8,
+    // marginTop: 8,
   },
 });
 
